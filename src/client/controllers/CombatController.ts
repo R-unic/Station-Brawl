@@ -33,7 +33,6 @@ export class CombatController implements OnInit {
         if (this.db.attack) return;
         this.db.attack = true;
         GlobalEvents.client.playAnim.fire("attack", this.anims.attack[(new Random).NextInteger(0, this.anims.attack.size())]);
-        GlobalEvents.client.playSoundInCharacter.fire("punchSwing");
 
         const char = getCharacter();
         const root = char.PrimaryPart!;
@@ -46,12 +45,14 @@ export class CombatController implements OnInit {
             if (enemy) {
                 const [dmg0, dmg1] = this.DAMAGE;
                 const humanoid = <Humanoid>enemy.WaitForChild("Humanoid");
+                if (humanoid.Health <= 0) return;
+
                 const dmg = math.ceil(math.random(dmg0, dmg1));
-                GlobalEvents.client.damage.fire(humanoid, dmg);
                 GlobalEvents.client.playSoundInCharacter.fire("punchHit");
+                GlobalEvents.client.createVfx.fire("Blood", result.Position, .7);
+                GlobalEvents.client.damage.fire(humanoid, dmg);
             }
         }
-
         task.delay(this.COOLDOWN, () => this.db.attack = false);
     }
 }

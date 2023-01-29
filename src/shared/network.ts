@@ -4,6 +4,7 @@ interface ServerEvents {
     playAnim(name: string, id: number): void;
     playSoundInCharacter(name: string): void;
     damage(humanoid: Humanoid, amount: number): void;
+    createVfx(name: string, pos: Vector3, duration: number): void,
 }
 
 interface ClientEvents {}
