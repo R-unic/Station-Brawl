@@ -2,22 +2,24 @@ import Roact, { Children, Element, PropsWithChildren } from "@rbxts/roact";
 import { useEffect, useState, withHooks } from "@rbxts/roact-hooked";
 import { Events } from "client/network";
 
-interface Props<T, I extends Instance> {
-    InitialText?: T;
+interface Props<I extends Instance> {
+    InitialText?: string;
     DataKey: string;
+    DataMapper: (a: unknown) => unknown;
     LabelProperties: Partial<WritableInstanceProperties<I>>;
 }
 
-interface State<T> {
-    LinkedText: T
+interface State {
+    LinkedText: string
 }
 
-function DataConnectedText(props: PropsWithChildren<Props<string, TextLabel>>) {
-    const [state, setState] = useState<State<string>>({ LinkedText: props.InitialText ?? "..." });
+function DataConnectedText(props: PropsWithChildren<Props<TextLabel>>) {
+    const [state, setState] = useState<State>({ LinkedText: props.InitialText ?? "..." });
     useEffect(() => {
         const dataUpdateConnection = Events.dataUpdate.connect((key: string, value: unknown) => {
             if (key !== props.DataKey) return;
-            setState({ LinkedText: value as string });
+            const mapped = props.DataMapper(value);
+            setState({ LinkedText: mapped as string });
         });
 
         return () => dataUpdateConnection.Disconnect();

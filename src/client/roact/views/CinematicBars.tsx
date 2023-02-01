@@ -25,7 +25,6 @@ class CinematicBars extends Roact.Component<Props> {
     }
 
     protected didMount(): void {
-        this._toggle(true);
         Events.toggleCinematicBars.connect(on => this._toggle(on));
     }
 

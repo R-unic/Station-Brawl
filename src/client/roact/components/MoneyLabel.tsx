@@ -35,6 +35,7 @@ export default function MoneyLabel(props: Props) {
                     Key="Amount"
                     DataKey="money"
                     InitialText="$10,000"
+                    DataMapper={a => "$" + a}
                     LabelProperties={{
                         AnchorPoint: new Vector2(1, 0),
                         BackgroundTransparency: 1,
@@ -57,9 +58,9 @@ export default function MoneyLabel(props: Props) {
                     </uistroke>
                 </DataConnectedText>
                 <uipadding
-                    PaddingBottom={new UDim(0.25, 0)}
+                    PaddingBottom={new UDim(0.2, 0)}
                     PaddingLeft={new UDim(0.05, 0)}
-                    PaddingTop={new UDim(0.25, 0)}
+                    PaddingTop={new UDim(0.2, 0)}
                 />
             </frame>
             <textbutton
