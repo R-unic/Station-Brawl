@@ -5,7 +5,7 @@ import { Events } from "client/network";
 interface Props<I extends Instance> {
     InitialText?: string;
     DataKey: string;
-    DataMapper: (a: unknown) => unknown;
+    DataMapper: (a: unknown) => string;
     LabelProperties: Partial<WritableInstanceProperties<I>>;
 }
 
@@ -19,7 +19,7 @@ function DataConnectedText(props: PropsWithChildren<Props<TextLabel>>) {
         const dataUpdateConnection = Events.dataUpdate.connect((key: string, value: unknown) => {
             if (key !== props.DataKey) return;
             const mapped = props.DataMapper(value);
-            setState({ LinkedText: mapped as string });
+            setState({ LinkedText: mapped });
         });
 
         return () => dataUpdateConnection.Disconnect();

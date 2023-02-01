@@ -1,4 +1,5 @@
-import Roact from "@rbxts/roact";
+import Roact, { createRef } from "@rbxts/roact";
+import { commaFormat } from "shared/utility/NumberUtil";
 import DropShadow from "./DropShadow"
 import DataConnectedText from "./DataConnectedText";
 
@@ -7,6 +8,16 @@ interface Props {
 }
 
 export default function MoneyLabel(props: Props) {
+    function elevate (btn: GuiButton): void {
+        const shadowContainer = btn.WaitForChild<Frame>("ShadowContainer");
+        shadowContainer.SetAttribute("Elevation", 5)
+    }
+
+    function fall (btn: GuiButton): void {
+        const shadowContainer = btn.WaitForChild<Frame>("ShadowContainer");
+        shadowContainer.SetAttribute("Elevation", undefined)
+    }
+
     return (
         <frame
             Key="MoneyLabel"
@@ -35,7 +46,7 @@ export default function MoneyLabel(props: Props) {
                     Key="Amount"
                     DataKey="money"
                     InitialText="$10,000"
-                    DataMapper={a => "$" + a}
+                    DataMapper={a => "$" + commaFormat(a as number)}
                     LabelProperties={{
                         AnchorPoint: new Vector2(1, 0),
                         BackgroundTransparency: 1,
@@ -58,9 +69,9 @@ export default function MoneyLabel(props: Props) {
                     </uistroke>
                 </DataConnectedText>
                 <uipadding
-                    PaddingBottom={new UDim(0.2, 0)}
+                    PaddingBottom={new UDim(0.15, 0)}
                     PaddingLeft={new UDim(0.05, 0)}
-                    PaddingTop={new UDim(0.2, 0)}
+                    PaddingTop={new UDim(0.15, 0)}
                 />
             </frame>
             <textbutton
@@ -70,9 +81,14 @@ export default function MoneyLabel(props: Props) {
                 Position={new UDim2(0, 0, 0.5, 0)}
                 Size={new UDim2(0.95, 0, 0.95, 0)}
                 ZIndex={2}
+                AutoButtonColor={false}
                 Text=""
                 Event={{
-                    MouseButton1Click: b => props.OnPromptAddMoney(b)
+                    MouseButton1Click: b => props.OnPromptAddMoney(b),
+                    MouseEnter: elevate,
+                    MouseLeave: fall,
+                    MouseButton1Down: fall,
+                    MouseButton1Up: elevate
                 }}
             >
                 <DropShadow Elevation={2} />
