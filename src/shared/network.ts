@@ -8,6 +8,7 @@ interface ServerEvents {
 }
 
 interface ClientEvents {
+    dataUpdate(key: string, value: unknown): void;
     toggleCinematicBars(on: boolean): void;
 }
 
