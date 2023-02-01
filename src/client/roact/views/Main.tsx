@@ -4,10 +4,10 @@ import MoneyLabel from "../components/MoneyLabel";
 const MainUI = (
     <screengui Key="Main" ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}>
         <uipadding
-            PaddingBottom={new UDim(0, 15)}
+            PaddingBottom={new UDim(0, 5)}
             PaddingLeft={new UDim(0, 10)}
             PaddingRight={new UDim(0, 10)}
-            PaddingTop={new UDim(0, 15)}
+            PaddingTop={new UDim(0, 5)}
         />
         <MoneyLabel OnPromptAddMoney={() => {
             print("open shop")

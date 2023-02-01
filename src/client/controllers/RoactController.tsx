@@ -9,6 +9,6 @@ export class RoactController implements OnStart {
     public onStart(): void {
         const PlayerUI = getUI();
         mount(MainUI, PlayerUI);
-        mount((<CinematicBars />), PlayerUI)
+        mount((<CinematicBars />), PlayerUI);
     }
 }

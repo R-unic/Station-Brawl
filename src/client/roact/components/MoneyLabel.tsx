@@ -12,8 +12,8 @@ export default function MoneyLabel(props: Props) {
             Key="MoneyLabel"
             AnchorPoint={new Vector2(1, 0)}
             BackgroundTransparency={1}
-            Position={new UDim2(.9, 0, 0, 0)}
-            Size={new UDim2(0.125, 0, 0.075, 0)}
+            Position={new UDim2(.96, 0, 0, 0)}
+            Size={new UDim2(0.125, 0, 0.06, 0)}
         >
             <frame
                 Key="TextContainer"
