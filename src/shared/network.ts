@@ -1,7 +1,7 @@
 import { Networking } from "@flamework/networking";
 
 interface ServerEvents {
-    playAnim(name: string, id: number, character?: Model): void;
+    playAnim(name: string, id: number, character?: Model, finishedCallback?: () => void): void;
     playSoundInCharacter(name: string): void;
     damage(humanoid: Humanoid, amount: number): void;
     createVfx(name: string, pos: Vector3, duration: number): void;
@@ -10,6 +10,7 @@ interface ServerEvents {
 interface ClientEvents {
     dataUpdate(key: string, value: unknown): void;
     toggleCinematicBars(on: boolean): void;
+    toggleKnockedFX(on: boolean): void
     shakeCamera(): void;
 }
 

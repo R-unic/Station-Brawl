@@ -9,7 +9,7 @@ export class AnimationService implements OnInit {
     private _plrAnimations = new Map<Player, Map<string, Animation>>();
 
     public onInit(): void {
-        GlobalEvents.server.playAnim.connect((player, name, id, character?) => this._playAnimation(player, name, id, character));
+        GlobalEvents.server.playAnim.connect((player, name, id, character?, finishedCallback?) => this._playAnimation(player, name, id, character, finishedCallback));
         Players.PlayerAdded.Connect(player =>
             player.CharacterAdded.Connect(character => {
                 const animations = new Map<string, Animation>();
@@ -29,23 +29,18 @@ export class AnimationService implements OnInit {
         return animation;
     }
 
-    private _playAnimation(player: Player, name: string, id: number, character = player.Character ?? player.CharacterAdded.Wait()[0]): void {
+    private _playAnimation(player: Player, name: string, id: number, character = player.Character ?? player.CharacterAdded.Wait()[0], finishedCallback?: () => void): void {
         const humanoid = <Humanoid>character.WaitForChild("Humanoid");
         const animation = this._plrAnimations.get(player)?.get(name);
         if (!animation) return warn(`Could not find animation instance "${name}"`);
 
         animation.AnimationId = `rbxassetid://${id}`;
         const track = humanoid.LoadAnimation(animation);
+        track.Stopped.Once(() => track.Destroy());
         track.Ended.Once(() => {
             track.Destroy();
-            if (name === "finisher") {
-                character.PrimaryPart!.Anchored = false;
-                Events.toggleCinematicBars.fire(player, false);
-            } else if (name === "beingFinished") {
-                character.PrimaryPart!.Anchored = false;
-                Events.toggleCinematicBars.fire(player, false);
-                task.delay(.25, () => player.LoadCharacter());
-            }
+            if (finishedCallback)
+                finishedCallback();
         });
         track.Play();
     }

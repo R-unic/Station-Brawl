@@ -1,8 +1,8 @@
 import { Controller, OnInit } from "@flamework/core";
 import CameraShaker from "@rbxts/camera-shaker";
-import { ContextActionService as Action, Workspace as World } from "@rbxts/services";
+import { ContextActionService as Action, Lighting, Workspace as World } from "@rbxts/services";
 import { Events } from "client/network";
-import { getCharacter } from "client/utility";
+import { getCharacter, tween } from "client/utility";
 
 @Controller({})
 export class CombatController implements OnInit {
@@ -17,11 +17,16 @@ export class CombatController implements OnInit {
         attack: false
     };
 
+    private readonly knockedColorCorrection = new Instance("ColorCorrectionEffect");
+    private readonly knockedBlur = new Instance("BlurEffect");
+    private readonly defaultSaturation = 0
+    private readonly defaultBlur = 0;
+
     private _handleAction(action: string, io: InputObject): void {
         switch(action) {
             case "Attack":
                 if (io.UserInputState !== Enum.UserInputState.Begin) break;
-                this.attack();
+                this._attack();
                 break;
         }
     }
@@ -30,10 +35,21 @@ export class CombatController implements OnInit {
         const camera = World.CurrentCamera!;
         const shaker = new CameraShaker(0, cf => camera.CFrame = camera.CFrame.mul(cf));
         shaker.Start();
-
         Events.shakeCamera.connect(() => shaker.Shake(CameraShaker.Presets.Bump));
 
+        this.knockedColorCorrection.Name = "KnockedCC";
+        this.knockedBlur.Name = "KnockedBlur";
+        this.knockedColorCorrection.Saturation = this.defaultSaturation;
+        this.knockedBlur.Size = this.defaultBlur;
+        Events.toggleKnockedFX.connect(on => this._toggleKnockedFX(on));
+
         Action.BindAction("Attack", (action, _, io) => this._handleAction(action, io), true, Enum.UserInputType.MouseButton1);
+    }
+
+    private _toggleKnockedFX(on: boolean): void {
+        const info = new TweenInfo(.5, Enum.EasingStyle.Elastic);
+        tween(this.knockedColorCorrection, info, { Saturation: on ? -1 - Lighting.ColorCorrection.Saturation : this.defaultSaturation });
+        tween(this.knockedBlur, info, { Size: on ? 16 : this.defaultBlur });
     }
 
     private _rayMarch(): RaycastResult | undefined {
@@ -50,7 +66,7 @@ export class CombatController implements OnInit {
         return centerResults || leftResults || rightResults;
     }
 
-    public attack(): void {
+    private _attack(): void {
         if (this.debounce.attack) return;
         this.debounce.attack = true;
 

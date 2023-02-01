@@ -1,6 +1,6 @@
 import { Players, TweenService } from "@rbxts/services";
 
-export function tween(instance: Instance, info: TweenInfo, goal: Partial<ExtractMembers<any, Tweenable>>): Tween {
+export function tween<T extends Instance>(instance: T, info: TweenInfo, goal: Partial<ExtractMembers<T, Tweenable>>): Tween {
     const t = TweenService.Create(instance, info, goal);
     t.Play();
     return t;
