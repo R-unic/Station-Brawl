@@ -1,13 +1,15 @@
 import { Networking } from "@flamework/networking";
 
 interface ServerEvents {
-    playAnim(name: string, id: number): void;
+    playAnim(name: string, id: number, character?: Model): void;
     playSoundInCharacter(name: string): void;
     damage(humanoid: Humanoid, amount: number): void;
     createVfx(name: string, pos: Vector3, duration: number): void,
 }
 
-interface ClientEvents {}
+interface ClientEvents {
+    toggleCinematicBars(on: boolean): void;
+}
 
 interface ServerFunctions {}
 

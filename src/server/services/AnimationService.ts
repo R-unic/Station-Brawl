@@ -1,38 +1,52 @@
 import { Service, OnInit } from "@flamework/core";
 import { Players } from "@rbxts/services";
 import { GlobalEvents } from "shared/network";
+import ragdoll from "server/utility/ragdoll";
+import { Events } from "server/network";
 
 @Service({})
 export class AnimationService implements OnInit {
     private _plrAnimations = new Map<Player, Map<string, Animation>>();
 
     public onInit(): void {
-        GlobalEvents.server.playAnim.connect((plr, name, id) => this._playAnimation(plr, name, id));
-        Players.PlayerAdded.Connect(plr =>
-            plr.CharacterAdded.Connect(char => {
-                const anims = new Map<string, Animation>();
-                anims.set("attack", this._createAnimation("attack", char));
-                this._plrAnimations.set(plr, anims);
+        GlobalEvents.server.playAnim.connect((player, name, id, character?) => this._playAnimation(player, name, id, character));
+        Players.PlayerAdded.Connect(player =>
+            player.CharacterAdded.Connect(character => {
+                const animations = new Map<string, Animation>();
+                const create = (name: string) => animations.set(name, this._createAnimation(name, character));
+                create("attack");
+                create("finisher");
+                create("beingFinished");
+                this._plrAnimations.set(player, animations);
             })
         );
     }
 
     private _createAnimation(name: string, parent?: Instance): Animation {
-        const anim = new Instance("Animation");
-        anim.Name = name;
-        anim.Parent = parent;
-        return anim;
+        const animation = new Instance("Animation");
+        animation.Name = name;
+        animation.Parent = parent;
+        return animation;
     }
 
-    private _playAnimation(plr: Player, name: string, id: number): void {
-        const char = plr.Character ?? plr.CharacterAdded.Wait()[0];
-        const hum = <Humanoid>char.WaitForChild("Humanoid");
-        const anim = this._plrAnimations.get(plr)?.get(name);
-        if (!anim) return warn(`Could not find animation instance "${name}"`);
+    private _playAnimation(player: Player, name: string, id: number, character = player.Character ?? player.CharacterAdded.Wait()[0]): void {
+        const humanoid = <Humanoid>character.WaitForChild("Humanoid");
+        const animation = this._plrAnimations.get(player)?.get(name);
+        if (!animation) return warn(`Could not find animation instance "${name}"`);
 
-        anim.AnimationId = `rbxassetid://${id}`;
-        const track = hum.LoadAnimation(anim);
-        track.Ended.Once(() => track.Destroy());
+        animation.AnimationId = `rbxassetid://${id}`;
+        const track = humanoid.LoadAnimation(animation);
+        track.Ended.Once(() => {
+            track.Destroy();
+            if (name === "finisher") {
+                character.PrimaryPart!.Anchored = false;
+                Events.toggleCinematicBars.fire(player, false);
+            } else if (name === "beingFinished") {
+                character.PrimaryPart!.Anchored = false;
+                Events.toggleCinematicBars.fire(player, false);
+                task.delay(.25, () => player.LoadCharacter());
+            }
+        });
         track.Play();
     }
 }

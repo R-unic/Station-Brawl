@@ -1,18 +1,18 @@
 import { Controller, OnInit } from "@flamework/core";
 import { ContextActionService as Action, Workspace as World } from "@rbxts/services";
-import { GlobalEvents } from "shared/network";
+import { Events } from "client/network";
 import { getCharacter } from "client/utility";
 
 @Controller({})
 export class CombatController implements OnInit {
-    private readonly RANGE = 2.8;
+    private readonly RANGE = 2.6;
     private readonly COOLDOWN = .4;
     private readonly DAMAGE = [15, 25];
 
-    private readonly anims = {
+    private readonly animations = {
         "attack": [12219768623, 12219772302, 12219779172, 12219783178, 12219787450]
     };
-    private readonly db = {
+    private readonly debounce = {
         attack: false
     };
 
@@ -29,30 +29,43 @@ export class CombatController implements OnInit {
         Action.BindAction("Attack", (action, _, io) => this._handleAction(action, io), true, Enum.UserInputType.MouseButton1);
     }
 
-    public attack(): void {
-        if (this.db.attack) return;
-        this.db.attack = true;
-        GlobalEvents.client.playAnim.fire("attack", this.anims.attack[(new Random).NextInteger(0, this.anims.attack.size())]);
-
-        const char = getCharacter();
-        const root = char.PrimaryPart!;
+    private _rayMarch(): RaycastResult | undefined {
+        const character = getCharacter();
+        const root = character.PrimaryPart!;
         const params = new RaycastParams();
-        params.FilterDescendantsInstances = [char];
+        params.FilterDescendantsInstances = [character];
 
-        const result = World.Raycast(root.Position, root.CFrame.LookVector.mul(this.RANGE), params);
-        if (result) {
+        const rotation = 40
+        const lookVector = root.CFrame.LookVector.mul(this.RANGE);
+        const centerResults = World.Raycast(root.Position, lookVector, params);
+        const rightResults = World.Raycast(root.Position, CFrame.Angles(0, math.rad(rotation), 0).VectorToWorldSpace(lookVector), params);
+        const leftResults = World.Raycast(root.Position, CFrame.Angles(0, math.rad(-rotation), 0).VectorToWorldSpace(lookVector), params);
+        return centerResults || leftResults || rightResults;
+    }
+
+    public attack(): void {
+        if (this.debounce.attack) return;
+        this.debounce.attack = true;
+
+        task.spawn(() => {
+            Events.playAnim.fire("attack", this.animations.attack[(new Random).NextInteger(0, this.animations.attack.size())]);
+            const result = this._rayMarch();
+            if (!result) return;
+
+            Events.playSoundInCharacter.fire("punchHit");
             const enemy = result.Instance.FindFirstAncestorOfClass("Model")
-            if (enemy) {
-                const [dmg0, dmg1] = this.DAMAGE;
-                const humanoid = <Humanoid>enemy.WaitForChild("Humanoid");
-                if (humanoid.Health <= 0) return;
+            if (!enemy) return;
 
-                const dmg = math.ceil(math.random(dmg0, dmg1));
-                GlobalEvents.client.playSoundInCharacter.fire("punchHit");
-                GlobalEvents.client.createVfx.fire("Blood", result.Position, .7);
-                GlobalEvents.client.damage.fire(humanoid, dmg);
-            }
-        }
-        task.delay(this.COOLDOWN, () => this.db.attack = false);
+            const [dmg0, dmg1] = this.DAMAGE;
+            const humanoid = <Humanoid>enemy.FindFirstChild("Humanoid", true);
+            if (!humanoid) return;
+            if (humanoid.Health <= 0) return;
+
+            const dmg = math.ceil(math.random(dmg0, dmg1));
+            Events.damage.fire(humanoid, dmg);
+            Events.createVfx.fire("Blood", result.Position, .7);
+        });
+
+        task.delay(this.COOLDOWN, () => this.debounce.attack = false);
     }
 }

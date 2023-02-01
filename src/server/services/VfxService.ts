@@ -5,18 +5,18 @@ import { GlobalEvents } from "shared/network";
 @Service({})
 export class VfxService implements OnInit {
     public onInit(): void {
-        GlobalEvents.server.createVfx.connect((plr, name, pos, duration) => this.create(name, pos, duration));
+        GlobalEvents.server.createVfx.connect((player, name, position, duration) => this.create(name, position, duration));
     }
 
-    public create(name: string, pos: Vector3, duration: number): void {
+    public create(name: string, position: Vector3, duration: number): void {
         task.spawn(() => {
             const part = <Part>Replicated.Assets.VFX.WaitForChild(name).Clone();
             const particles = part.GetDescendants().filter((i): i is ParticleEmitter => i.IsA("ParticleEmitter"));
 
-            part.Position = pos;
+            part.Position = position;
             part.Parent = World.WaitForChild("Ignore");
-            for (const p of particles)
-                task.delay(duration, () => p.Enabled = false);
+            for (const particle of particles)
+                task.delay(duration, () => particle.Enabled = false);
 
             Debris.AddItem(part, duration * 2);
         });
