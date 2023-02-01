@@ -15,12 +15,17 @@ export class CharacterService implements OnInit {
         Players.PlayerAdded.Connect(player => player.LoadCharacter());
     }
 
-    public damage(player: Player, humanoid: Humanoid, dmg: number): void {
-        if (humanoid.Health <= 0) return;
-        humanoid.TakeDamage(dmg);
+    public damage(player: Player, victimHumanoid: Humanoid, dmg: number): void {
+        if (victimHumanoid.Health <= 0) return;
+        victimHumanoid.TakeDamage(dmg);
 
-        if (humanoid.Health > 0) return;
-        this._kill(player, humanoid);
+        const victimCharacter = <Model>victimHumanoid.Parent;
+        const victim = Players.GetPlayerFromCharacter(victimCharacter);
+        if (victim)
+            Events.shakeCamera.fire(victim);
+
+        if (victimHumanoid.Health > 0) return;
+        this._kill(player, victimHumanoid);
     }
 
     private _kill(killer: Player, victimHumanoid: Humanoid) {

@@ -1,4 +1,5 @@
 import { Controller, OnInit } from "@flamework/core";
+import CameraShaker from "@rbxts/camera-shaker";
 import { ContextActionService as Action, Workspace as World } from "@rbxts/services";
 import { Events } from "client/network";
 import { getCharacter } from "client/utility";
@@ -26,6 +27,12 @@ export class CombatController implements OnInit {
     }
 
 	public onInit(): void {
+        const camera = World.CurrentCamera!;
+        const shaker = new CameraShaker(0, cf => camera.CFrame = camera.CFrame.mul(cf));
+        shaker.Start();
+
+        Events.shakeCamera.connect(() => shaker.Shake(CameraShaker.Presets.Bump));
+
         Action.BindAction("Attack", (action, _, io) => this._handleAction(action, io), true, Enum.UserInputType.MouseButton1);
     }
 
