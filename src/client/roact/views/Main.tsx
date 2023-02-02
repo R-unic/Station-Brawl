@@ -1,7 +1,8 @@
 import Roact from "@rbxts/roact";
-import MoneyLabel from "../components/MoneyLabel";
+import MoneyLabel from "../components/shop/MoneyLabel";
+import { ShopUIRef } from "./Shop";
 
-const MainUI = (
+export const MainUI = (
     <screengui Key="Main" ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}>
         <uipadding
             PaddingBottom={new UDim(0, 5)}
@@ -10,9 +11,9 @@ const MainUI = (
             PaddingTop={new UDim(0, 5)}
         />
         <MoneyLabel OnPromptAddMoney={() => {
-            print("open shop")
+            const shop = ShopUIRef.getValue();
+            if (shop)
+                shop.Enabled = true;
         }}/>
     </screengui>
 );
-
-export = MainUI;

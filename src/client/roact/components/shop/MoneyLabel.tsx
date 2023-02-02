@@ -1,7 +1,7 @@
-import Roact, { createRef } from "@rbxts/roact";
+import Roact, { Ref } from "@rbxts/roact";
 import { commaFormat } from "shared/utility/NumberUtil";
-import DropShadow from "./DropShadow"
-import DataConnectedText from "./DataConnectedText";
+import DropShadow from "../DropShadow"
+import DataConnectedText from "../DataConnectedText";
 
 interface Props {
     OnPromptAddMoney: (btn: TextButton) => void;

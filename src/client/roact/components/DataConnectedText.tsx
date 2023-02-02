@@ -21,7 +21,6 @@ function DataConnectedText(props: PropsWithChildren<Props<TextLabel>>) {
             const mapped = props.DataMapper(value);
             setState({ LinkedText: mapped });
         });
-
         return () => dataUpdateConnection.Disconnect();
     }, []);
 

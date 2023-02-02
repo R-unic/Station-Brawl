@@ -9,7 +9,7 @@ interface Props {
 
 const { CoreGuiType, ScreenInsets, EasingStyle } = Enum;
 
-class CinematicBars extends Roact.Component<Props> {
+export default class CinematicBars extends Roact.Component<Props> {
     private readonly bottomRef = createRef<Frame>();
     private readonly topRef = createRef<Frame>();
 
@@ -53,5 +53,3 @@ class CinematicBars extends Roact.Component<Props> {
         );
     }
 }
-
-export = CinematicBars;
