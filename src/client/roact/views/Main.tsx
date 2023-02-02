@@ -11,9 +11,8 @@ export const MainUI = (
             PaddingTop={new UDim(0, 5)}
         />
         <MoneyLabel OnPromptAddMoney={() => {
-            const shop = ShopUIRef.getValue();
-            if (shop)
-                shop.Enabled = true;
+            const shop = ShopUIRef.getValue()!;
+            shop.Enabled = !shop.Enabled;
         }}/>
     </screengui>
 );

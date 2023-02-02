@@ -1,5 +1,6 @@
-import Roact, { Ref } from "@rbxts/roact";
+import Roact from "@rbxts/roact";
 import { commaFormat } from "shared/utility/NumberUtil";
+import { tween } from "client/utility";
 import DropShadow from "../DropShadow"
 import DataConnectedText from "../DataConnectedText";
 
@@ -7,15 +8,22 @@ interface Props {
     OnPromptAddMoney: (btn: TextButton) => void;
 }
 
+const { Font, EasingStyle } = Enum;
+
+// color animations for add currency button
 export default function MoneyLabel(props: Props) {
-    function elevate (btn: GuiButton): void {
+    const defaultAddColor = Color3.fromRGB(63, 202, 140);
+    const hoverAddInfo = new TweenInfo(.35, EasingStyle.Quad);
+    function hoverAdd(btn: GuiButton): void {
         const shadowContainer = btn.WaitForChild<Frame>("ShadowContainer");
-        shadowContainer.SetAttribute("Elevation", 5)
+        shadowContainer.SetAttribute("Elevation", 5);
+        tween(btn, hoverAddInfo, { BackgroundColor3: Color3.fromRGB(135, 217, 181) });
     }
 
-    function fall (btn: GuiButton): void {
+    function unhoverAdd(btn: GuiButton): void {
         const shadowContainer = btn.WaitForChild<Frame>("ShadowContainer");
-        shadowContainer.SetAttribute("Elevation", undefined)
+        shadowContainer.SetAttribute("Elevation", undefined);
+        tween(btn, hoverAddInfo, { BackgroundColor3: defaultAddColor });
     }
 
     return (
@@ -47,11 +55,11 @@ export default function MoneyLabel(props: Props) {
                     DataKey="money"
                     InitialText="$10,000"
                     DataMapper={a => "$" + commaFormat(a as number)}
+
                     LabelProperties={{
                         AnchorPoint: new Vector2(1, 0),
                         BackgroundTransparency: 1,
-                        Font: Enum.Font.Unknown,
-                        FontFace: Font.fromEnum(Enum.Font.GothamBold),
+                        Font: Font.GothamBold,
                         Position: new UDim2(0.85, 0, 0, 0),
                         Size: new UDim2(0.6, 0, 1, 0),
                         TextColor3: Color3.fromRGB(166, 241, 220),
@@ -77,7 +85,7 @@ export default function MoneyLabel(props: Props) {
             <textbutton
                 Key="AddCurrency"
                 AnchorPoint={new Vector2(0, 0.5)}
-                BackgroundColor3={Color3.fromRGB(63, 202, 140)}
+                BackgroundColor3={defaultAddColor}
                 Position={new UDim2(0, 0, 0.5, 0)}
                 Size={new UDim2(0.95, 0, 0.95, 0)}
                 ZIndex={2}
@@ -85,10 +93,10 @@ export default function MoneyLabel(props: Props) {
                 Text=""
                 Event={{
                     MouseButton1Click: b => props.OnPromptAddMoney(b),
-                    MouseEnter: elevate,
-                    MouseLeave: fall,
-                    MouseButton1Down: fall,
-                    MouseButton1Up: elevate
+                    MouseEnter: hoverAdd,
+                    MouseLeave: unhoverAdd,
+                    MouseButton1Down: unhoverAdd,
+                    MouseButton1Up: hoverAdd
                 }}
             >
                 <DropShadow Elevation={2} />

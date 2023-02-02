@@ -1,6 +1,6 @@
 import Roact from "@rbxts/roact"
 import { MarketplaceService as Market } from "@rbxts/services";
-import { tween } from "client/utility";
+import { getPlayer, tween } from "client/utility";
 
 interface Props {
     ItemName: string;
@@ -10,6 +10,7 @@ interface Props {
 
 const { Font, SizeConstraint, ScaleType, ApplyStrokeMode, InfoType, EasingStyle } = Enum;
 
+// purchase button animations
 export default function MoneyItemFrame(props: Props) {
     let timeout = 0;
     function getRobuxPrice(): number {
@@ -24,26 +25,44 @@ export default function MoneyItemFrame(props: Props) {
         return info.PriceInRobux || 0;
     }
 
-    const hoverInfo = new TweenInfo(.6, EasingStyle.Quad);
+    const hoverInfo = new TweenInfo(.3, EasingStyle.Quad);
     function hover(btn: TextButton): void {
-        tween(btn.WaitForChild<TextLabel>("Info"), hoverInfo, { Size: new UDim2(1, 0, 0, 25) });
+        tween(btn.WaitForChild<ImageLabel>("Glow"), hoverInfo, {
+            ImageTransparency: .4
+        });
+        tween(btn.WaitForChild<TextLabel>("Info"), hoverInfo, {
+            BackgroundTransparency: 0.35,
+            TextTransparency: 0
+        });
     }
 
     function unhover(btn: TextButton): void {
-        tween(btn.WaitForChild<TextLabel>("Info"), hoverInfo, { Size: new UDim2(1, 0, 0, 0) });
+        tween(btn.WaitForChild<ImageLabel>("Glow"), hoverInfo, {
+            ImageTransparency: 1
+        });
+        tween(btn.WaitForChild<TextLabel>("Info"), hoverInfo, {
+            BackgroundTransparency: 1,
+            TextTransparency: 1
+        });
+    }
+
+    function promptPurchase(): void {
+        Market.PromptProductPurchase(getPlayer(), props.ID);
     }
 
     return (
         <textbutton
             Key={props.ItemName}
-            Active={false}
             BackgroundColor3={Color3.fromRGB(255, 255, 255)}
+            Active={false}
             Selectable={false}
+            AutoButtonColor={false}
             Size={new UDim2(0, 100, 0, 100)}
             Text={""}
             Event={{
                 MouseEnter: hover,
-                MouseLeave: unhover
+                MouseLeave: unhover,
+                MouseButton1Click: promptPurchase
             }}
         >
             <uicorner />
@@ -53,6 +72,14 @@ export default function MoneyItemFrame(props: Props) {
                     Rotation={45}
                 />
             </uistroke>
+            <imagelabel
+                Key="Glow"
+                Image="rbxassetid://10924531821"
+                ImageTransparency={1}
+                BackgroundTransparency={1}
+                Size={UDim2.fromScale(1, 1)}
+                ZIndex={2}
+            />
             <textlabel
                 Key="Info"
                 BackgroundColor3={Color3.fromRGB(21, 23, 26)}
@@ -81,7 +108,12 @@ export default function MoneyItemFrame(props: Props) {
                 TextColor3={Color3.fromRGB(169, 219, 184)}
                 TextScaled={true}
                 TextWrapped={true}
+                AutoButtonColor={false}
                 TextSize={14}
+                ZIndex={3}
+                Event={{
+                    MouseButton1Click: promptPurchase
+                }}
             >
                 <uicorner />
                 <uipadding
