@@ -1,6 +1,6 @@
 import Roact, { createRef } from "@rbxts/roact";
 import MoneyProductCard from "../components/shop/MoneyProductCard";
-import ScrollerWindow from "../components/shop/ShopWindow";
+import ScrollerWindow from "../components/ScrollerWindow";
 
 export const ShopUIRef = createRef<ScreenGui>();
 
