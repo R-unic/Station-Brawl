@@ -1,14 +1,15 @@
 import Roact, { createRef } from "@rbxts/roact";
 import { WINDOW_REFS } from "client/roact/Refs";
-import ScrollerWindow from "../../components/ScrollerWindow";
+import ListWindow from "../../components/ListWindow";
+import InventoryCard from "client/roact/components/InventoryCard";
 
 const ref = createRef<ScreenGui>();
 WINDOW_REFS.set("inventory", ref);
 
 export const InventoryUI = (
     <screengui Ref={ref} Key="Inventory" Enabled={false}>
-        <ScrollerWindow Title="Inventory">
-
-        </ScrollerWindow>
+        <ListWindow Title="Inventory">
+            <InventoryCard ItemName="test" Icon="rbxassetid://6856899848" />
+        </ListWindow>
     </screengui>
 );

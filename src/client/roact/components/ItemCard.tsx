@@ -14,6 +14,7 @@ interface Props {
 
 const { Font, SizeConstraint, ScaleType, ApplyStrokeMode, EasingStyle } = Enum;
 
+// card button animations
 export default function ItemCard(props: Props) {
     const hoverInfo = new TweenInfo(.3, EasingStyle.Quad);
     function hover(btn: TextButton): void {
@@ -65,20 +66,22 @@ export default function ItemCard(props: Props) {
                 ImageTransparency={1}
                 BackgroundTransparency={1}
                 Size={UDim2.fromScale(1, 1)}
-                ZIndex={2}
+                ZIndex={3}
             />
             <textlabel
                 Key="Info"
                 BackgroundColor3={Color3.fromRGB(21, 23, 26)}
-                BackgroundTransparency={0.35}
+                BackgroundTransparency={1}
                 Font={Font.SourceSansSemibold}
                 RichText={true}
-                Size={new UDim2(1, 0, 0, 0)}
+                Size={new UDim2(1, 0, 0, 25)}
                 Text={props.InfoText}
+                TextTransparency={1}
                 TextColor3={Color3.fromRGB(255, 255, 255)}
                 TextScaled={true}
                 TextSize={14}
                 TextWrapped={true}
+                ZIndex={4}
             >
                 <uipadding PaddingLeft={new UDim(0, 10)} PaddingRight={new UDim(0, 10)} />
                 <uicorner />
@@ -97,7 +100,7 @@ export default function ItemCard(props: Props) {
                 TextWrapped={true}
                 AutoButtonColor={false}
                 TextSize={14}
-                ZIndex={3}
+                ZIndex={4}
                 Event={{
                     MouseButton1Click: () => props.OnButtonClicked()
                 }}
@@ -134,6 +137,7 @@ export default function ItemCard(props: Props) {
                 ScaleType={ScaleType.Fit}
                 Size={new UDim2(0.65, 0, 0.65, 0)}
                 SizeConstraint={SizeConstraint.RelativeYY}
+                ZIndex={2}
             >
                 <uiaspectratioconstraint />
             </imagelabel>

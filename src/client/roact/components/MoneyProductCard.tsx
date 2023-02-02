@@ -1,7 +1,7 @@
 import Roact from "@rbxts/roact"
 import { MarketplaceService as Market } from "@rbxts/services";
 import { getPlayer } from "client/utility";
-import ItemCard from "../ItemCard";
+import ItemCard from "./ItemCard";
 
 interface Props {
     ItemName: string;
@@ -9,7 +9,6 @@ interface Props {
     ID: number;
 }
 
-// purchase button animations
 export default function MoneyProductCard(props: Props) {
     let timeout = 0;
     function getRobuxPrice(): number {

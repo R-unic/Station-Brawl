@@ -8,7 +8,7 @@ interface Props {
     Title: string;
 }
 
-export default function ScrollerWindow(props: PropsWithChildren<Props>) {
+export default function ListWindow(props: PropsWithChildren<Props>) {
     const childrenMap = props[Children];
     const children: Element[] = [];
     childrenMap?.forEach(e => children.push(e));
@@ -34,14 +34,14 @@ export default function ScrollerWindow(props: PropsWithChildren<Props>) {
                 {...children}
                 <uipadding
                     PaddingBottom={new UDim(0.01, 0)}
-                    PaddingLeft={new UDim(0.025, 0)}
-                    PaddingRight={new UDim(0.025, 0)}
+                    PaddingLeft={new UDim(0.05, 0)}
+                    PaddingRight={new UDim(0.05, 0)}
                     PaddingTop={new UDim(0.01, 0)}
                 />
                 <uigridlayout
-                    CellPadding={new UDim2(0, 25, 0, 25)}
+                    CellPadding={new UDim2(0, 35, 0, 35)}
                     CellSize={new UDim2(0, 125, 0, 150)}
-                    HorizontalAlignment={HorizontalAlignment.Center}
+                    HorizontalAlignment={HorizontalAlignment.Left}
                     SortOrder={SortOrder.LayoutOrder}
                 />
             </scrollingframe>
