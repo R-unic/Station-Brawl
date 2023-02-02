@@ -9,7 +9,7 @@ interface Props {
 
 const { CoreGuiType, ScreenInsets, EasingStyle } = Enum;
 
-export default class CinematicBars extends Roact.Component<Props> {
+class CinematicBars extends Roact.Component<Props> {
     private readonly bottomRef = createRef<Frame>();
     private readonly topRef = createRef<Frame>();
 
@@ -27,6 +27,7 @@ export default class CinematicBars extends Roact.Component<Props> {
     protected didMount(): void {
         this._toggle(this.props.InitiallyToggled ?? false);
         Events.toggleCinematicBars.connect(on => this._toggle(on));
+        StarterGui.SetCoreGuiEnabled(CoreGuiType.Backpack, false);
     }
 
     public render(): Roact.Element {
@@ -53,3 +54,5 @@ export default class CinematicBars extends Roact.Component<Props> {
         );
     }
 }
+
+export = <CinematicBars />

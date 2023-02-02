@@ -1,14 +1,15 @@
 import Roact from "@rbxts/roact";
 import { commaFormat } from "shared/utility/NumberUtil";
 import { tween } from "client/utility";
-import DropShadow from "../DropShadow"
-import DataConnectedText from "../DataConnectedText";
+import DropShadow from "./DropShadow"
+import DataConnectedText from "./DataConnectedText";
 
 interface Props {
+    FrameProperties: Partial<WritableInstanceProperties<Frame>>;
     OnPromptAddMoney: (btn: TextButton) => void;
 }
 
-const { Font, EasingStyle } = Enum;
+const { Font, EasingStyle, TextXAlignment } = Enum;
 
 // color animations for add currency button
 export default function MoneyLabel(props: Props) {
@@ -28,11 +29,9 @@ export default function MoneyLabel(props: Props) {
 
     return (
         <frame
+            {...props.FrameProperties}
             Key="MoneyLabel"
-            AnchorPoint={new Vector2(1, 0)}
             BackgroundTransparency={1}
-            Position={new UDim2(.96, 0, 0, 0)}
-            Size={new UDim2(0.125, 0, 0.06, 0)}
         >
             <frame
                 Key="TextContainer"
@@ -63,6 +62,7 @@ export default function MoneyLabel(props: Props) {
                         Position: new UDim2(0.85, 0, 0, 0),
                         Size: new UDim2(0.6, 0, 1, 0),
                         TextColor3: Color3.fromRGB(166, 241, 220),
+                        TextXAlignment: TextXAlignment.Left,
                         TextScaled: true,
                         TextSize: 14,
                         TextWrapped: true,

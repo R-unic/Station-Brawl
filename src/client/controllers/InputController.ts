@@ -1,7 +1,8 @@
 import { Controller, OnInit } from "@flamework/core";
 import { ContextActionService as Action } from "@rbxts/services";
-import { CombatController } from "./CombatController";
 import { Events } from "client/network";
+import { WINDOW_REFS } from "client/roact/Refs";
+import { CombatController } from "./CombatController";
 import { EmoteController } from "./EmoteController";
 
 const { UserInputState, UserInputType, KeyCode: Key } = Enum;
@@ -26,6 +27,11 @@ export class InputController implements OnInit {
                 else
                     this.emote.play(12352065254);
                 break;
+            case "OpenInventory":
+                if (io.UserInputState !== UserInputState.Begin) break;
+                const inventoryRef = WINDOW_REFS.mustGet("inventory");
+                const inventory = inventoryRef.getValue()!;
+                inventory.Enabled = !inventory.Enabled
         }
     }
 
@@ -33,5 +39,6 @@ export class InputController implements OnInit {
         const handle = (action: string, _: Enum.UserInputState, io: InputObject): void => this._handleAction(action, io);
         Action.BindAction("Attack", handle, true, UserInputType.MouseButton1);
         Action.BindAction("Emote", handle, true, Key.F);
+        Action.BindAction("OpenInventory", handle, true, Key.Y);
     }
 }

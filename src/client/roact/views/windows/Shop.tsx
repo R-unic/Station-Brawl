@@ -1,11 +1,13 @@
 import Roact, { createRef } from "@rbxts/roact";
-import MoneyProductCard from "../components/shop/MoneyProductCard";
-import ScrollerWindow from "../components/ScrollerWindow";
+import { WINDOW_REFS } from "client/roact/Refs";
+import MoneyProductCard from "../../components/shop/MoneyProductCard";
+import ScrollerWindow from "../../components/ScrollerWindow";
 
-export const ShopUIRef = createRef<ScreenGui>();
+const ref = createRef<ScreenGui>();
+WINDOW_REFS.set("shop", ref);
 
 export const ShopUI = (
-    <screengui Ref={ShopUIRef} Key="Shop" Enabled={false}>
+    <screengui Ref={ref} Key="Shop" Enabled={false}>
         <ScrollerWindow Title="Purchase Money">
             <MoneyProductCard ItemName="$300" Icon="rbxassetid://46022281" ID={1369201265} />
             <MoneyProductCard ItemName="$650" Icon="rbxassetid://46022281" ID={1369202529} />

@@ -1,4 +1,4 @@
-import Roact, { Children, Element, PropsWithChildren } from "@rbxts/roact";
+import Roact, { Children, Element, PropsWithChildren, Ref } from "@rbxts/roact";
 import { tween } from "client/utility";
 
 interface Props {
@@ -26,7 +26,7 @@ export default function Window(props: PropsWithChildren<Props>) {
             Key={props.Title}
             BackgroundColor3={Color3.fromRGB(255, 255, 255)}
             BorderSizePixel={0}
-            Position={new UDim2(0.23700000000000002, 0, 0.20700000000000002, 0)}
+            Position={new UDim2(0.24, 0, 0.21, 0)}
             Size={new UDim2(0.5, 0, 0.65, 0)}
         >
             {...children}
