@@ -1,15 +1,17 @@
 import Roact from "@rbxts/roact";
-import DropShadow from "./DropShadow";
+import DropShadow from "../DropShadow";
 import { tween } from "client/utility";
 
 interface Props {
     ItemName: string;
     Icon: string;
     InfoText: string;
+    PrimaryGradientColor?: Color3;
+    SecondaryGradientColor?: Color3;
     ButtonText: string;
     ButtonTextColor: Color3;
     ButtonColor: Color3;
-    OnButtonClicked: () => void;
+    OnButtonClicked: (card: TextButton) => void;
 }
 
 const { Font, SizeConstraint, ScaleType, ApplyStrokeMode, EasingStyle } = Enum;
@@ -49,7 +51,7 @@ export default function ItemCard(props: Props) {
             Event={{
                 MouseEnter: hover,
                 MouseLeave: unhover,
-                MouseButton1Click: b => props.OnButtonClicked()
+                MouseButton1Click: b => props.OnButtonClicked(b)
             }}
         >
             <uicorner />
@@ -102,7 +104,7 @@ export default function ItemCard(props: Props) {
                 TextSize={14}
                 ZIndex={4}
                 Event={{
-                    MouseButton1Click: () => props.OnButtonClicked()
+                    MouseButton1Click: b => props.OnButtonClicked(b.Parent as TextButton)
                 }}
             >
                 <uicorner />
@@ -125,7 +127,7 @@ export default function ItemCard(props: Props) {
                 <uistroke Color={Color3.fromRGB(65, 81, 93)} Thickness={1.6} />
             </textbutton>
             <uigradient
-                Color={new ColorSequence([new ColorSequenceKeypoint(0, Color3.fromRGB(29, 30, 44)), new ColorSequenceKeypoint(1, Color3.fromRGB(64, 63, 76))])}
+                Color={new ColorSequence([new ColorSequenceKeypoint(0, props.PrimaryGradientColor ?? Color3.fromRGB(29, 30, 44)), new ColorSequenceKeypoint(1, props.SecondaryGradientColor ?? Color3.fromRGB(64, 63, 76))])}
                 Rotation={45}
             />
             <imagelabel

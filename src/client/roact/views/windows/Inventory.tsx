@@ -1,7 +1,8 @@
 import Roact, { Element, createRef } from "@rbxts/roact";
 import { Events } from "client/network";
 import { WINDOW_REFS } from "client/roact/Refs";
-import InventoryCard from "client/roact/components/InventoryCard";
+import InventoryItemCard from "client/roact/components/cards/InventoryItemCard";
+import CaseCard from "client/roact/components/cards/CaseCard";
 import ListWindow from "client/roact/components/ListWindow";
 import Inventory from "shared/dataInterfaces/Inventory";
 
@@ -21,23 +22,30 @@ class InventoryScreen extends Roact.Component<{}, State> {
     public constructor(props: {}) {
         super(props);
         WINDOW_REFS.set("inventory", this.ref);
+        this.setState({
+            CurrentPage: "Cases",
+            Pages: {
+                Effects: [],
+                Cases: []
+            }
+        });
     }
 
     protected didMount(): void {
         Events.dataUpdate.connect<[key: string, value: Inventory]>((key, value) => {
             if (key !== "inventory") return;
             for (const _case of value.cases)
-                this.state.Pages.Cases.push(<InventoryCard ItemName={_case.name + " Case"} Icon={_case.image} />);
+                this.state.Pages.Cases.push(<CaseCard ItemName={_case.name + " Case"} Icon={_case.image} />);
             for (const effect of value.effects)
-                this.state.Pages.Cases.push(<InventoryCard ItemName={effect.name} Icon={effect.image} />);
+                this.state.Pages.Effects.push(<InventoryItemCard ItemName={effect.name} Icon={effect.image} />);
 
-        });
-        this.setState({
-            CurrentPage: "Effects",
-            Pages: {
-                Effects: [],
-                Cases: []
-            }
+            this.setState({
+                CurrentPage: this.state.CurrentPage,
+                Pages: {
+                    Effects: this.state.Pages.Effects,
+                    Cases: this.state.Pages.Cases
+                }
+            });
         });
     }
 

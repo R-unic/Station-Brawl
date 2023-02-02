@@ -11,7 +11,7 @@ interface State {
     Equipped: boolean;
 }
 
-class InventoryCard extends Roact.Component<Props, State> {
+class InventoryItemCard extends Roact.Component<Props, State> {
     private readonly equippedColor = Color3.fromRGB(212, 171, 143);
     private readonly unequippedColor = Color3.fromRGB(143, 194, 212);
 
@@ -38,4 +38,4 @@ class InventoryCard extends Roact.Component<Props, State> {
     }
 }
 
-export = InventoryCard;
+export = InventoryItemCard;
