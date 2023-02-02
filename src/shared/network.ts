@@ -1,7 +1,7 @@
 import { Networking } from "@flamework/networking";
 
 interface ServerEvents {
-    playAnim(name: string, id: number, character?: Model): void;
+    playAnim(name: string, id: number, character?: Model, dontCancel?: boolean): void;
     stopAnim(name: string): void;
     playSoundInCharacter(name: string): void;
     damage(humanoid: Humanoid, amount: number): void;

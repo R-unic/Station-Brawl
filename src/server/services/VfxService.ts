@@ -1,6 +1,6 @@
 import { Service, OnInit } from "@flamework/core";
 import { ReplicatedStorage as Replicated, Workspace as World } from "@rbxts/services";
-import { PartCache } from "@rbxts/partcache/out/class";
+import { PartCache } from "@rbxts/partcache/class";
 import PartCacheModule from "@rbxts/partcache";
 import { Events } from "server/network";
 

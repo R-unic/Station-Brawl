@@ -8,10 +8,6 @@ const { UserInputState, UserInputType, KeyCode: Key } = Enum;
 
 @Controller({})
 export class InputController implements OnInit {
-    private readonly debounce = {
-        emote: false
-    };
-
     public constructor(
         public combat: CombatController,
         public emote: EmoteController

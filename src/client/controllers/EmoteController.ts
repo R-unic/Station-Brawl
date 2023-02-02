@@ -8,7 +8,6 @@ export class EmoteController implements OnInit {
     private character = getCharacter();
 
     public onInit(): void {
-
         Events.finishedEmote.connect(() => {
             task.delay(3, () => this.emoting = false);
             Events.anchor.fire(this.character, false, "HumanoidRootPart");

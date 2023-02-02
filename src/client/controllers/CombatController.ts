@@ -3,6 +3,7 @@ import { Lighting, Workspace as World } from "@rbxts/services";
 import CameraShaker from "@rbxts/camera-shaker";
 import { Events } from "client/network";
 import { getCharacter, getPlayer, tween } from "client/utility";
+import { EmoteController } from "./EmoteController";
 
 @Controller({})
 export class CombatController implements OnInit {
@@ -17,6 +18,10 @@ export class CombatController implements OnInit {
         attack: false
     };
 
+    public constructor(
+        private readonly emote: EmoteController
+    ) {}
+
 	public onInit(): void {
         math.randomseed(tick() + os.time());
         const camera = World.CurrentCamera!;
@@ -27,6 +32,7 @@ export class CombatController implements OnInit {
     }
 
     public attack(): void {
+        if (this.emote.emoting) return;
         if (this.debounce.attack) return;
         this.debounce.attack = true;
 
@@ -36,7 +42,8 @@ export class CombatController implements OnInit {
             if (character.WaitForChild<Humanoid>("Humanoid").Health <= 0) return;
             if (player.GetAttribute("BeingFinished") === true) return;
 
-            Events.playAnim.fire("attack", this.animations.attack[(new Random).NextInteger(0, this.animations.attack.size())]);
+            const attackId = this.animations.attack[(new Random).NextInteger(0, this.animations.attack.size())];
+            Events.playAnim.fire("attack", attackId, undefined, false);
             const result = this._rayMarch();
             if (!result) return;
 
