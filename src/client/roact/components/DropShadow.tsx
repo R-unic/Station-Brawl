@@ -21,7 +21,7 @@ class DropShadow extends Roact.Component<PropsWithChildren<Props>, State> {
         container.GetAttributeChangedSignal("Elevation").Connect(() => this.setElevation(container.GetAttribute("Elevation") as number ?? this.props.Elevation));
     }
 
-    public setElevation(elevation: number) {
+    public setElevation(elevation: number): void {
         this.setState({ Elevation: elevation });
     }
 

@@ -4,10 +4,10 @@ import { Janitor } from "@rbxts/janitor";
 import { Events } from "server/network";
 import anchor from "server/utility/anchor";
 
-@Service({})
+@Service({ loadOrder: 0 })
 export class AnimationService implements OnInit {
-    private _plrAnimations = new Map<Player, Map<string, Animation>>();
-    private _plrTracks = new Map<Player, Map<string, AnimationTrack>>();
+    private playerAnimations = new Map<Player, Map<string, Animation>>();
+    private playerTracks = new Map<Player, Map<string, AnimationTrack>>();
 
     public onInit(): void {
         Events.playAnim.connect((player, name, id, character?) => this._playAnimation(player, name, id, character));
@@ -23,8 +23,8 @@ export class AnimationService implements OnInit {
                 intializeAnimation("beingFinished");
                 intializeAnimation("emote")
 
-                this._plrAnimations.set(player, animations);
-                this._plrTracks.set(player, tracks);
+                this.playerAnimations.set(player, animations);
+                this.playerTracks.set(player, tracks);
             })
         );
     }
@@ -37,19 +37,19 @@ export class AnimationService implements OnInit {
     }
 
     private _stopAnimation(player: Player, name: string): void {
-        const track = this._plrTracks.get(player)?.get(name)!;
+        const track = this.playerTracks.get(player)?.get(name)!;
         task.spawn(() => {
             if (!track) return;
             track.Stop();
             this._finishTrack(player, name, track);
-            this._plrTracks.get(player)?.delete(name);
+            this.playerTracks.get(player)?.delete(name);
         });
     }
 
     private _playAnimation(player: Player, name: string, id: number, character = player.Character ?? player.CharacterAdded.Wait()[0], dontCancel = true): void {
         const humanoid = <Humanoid>character.WaitForChild("Humanoid");
-        const animation = this._plrAnimations.get(player)?.get(name)!;
-        const oldTrack = this._plrTracks.get(player)?.get(name)!;
+        const animation = this.playerAnimations.get(player)?.get(name)!;
+        const oldTrack = this.playerTracks.get(player)?.get(name)!;
 
         animation.AnimationId = `rbxassetid://${id}`;
         const track = humanoid.LoadAnimation(animation);
@@ -72,7 +72,7 @@ export class AnimationService implements OnInit {
                 break;
         }
 
-        this._plrTracks.get(player)?.set(name, track);
+        this.playerTracks.get(player)?.set(name, track);
     }
 
     private _finishTrack(player: Player, name: string, track: AnimationTrack): void {
