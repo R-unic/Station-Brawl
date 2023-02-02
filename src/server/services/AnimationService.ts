@@ -88,7 +88,6 @@ export class AnimationService implements OnInit {
                 task.delay(respawnDelay, () => {
                     player.LoadCharacter();
                     player.SetAttribute("BeingFinished", false);
-                    Events.toggleKnockedFX.fire(player, false);
                 });
                 break;
             case "finisher":

@@ -68,9 +68,13 @@ export class CharacterService implements OnInit {
         task.delay(7, () => {
             if (victim?.GetAttribute("BeingFinished")) return;
             promptJanitor.Cleanup();
-            victim?.LoadCharacter();
+
             if (!victim)
                 victimCharacter.Destroy();
+            else {
+                Events.toggleKnockedFX.fire(victim, false);
+                victim?.LoadCharacter();
+            }
         });
     }
 
