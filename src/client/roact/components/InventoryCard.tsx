@@ -4,6 +4,7 @@ import ItemCard from "./ItemCard";
 interface Props {
     ItemName: string;
     Icon: string;
+    InfoText?: string;
 }
 
 interface State {
@@ -27,7 +28,7 @@ class InventoryCard extends Roact.Component<Props, State> {
             <ItemCard
                 ItemName={this.props.ItemName}
                 Icon={this.props.Icon}
-                InfoText={this.props.ItemName}
+                InfoText={this.props.InfoText ?? this.props.ItemName}
                 ButtonText={this.state.Equipped ? "Unequip" : "Equip"}
                 ButtonTextColor={this.state.Equipped ? this.equippedColor : this.unequippedColor}
                 ButtonColor={this.state.Equipped ? this.equippedColor : this.unequippedColor}
