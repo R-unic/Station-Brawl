@@ -6,7 +6,7 @@ interface ServerEvents {
     playSoundInCharacter(name: string): void;
     damage(humanoid: Humanoid, amount: number): void;
     anchor(character: Model, on?: boolean, anchorPart?: string): void;
-    createVfx(name: string, pos: Vector3, duration: number): void;
+    createBlood(position: Vector3, duration: number): void;
 }
 
 interface ClientEvents {

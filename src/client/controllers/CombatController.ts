@@ -51,7 +51,7 @@ export class CombatController implements OnInit {
 
             const dmg = math.ceil(math.random(dmg0, dmg1));
             Events.damage.fire(humanoid, dmg);
-            Events.createVfx.fire("Blood", result.Position, .7);
+            Events.createBlood.fire(result.Position, .5);
         });
 
         task.delay(this.COOLDOWN, () => this.debounce.attack = false);
