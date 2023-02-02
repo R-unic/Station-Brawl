@@ -101,7 +101,7 @@ export class AnimationService implements OnInit {
     }
 
     private _resetFinisherState(player: Player): void {
-        anchor(player.Character, false);
+        anchor(player.Character, false, "HumanoidRootPart");
         Events.toggleCinematicBars.fire(player, false);
     }
 }

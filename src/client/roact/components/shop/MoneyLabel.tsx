@@ -17,7 +17,7 @@ export default function MoneyLabel(props: Props) {
     function hoverAdd(btn: TextButton): void {
         const shadowContainer = btn.WaitForChild<Frame>("ShadowContainer");
         shadowContainer.SetAttribute("Elevation", 5);
-        tween(btn, hoverAddInfo, { BackgroundColor3: Color3.fromRGB(110, 186, 153) });
+        tween(btn, hoverAddInfo, { BackgroundColor3: Color3.fromRGB(156, 219, 191)});
     }
 
     function unhoverAdd(btn: TextButton): void {

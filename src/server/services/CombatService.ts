@@ -13,14 +13,16 @@ export class CharacterService implements OnInit {
     };
 
     public onInit(): void {
-        Events.anchor.connect((_, character, on) => anchor(character, on));
+        Events.anchor.connect((_, character, on, anchorPart) => anchor(character, on, anchorPart));
         Events.damage.connect((player, humanoid, dmg) => this._damage(player, humanoid, dmg));
         Players.PlayerAdded.Connect(player => {
             const characterLifeJanitor = new Janitor;
             player.CharacterAdded.Connect(character => {
                 const humanoid = character.WaitForChild<Humanoid>("Humanoid");
-                characterLifeJanitor.Add(humanoid.Died.Connect(() => this._knock(undefined, humanoid)));
-                characterLifeJanitor.Cleanup();
+                characterLifeJanitor.Add(humanoid.Died.Connect(() => {
+                    this._knock(undefined, humanoid);
+                    characterLifeJanitor.Cleanup();
+                }));
             })
             player.LoadCharacter();
         });
@@ -79,8 +81,8 @@ export class CharacterService implements OnInit {
 
         const victimTorso = victimCharacter.WaitForChild<Part>("UpperTorso");
         const killerTorso = killer.Character!.WaitForChild<Part>("UpperTorso");
-        anchor(victimCharacter, true);
-        anchor(killer.Character, true);
+        anchor(victimCharacter, true, "HumanoidRootPart");
+        anchor(killer.Character, true, "HumanoidRootPart");
 
         const negativeDistance = killerTorso.CFrame.LookVector.mul(.8);
         victimTorso.CFrame = killerTorso.CFrame.add(killerTorso.CFrame.LookVector.sub(negativeDistance));

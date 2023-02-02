@@ -11,7 +11,7 @@ export class EmoteController implements OnInit {
 
         Events.finishedEmote.connect(() => {
             task.delay(3, () => this.emoting = false);
-            Events.anchor.fire(this.character, true);
+            Events.anchor.fire(this.character, false, "HumanoidRootPart");
         });
     }
 
@@ -19,7 +19,7 @@ export class EmoteController implements OnInit {
         if (this.emoting) return;
         this.emoting = true;
 
-        Events.anchor.fire(this.character, true);
+        Events.anchor.fire(this.character, true, "HumanoidRootPart");
         Events.playAnim.fire("emote", id);
     }
 }

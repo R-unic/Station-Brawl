@@ -5,7 +5,7 @@ interface ServerEvents {
     stopAnim(name: string): void;
     playSoundInCharacter(name: string): void;
     damage(humanoid: Humanoid, amount: number): void;
-    anchor(character: Model, on?: boolean): void;
+    anchor(character: Model, on?: boolean, anchorPart?: string): void;
     createVfx(name: string, pos: Vector3, duration: number): void;
 }
 

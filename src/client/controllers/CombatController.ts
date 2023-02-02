@@ -17,21 +17,12 @@ export class CombatController implements OnInit {
         attack: false
     };
 
-    private readonly knockedColorCorrection = new Instance("ColorCorrectionEffect");
-    private readonly knockedBlur = new Instance("BlurEffect");
-    private readonly defaultSaturation = 0
-    private readonly defaultBlur = 0;
-
 	public onInit(): void {
+        math.randomseed(tick() + os.time());
         const camera = World.CurrentCamera!;
         const shaker = new CameraShaker(0, cf => camera.CFrame = camera.CFrame.mul(cf));
         shaker.Start();
         Events.shakeCamera.connect(() => shaker.Shake(CameraShaker.Presets.Vibration));
-
-        this.knockedColorCorrection.Name = "KnockedCC";
-        this.knockedBlur.Name = "KnockedBlur";
-        this.knockedColorCorrection.Saturation = this.defaultSaturation;
-        this.knockedBlur.Size = this.defaultBlur;
         Events.toggleKnockedFX.connect(on => this._toggleKnockedFX(on));
     }
 
@@ -67,10 +58,9 @@ export class CombatController implements OnInit {
     }
 
     private _toggleKnockedFX(on: boolean): void {
-        print(on);
         const info = new TweenInfo(.5, Enum.EasingStyle.Elastic);
-        tween(this.knockedColorCorrection, info, { Saturation: on ? -1 - Lighting.ColorCorrection.Saturation : this.defaultSaturation });
-        tween(this.knockedBlur, info, { Size: on ? 16 : this.defaultBlur });
+        tween(Lighting.KnockedCC, info, { Saturation: on ? -1 - Lighting.ColorCorrection.Saturation : 0 });
+        tween(Lighting.KnockedBlur, info, { Size: on ? 16 : 0 });
     }
 
     private _rayMarch(): RaycastResult | undefined {
