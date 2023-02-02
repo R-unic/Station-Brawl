@@ -42,9 +42,8 @@ export class AnimationService implements OnInit {
 
         animation.AnimationId = `rbxassetid://${id}`;
         const track = humanoid.LoadAnimation(animation);
-        if (tracks.size() > 0)
-            for (const t of tracks)
-                t.Stop();
+        for (const oldTrack of tracks)
+            oldTrack.Stop();
 
         tracks.push(track);
         function removeTrack(): void {

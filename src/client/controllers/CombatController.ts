@@ -71,8 +71,10 @@ export class CombatController implements OnInit {
         this.debounce.attack = true;
 
         task.spawn(() => {
+            const player = getCharacter();
             const character = getCharacter();
             if (character.WaitForChild<Humanoid>("Humanoid").Health <= 0) return;
+            if (player.GetAttribute("BeingFinished")) return;
 
             Events.playAnim.fire("attack", this.animations.attack[(new Random).NextInteger(0, this.animations.attack.size())]);
             const result = this._rayMarch();
