@@ -1,6 +1,7 @@
 import Roact from "@rbxts/roact"
 import { MarketplaceService as Market } from "@rbxts/services";
 import { getPlayer, tween } from "client/utility";
+import DropShadow from "../DropShadow";
 
 interface Props {
     ItemName: string;
@@ -72,6 +73,7 @@ export default function MoneyItemFrame(props: Props) {
                     Rotation={45}
                 />
             </uistroke>
+            <DropShadow Elevation={2} />
             <imagelabel
                 Key="Glow"
                 Image="rbxassetid://10924531821"

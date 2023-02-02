@@ -14,13 +14,13 @@ const { Font, EasingStyle } = Enum;
 export default function MoneyLabel(props: Props) {
     const defaultAddColor = Color3.fromRGB(63, 202, 140);
     const hoverAddInfo = new TweenInfo(.35, EasingStyle.Quad);
-    function hoverAdd(btn: GuiButton): void {
+    function hoverAdd(btn: TextButton): void {
         const shadowContainer = btn.WaitForChild<Frame>("ShadowContainer");
         shadowContainer.SetAttribute("Elevation", 5);
-        tween(btn, hoverAddInfo, { BackgroundColor3: Color3.fromRGB(135, 217, 181) });
+        tween(btn, hoverAddInfo, { BackgroundColor3: Color3.fromRGB(110, 186, 153) });
     }
 
-    function unhoverAdd(btn: GuiButton): void {
+    function unhoverAdd(btn: TextButton): void {
         const shadowContainer = btn.WaitForChild<Frame>("ShadowContainer");
         shadowContainer.SetAttribute("Elevation", undefined);
         tween(btn, hoverAddInfo, { BackgroundColor3: defaultAddColor });

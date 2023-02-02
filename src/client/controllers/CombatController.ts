@@ -6,7 +6,7 @@ import { getCharacter, tween } from "client/utility";
 
 @Controller({})
 export class CombatController implements OnInit {
-    private readonly RANGE = 2.6;
+    private readonly RANGE = 2.8;
     private readonly COOLDOWN = .4;
     private readonly DAMAGE = [15, 25];
 

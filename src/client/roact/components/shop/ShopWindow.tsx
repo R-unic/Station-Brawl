@@ -63,7 +63,13 @@ export default function ShopWindow(props: PropsWithChildren<Props>) {
                 BackgroundTransparency={1}
                 Position={new UDim2(0.5, 0, 1, 0)}
                 ScrollBarThickness={14}
-                Size={new UDim2(1.0150000000000001, 0, 0.88, 0)}
+                ScrollBarImageTransparency={1}
+                Size={new UDim2(1.015, 0, 0.88, 0)}
+                BorderSizePixel={0}
+                Event={{
+                    MouseEnter: f => tween(f, closeHoverInfo, { ScrollBarImageTransparency: 0 }),
+                    MouseLeave: f => tween(f, closeHoverInfo, { ScrollBarImageTransparency: 1 })
+                }}
             >
                 {...children}
                 <uipadding
