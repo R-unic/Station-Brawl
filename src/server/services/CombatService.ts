@@ -1,8 +1,10 @@
 import { Service, OnInit } from "@flamework/core";
 import { Players } from "@rbxts/services";
+import { Janitor } from "@rbxts/janitor";
 import { Events } from "server/network";
 import { randomElement } from "shared/utility/ArrayUtil";
 import ragdoll from "server/utility/ragdoll";
+import anchor from "server/utility/anchor";
 
 @Service({})
 export class CharacterService implements OnInit {
@@ -11,11 +13,20 @@ export class CharacterService implements OnInit {
     };
 
     public onInit(): void {
-        Events.damage.connect((player, humanoid, dmg) => this.damage(player, humanoid, dmg))
-        Players.PlayerAdded.Connect(player => player.LoadCharacter());
+        Events.anchor.connect((_, character, on) => anchor(character, on));
+        Events.damage.connect((player, humanoid, dmg) => this._damage(player, humanoid, dmg));
+        Players.PlayerAdded.Connect(player => {
+            const characterLifeJanitor = new Janitor;
+            player.CharacterAdded.Connect(character => {
+                const humanoid = character.WaitForChild<Humanoid>("Humanoid");
+                characterLifeJanitor.Add(humanoid.Died.Connect(() => this._knock(undefined, humanoid)));
+                characterLifeJanitor.Cleanup();
+            })
+            player.LoadCharacter();
+        });
     }
 
-    public damage(player: Player, victimHumanoid: Humanoid, dmg: number): void {
+    private _damage(player: Player, victimHumanoid: Humanoid, dmg: number): void {
         if (victimHumanoid.Health <= 0) return;
         victimHumanoid.TakeDamage(dmg);
 
@@ -25,17 +36,12 @@ export class CharacterService implements OnInit {
             Events.shakeCamera.fire(victim);
 
         if (victimHumanoid.Health > 0) return;
-        this._kill(player, victimHumanoid);
+        this._knock(player, victimHumanoid);
     }
 
-    private _resetFinisherState(player: Player): void {
-        player.Character!.PrimaryPart!.Anchored = false;
-        Events.toggleCinematicBars.fire(player, false);
-    }
-
-    private _kill(killer: Player, victimHumanoid: Humanoid) {
-        let conn: RBXScriptConnection
-        let victimCharacter = <Model>victimHumanoid.Parent;
+    private _knock(killer: Player | undefined, victimHumanoid: Humanoid) {
+        const promptJanitor = new Janitor;
+        const victimCharacter = <Model>victimHumanoid.Parent;
         const victim = Players.GetPlayerFromCharacter(victimCharacter);
         ragdoll(victimCharacter);
 
@@ -50,38 +56,38 @@ export class CharacterService implements OnInit {
             finishPrompt.GamepadKeyCode = Enum.KeyCode.ButtonX;
             finishPrompt.Enabled = true;
             finishPrompt.Parent = victimCharacter.PrimaryPart!;
-            conn = finishPrompt.Triggered.Once(player => {
+            promptJanitor.Add(finishPrompt.Triggered.Once(player => {
+                if (player === victim) return;
                 if (player !== killer) return;
-                victim.SetAttribute("BeingFinished", true);
-                victim.LoadCharacter();
-
-                victimCharacter = victim.Character!;
-                victimCharacter.PrimaryPart!.Anchored = true;
-                killer.Character!.PrimaryPart!.Anchored = true;
-
-                const negativeDistance = killer.Character!.PrimaryPart!.CFrame.LookVector.mul(.65);
-                victimCharacter.PrimaryPart!.CFrame = killer.Character!.PrimaryPart!.CFrame.add(killer.Character!.PrimaryPart!.CFrame.LookVector.sub(negativeDistance));
-
-                Events.toggleCinematicBars.fire([killer, victim], true);
-                const [ killerAnimationID, victimAnimationID ] = randomElement(this.animations.finishers);
-                Events.playAnim.predict(killer, "finisher", killerAnimationID, undefined, () => this._resetFinisherState(killer));
-                Events.playAnim.predict(victim, "beingFinished", victimAnimationID, victimCharacter, () => {
-                    this._resetFinisherState(victim);
-                    task.delay(.25, () => {
-                        victim.LoadCharacter();
-                        victim.SetAttribute("BeingFinished", false);
-                        Events.toggleKnockedFX.fire(victim, false);
-                    });
-                });
-            });
+                this._doFinisher(killer, victim);
+            }));
         }
 
         task.delay(7, () => {
             if (victim?.GetAttribute("BeingFinished")) return;
-            conn?.Disconnect();
+            promptJanitor.Cleanup();
             victim?.LoadCharacter();
             if (!victim)
                 victimCharacter.Destroy();
         });
+    }
+
+    private _doFinisher(killer: Player, victim: Player): void {
+        victim.SetAttribute("BeingFinished", true);
+        victim.LoadCharacter();
+        const victimCharacter = victim.Character!;
+
+        const victimTorso = victimCharacter.WaitForChild<Part>("UpperTorso");
+        const killerTorso = killer.Character!.WaitForChild<Part>("UpperTorso");
+        anchor(victimCharacter, true);
+        anchor(killer.Character, true);
+
+        const negativeDistance = killerTorso.CFrame.LookVector.mul(.8);
+        victimTorso.CFrame = killerTorso.CFrame.add(killerTorso.CFrame.LookVector.sub(negativeDistance));
+
+        Events.toggleCinematicBars.fire([killer, victim], true);
+        const [ killerAnimationID, victimAnimationID ] = randomElement(this.animations.finishers);
+        Events.playAnim.predict(killer, "finisher", killerAnimationID);
+        Events.playAnim.predict(victim, "beingFinished", victimAnimationID, victimCharacter);
     }
 }
