@@ -1,6 +1,7 @@
 import { Service, OnInit } from "@flamework/core";
 import { MarketplaceService as Market, Players } from "@rbxts/services";
 import { DataService } from "./DataService";
+import Logger from "shared/Logger";
 
 const { ProductPurchaseDecision } = Enum;
 
@@ -23,6 +24,8 @@ export class PurchaseRewardsService implements OnInit {
                 const player = Players.GetPlayerByUserId(receiptInfo.PlayerId)!;
                 const money = this.data.get<number>(player, "money");
                 money.Increment(amount);
+
+                Logger.$discord(player, "Currency Purchase", `Purchased ${info.Name} (R$${info.PriceInRobux ?? "?"})`);
                 return ProductPurchaseDecision.PurchaseGranted;
             }
             return ProductPurchaseDecision.NotProcessedYet;

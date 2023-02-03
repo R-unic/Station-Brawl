@@ -1,4 +1,4 @@
-import Roact, { Portal, createRef } from "@rbxts/roact";
+import Roact, { createRef } from "@rbxts/roact";
 import { WINDOW_REFS } from "client/roact/Refs";
 import MoneyProductCard from "client/roact/components/MoneyProductCard";
 import ListWindow from "client/roact/components/ListWindow";

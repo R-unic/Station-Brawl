@@ -7,12 +7,6 @@ export class SoundPlayerService implements OnInit {
         ["punchHit", [1193237596]],
     ])
 
-    private getRandomId(name: string): number | undefined {
-        const ids = this.soundMap.get(name);
-        if (!ids) return;
-        return ids[(new Random).NextInteger(0, ids.size())];
-    }
-
     public onInit(): void {
         Events.playSoundInCharacter.connect((plr, name) => this.playInCharacter(plr, name));
     }
@@ -21,11 +15,17 @@ export class SoundPlayerService implements OnInit {
         task.spawn(() => {
             const char = plr.Character ?? plr.CharacterAdded.Wait()[0];
             const sound = <Sound>char.WaitForChild(name);
-            const id = this.getRandomId(name);
+            const id = this._getRandomId(name);
             if (!sound || !id) return;
 
             sound.SoundId = `rbxassetid://${id}`;
             sound.Play();
         });
+    }
+
+    private _getRandomId(name: string): number | undefined {
+        const ids = this.soundMap.get(name);
+        if (!ids) return;
+        return ids[(new Random).NextInteger(0, ids.size())];
     }
 }

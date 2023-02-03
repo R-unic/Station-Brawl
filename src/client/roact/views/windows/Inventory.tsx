@@ -6,6 +6,7 @@ import ListWindow from "client/roact/components/ListWindow";
 import WindowTabs from "client/roact/components/WindowTabs";
 import CaseCard from "client/roact/components/cards/CaseCard";
 import InventoryItemCard from "client/roact/components/cards/InventoryItemCard";
+import Logger from "shared/Logger";
 import InventoryInfo from "shared/dataInterfaces/InventoryInfo";
 
 interface State {
@@ -35,7 +36,7 @@ class InventoryScreen extends Roact.Component<{}, State> {
         if (!screen) return;
 
         const list = screen.WaitForChild("Inventory").FindFirstChildOfClass("ScrollingFrame");
-        if (!list) return warn("Could not find list frame in inventory window when setting page");
+        if (!list) return;
 
         const pageMembers = list.GetChildren().filter((i): i is GuiObject => i.GetAttribute("Page") === page && i.IsA("GuiObject"));
         const nonPageMembers = list.GetChildren().filter((i): i is GuiObject => i.GetAttribute("Page") !== page && i.IsA("GuiObject"));
@@ -70,7 +71,7 @@ class InventoryScreen extends Roact.Component<{}, State> {
             this.items.push(<InventoryItemCard CardName={"effects_" + effect.name} ItemName={effect.name} Icon={effect.image} />);
 
         const list = screen.WaitForChild("Inventory").FindFirstChildOfClass("ScrollingFrame");
-        if (!list) return warn("Could not find list frame in inventory window when refreshing inventory");
+        if (!list) return;
         for (const element of this.items)
             this.itemHandles.push(mount(element, list));
 

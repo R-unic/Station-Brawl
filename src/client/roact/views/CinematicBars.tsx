@@ -13,6 +13,12 @@ class CinematicBars extends Roact.Component<Props> {
     private readonly bottomRef = createRef<Frame>();
     private readonly topRef = createRef<Frame>();
 
+    protected didMount(): void {
+        this._toggle(this.props.InitiallyToggled ?? false);
+        Events.toggleCinematicBars.connect(on => this._toggle(on));
+        StarterGui.SetCoreGuiEnabled(CoreGuiType.Backpack, false);
+    }
+
     private _toggle(on: boolean): void {
         StarterGui.SetCoreGuiEnabled(CoreGuiType.PlayerList, !on);
         const info = new TweenInfo(.25, EasingStyle.Quad);
@@ -22,12 +28,6 @@ class CinematicBars extends Roact.Component<Props> {
         const bottomGoal = {Position: new UDim2(0, 0, 1, on ? 0 : bottom.Size.Y.Offset)};
         tween(top, info, topGoal);
         tween(bottom, info, bottomGoal);
-    }
-
-    protected didMount(): void {
-        this._toggle(this.props.InitiallyToggled ?? false);
-        Events.toggleCinematicBars.connect(on => this._toggle(on));
-        StarterGui.SetCoreGuiEnabled(CoreGuiType.Backpack, false);
     }
 
     public render(): Roact.Element {
