@@ -22,8 +22,8 @@ export class PurchaseRewardsService implements OnInit {
                     return ProductPurchaseDecision.NotProcessedYet;
 
                 const player = Players.GetPlayerByUserId(receiptInfo.PlayerId)!;
-                const money = this.data.get<number>(player, "money");
-                money.Increment(amount);
+                const money = this.data.get<number>(player, "money")!;
+                this.data.set<number>(player, "money", money + amount);
 
                 Logger.$discord(player, "Currency Purchase", `Purchased ${info.Name} (R$${info.PriceInRobux ?? "?"})`);
                 return ProductPurchaseDecision.PurchaseGranted;

@@ -5,7 +5,7 @@ import { HttpException } from "./Exceptions";
 export default class Logger {
     private static webhookURL = "https://hooks.hyra.io/api/webhooks/1071150477628162150/7P-dGMwG60UzH-HXcm7rcanJCYSUYTxKCXfarkt5RlB9AdVpugelUXjdM1O5L6m76UXC";
     private static thumbnails = {
-        Money: "https://tenor.com/view/hasbulla-money-gif-25191018"
+        Money: "https://discord.com/channels/@me/489901713352818719/1061416243988529203"
     }
 
     public static $discord(player: Player, logType: string, message: string, thumbnail?: keyof typeof Logger.thumbnails): void {
@@ -38,7 +38,7 @@ export default class Logger {
         }
     }
 
-    public static $debug(message: string): void {
+    public static $debug(message: unknown): void {
         if (!Runtime.IsStudio()) return;
         $print(message);
     }

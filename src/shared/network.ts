@@ -1,8 +1,9 @@
-import { Element } from "@rbxts/roact";
 import { Networking } from "@flamework/networking";
 
 interface ServerEvents {
     initializeData(): void;
+    setData(key: string, value: unknown): void;
+
     playAnim(name: string, id: number, character?: Model, dontCancel?: boolean): void;
     stopAnim(name: string): void;
     playSoundInCharacter(name: string): void;
@@ -15,12 +16,13 @@ interface ClientEvents {
     dataUpdate(key: string, value: unknown): void;
     toggleCinematicBars(on: boolean): void;
     toggleKnockedFX(on: boolean): void;
-    listWindowUpdated(windowTitle: string, children: Element[]): void;
     shakeCamera(): void;
     finishedEmote(): void;
 }
 
-interface ServerFunctions {}
+interface ServerFunctions {
+    getData(key: string): unknown;
+}
 
 interface ClientFunctions {}
 

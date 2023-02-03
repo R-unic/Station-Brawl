@@ -1,7 +1,7 @@
-import { CaseInfo } from "./CaseInfo";
-import { EffectInfo } from "./EffectInfo";
+import { CaseItemInfo } from "./CaseItemInfo";
+import { EffectItemInfo } from "./EffectItemInfo";
 
 export default interface InventoryInfo {
-    readonly cases: CaseInfo[]
-    readonly effects: EffectInfo[]
+    readonly cases: CaseItemInfo[]
+    readonly effects: EffectItemInfo[]
 }

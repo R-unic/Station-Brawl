@@ -1,12 +1,10 @@
 import Roact, { Element, Ref, Tree, createRef, mount, unmount } from "@rbxts/roact";
-import { StrictMap } from "@rbxts/strict-map";
 import { Events } from "client/network";
 import { WINDOW_REFS } from "client/roact/Refs";
 import ListWindow from "client/roact/components/ListWindow";
 import WindowTabs from "client/roact/components/WindowTabs";
 import CaseCard from "client/roact/components/cards/CaseCard";
 import InventoryItemCard from "client/roact/components/cards/InventoryItemCard";
-import Logger from "shared/Logger";
 import InventoryInfo from "shared/dataInterfaces/InventoryInfo";
 
 interface State {
@@ -62,10 +60,9 @@ class InventoryScreen extends Roact.Component<{}, State> {
         this.itemHandles.clear();
         this.items.clear();
 
-        // set attributes
         for (const _case of inventory.cases) {
             const itemName = _case.name + " Case";
-            this.items.push(<CaseCard CardName={"cases_" + itemName} ItemName={itemName} Icon={_case.image} />);
+            this.items.push(<CaseCard CaseInfo={_case} CardName={"cases_" + itemName} ItemName={itemName} Icon={_case.image} />);
         }
         for (const effect of inventory.effects)
             this.items.push(<InventoryItemCard CardName={"effects_" + effect.name} ItemName={effect.name} Icon={effect.image} />);
@@ -82,7 +79,7 @@ class InventoryScreen extends Roact.Component<{}, State> {
     public render(): Roact.Element {
         return (
             <screengui Ref={this.ref} Key="Inventory" Enabled={false}>
-                <ListWindow Title="Inventory" ListSize={new UDim2(1.015, 0, 0.77, 0)} ListChildren={[]}>
+                <ListWindow Title="Inventory" ListSize={new UDim2(1.015, 0, 0.77, 0)}>
                     <WindowTabs>
                         <InventoryTab TabName="Effects" Screen={this} />
                         <InventoryTab TabName="Cases" Screen={this} />

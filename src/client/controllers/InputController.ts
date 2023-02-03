@@ -1,5 +1,6 @@
 import { Controller, OnInit } from "@flamework/core";
 import { ContextActionService as Action } from "@rbxts/services";
+
 import { Events } from "client/network";
 import { WINDOW_REFS } from "client/roact/Refs";
 import { CombatController } from "./CombatController";

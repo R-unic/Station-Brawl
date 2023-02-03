@@ -1,6 +1,7 @@
 import { Controller, OnInit } from "@flamework/core";
 import { Lighting, Workspace as World } from "@rbxts/services";
 import CameraShaker from "@rbxts/camera-shaker";
+
 import { Events } from "client/network";
 import { getCharacter, getPlayer, tween } from "client/utility";
 import { EmoteController } from "./EmoteController";
