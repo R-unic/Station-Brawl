@@ -2,7 +2,7 @@ import { OnInit, Service } from "@flamework/core";
 import DataStore2 from "@rbxts/datastore2";
 import { Events } from "server/network";
 import { CaseInfo } from "shared/dataInterfaces/CaseInfo";
-import Inventory from "shared/dataInterfaces/Inventory";
+import InventoryInfo from "shared/dataInterfaces/InventoryInfo";
 import { Rarity } from "shared/dataInterfaces/Rarity";
 
 DataStore2.Combine("DATA", "money", "inventory");
@@ -11,7 +11,7 @@ DataStore2.Combine("DATA", "money", "inventory");
 export class DataService implements OnInit {
     private _setup(player: Player): void {
         this._initialize(player, "money", 100);
-        this._initialize<Inventory>(player, "inventory", {
+        this._initialize<InventoryInfo>(player, "inventory", {
             cases: [new CaseInfo("test", 10, "rbxassetid://2026820322", Rarity.Basic)],
             effects: []
         });

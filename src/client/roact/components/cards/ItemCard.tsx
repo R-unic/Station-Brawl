@@ -1,8 +1,9 @@
-import Roact from "@rbxts/roact";
-import DropShadow from "../DropShadow";
+import Roact, { Ref } from "@rbxts/roact";
 import { tween } from "client/utility";
+import DropShadow from "../DropShadow";
 
 interface Props {
+    CardName?: string;
     ItemName: string;
     Icon: string;
     InfoText: string;
@@ -41,7 +42,7 @@ export default function ItemCard(props: Props) {
 
     return (
         <textbutton
-            Key={props.ItemName}
+            Key={props.CardName ?? props.ItemName}
             BackgroundColor3={Color3.fromRGB(255, 255, 255)}
             Active={false}
             Selectable={false}

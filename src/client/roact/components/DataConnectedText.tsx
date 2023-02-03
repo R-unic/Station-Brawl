@@ -1,5 +1,6 @@
 import Roact, { Children, Element, PropsWithChildren } from "@rbxts/roact";
 import { Events } from "client/network";
+import { getChildren } from "client/utility";
 
 interface Props<I extends Instance> {
     InitialText?: string;
@@ -23,13 +24,9 @@ export default class DataConnectedText extends Roact.Component<PropsWithChildren
     }
 
     public render(): Element {
-        const childrenMap = this.props[Children];
-        const children: Element[] = [];
-        childrenMap?.forEach(e => children.push(e));
-
         return (
             <textlabel {...this.props.LabelProperties} Text={this.state.LinkedText}>
-                {...children}
+                {...getChildren(this.props)}
             </textlabel>
         );
     }

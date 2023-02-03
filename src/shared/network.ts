@@ -1,3 +1,4 @@
+import { Element } from "@rbxts/roact";
 import { Networking } from "@flamework/networking";
 
 interface ServerEvents {
@@ -14,6 +15,7 @@ interface ClientEvents {
     dataUpdate(key: string, value: unknown): void;
     toggleCinematicBars(on: boolean): void;
     toggleKnockedFX(on: boolean): void;
+    listWindowUpdated(windowTitle: string, children: Element[]): void;
     shakeCamera(): void;
     finishedEmote(): void;
 }

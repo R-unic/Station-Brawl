@@ -1,5 +1,5 @@
 import Roact, { Children, Element, PropsWithChildren, Ref } from "@rbxts/roact";
-import { tween } from "client/utility";
+import { getChildren, tween } from "client/utility";
 
 interface Props {
     Title: string;
@@ -7,11 +7,8 @@ interface Props {
 
 const { Font, TextXAlignment, EasingStyle } = Enum;
 
+// window icon to left of title
 export default function Window(props: PropsWithChildren<Props>) {
-    const childrenMap = props[Children];
-    const children: Element[] = [];
-    childrenMap?.forEach(e => children.push(e));
-
     const closeHoverInfo = new TweenInfo(.3, EasingStyle.Quad);
     const defaultCloseColor = Color3.fromRGB(255, 100, 100);
     function hoverClose(btn: TextButton): void {
@@ -29,7 +26,7 @@ export default function Window(props: PropsWithChildren<Props>) {
             Position={new UDim2(0.24, 0, 0.21, 0)}
             Size={new UDim2(0.5, 0, 0.65, 0)}
         >
-            {...children}
+            {...getChildren(props)}
             <uicorner CornerRadius={new UDim(0, 12)} />
             <textbutton
                 Key="Close"

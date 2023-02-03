@@ -1,10 +1,11 @@
-import Roact from "@rbxts/roact";
+import Roact, { Ref } from "@rbxts/roact";
 import ItemCard from "./ItemCard";
 
 interface Props {
     ItemName: string;
     Icon: string;
     InfoText?: string;
+    CardName?: string;
 }
 
 interface State {
@@ -26,6 +27,7 @@ class InventoryItemCard extends Roact.Component<Props, State> {
     public render(): Roact.Element {
         return (
             <ItemCard
+                CardName={this.props.CardName}
                 ItemName={this.props.ItemName}
                 Icon={this.props.Icon}
                 InfoText={this.props.InfoText ?? this.props.ItemName}
