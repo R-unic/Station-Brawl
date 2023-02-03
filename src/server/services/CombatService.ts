@@ -45,6 +45,7 @@ export class CharacterService implements OnInit {
         const promptJanitor = new Janitor;
         const victimCharacter = <Model>victimHumanoid.Parent;
         const victim = Players.GetPlayerFromCharacter(victimCharacter);
+        if (!victimCharacter || !victimCharacter.PrimaryPart) return;
         ragdoll(victimCharacter);
 
         if (victim) {
