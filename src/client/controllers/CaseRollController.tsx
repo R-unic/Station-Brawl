@@ -53,8 +53,11 @@ export class CaseRollController {
                     Icon={reward.image}
                     InfoText={reward.name}
                     ButtonText={this._getRewardKindString(reward.kind)}
-                    ButtonColor={Color3.fromRGB(107, 115, 125)}
-                    ButtonTextColor={Color3.fromRGB(107, 115, 125)}
+                    AnchorPoint={new Vector2(.5, .5)}
+                    Position={UDim2.fromScale(.5, .425)}
+                    Size={UDim2.fromScale(.125, .3)}
+                    ButtonColor={Color3.fromRGB(48, 54, 64)}
+                    ButtonTextColor={Color3.fromRGB(168, 179, 191)}
                     OnButtonClicked={() => {}}
                 />
             </CaseRewardModal>

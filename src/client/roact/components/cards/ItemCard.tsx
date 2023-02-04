@@ -7,6 +7,9 @@ interface Props {
     ItemName: string;
     Icon: string;
     InfoText: string;
+    Size?: UDim2;
+    Position?: UDim2;
+    AnchorPoint?: Vector2;
     PrimaryGradientColor?: Color3;
     SecondaryGradientColor?: Color3;
     ButtonText: string;
@@ -47,7 +50,9 @@ export default function ItemCard(props: Props) {
             Active={false}
             Selectable={false}
             AutoButtonColor={false}
-            Size={new UDim2(0, 100, 0, 100)}
+            Size={props.Size ?? new UDim2(0, 100, 0, 100)}
+            Position={props.Position}
+            AnchorPoint={props.AnchorPoint}
             Text={""}
             Event={{
                 MouseEnter: hover,

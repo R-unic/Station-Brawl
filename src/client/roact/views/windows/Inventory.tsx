@@ -90,6 +90,7 @@ class InventoryScreen extends Roact.Component<{}, State> {
     }
 }
 
+// hover animation
 function InventoryTab(props: TabProps) {
     return (
         <textbutton

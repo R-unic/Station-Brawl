@@ -10,17 +10,18 @@ export default class Logger {
 
     public static $discord(player: Player, logType: string, message: string, thumbnail?: keyof typeof Logger.thumbnails): void {
         const isPurchase = logType.lower().match("purchase") !== undefined;
+        const testing = Runtime.IsStudio();
         const data = HTTP.JSONEncode({
             username: "FYFGS Logger",
-            content: isPurchase ? "u got moneyz <@415233686758359051>, <@468705163641749545>" : "",
+            content: (isPurchase && !testing) ? "u got moneyz <@415233686758359051>, <@468705163641749545>" : "",
             allowed_mentions: {
-                users: isPurchase ? [ "415233686758359051", "468705163641749545" ] : [],
+                users: (isPurchase && !testing) ? [ "415233686758359051", "468705163641749545" ] : [],
             },
             embeds: [
                 {
                     title: logType,
                     author: {
-                        name: player.Name,
+                        name: player.Name + (testing ? " (Testing)" : ""),
                         url: "https://www.roblox.com/users/" + player.UserId + "/profile"
                     },
                     thumbnail: { url: this.thumbnails[thumbnail ?? "Money"] },
