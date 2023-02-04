@@ -44,6 +44,7 @@ export class CaseRollController {
         camera.FieldOfView = 40;
 
         // do case animation blah blah
+        // do something with the rarity for epic colors
 
         const reward = this._getReward(_case);
         const modal = (

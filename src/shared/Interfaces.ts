@@ -1,4 +1,5 @@
 import { Element } from "@rbxts/roact";
+import { Rarity } from "./dataInterfaces/Rarity";
 
 export interface InventoryPages {
     Effects: Element[];
@@ -13,6 +14,7 @@ export class CaseReward {
     public constructor(
         public readonly kind: CaseRewardKind,
         public readonly name: string,
-        public readonly image: string
+        public readonly image: string,
+        public readonly rarity: Rarity
     ) {}
 }
