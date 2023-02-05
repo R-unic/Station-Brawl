@@ -6,7 +6,7 @@ interface Props {
     ItemName: string;
     Icon: string;
     InfoText?: string;
-    CardName?: string;
+    CardName: string;
     OnlyOneEquippable?: boolean;
     Rarity: Rarity;
     OnEquip: (on: boolean) => void;
@@ -27,8 +27,8 @@ class InventoryItemCard extends Roact.Component<Props, State> {
         this.props.OnEquip(on);
         if (this.props.OnlyOneEquippable ?? false)
             for (const inventoryCard of inventoryCards)
-                if (inventoryCard !== this)
-                    inventoryCard.equip(!equipped);
+                if (inventoryCard.props.CardName.split("_")[0] === this.props.CardName.split("_")[0] && inventoryCard.props.CardName !== this.props.CardName && on === true)
+                    inventoryCard.equip(false);
     }
 
     protected didMount(): void {

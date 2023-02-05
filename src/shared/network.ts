@@ -1,6 +1,7 @@
 import { Networking } from "@flamework/networking";
 import { ReplicatedStorage as Replicated } from "@rbxts/services";
 import { Rarity } from "./dataInterfaces/Rarity";
+import { WeaponData } from "./Interfaces";
 
 interface ServerEvents {
     initializeData(): void;
@@ -16,12 +17,17 @@ interface ServerEvents {
     damage(humanoid: Humanoid, amount: number): void;
     anchor(character: Model, on?: boolean, anchorPart?: string): void;
     createBlood(position: Vector3, duration: number): void;
+
+    equipWeapon(name: Exclude<keyof typeof Replicated.Assets.Weapons, keyof Folder>): void;
+    unequipWeapon(name: Exclude<keyof typeof Replicated.Assets.Weapons, keyof Folder>): void;
     addEffectParticles(character: Model, effectName: Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>): void;
     removeEffectParticles(character: Model, effectName: Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>): void;
 }
 
 interface ClientEvents {
     dataUpdate(key: string, value: unknown): void;
+    loadWeapon(data: WeaponData): void;
+    unloadWeapon(): void;
     toggleCinematicBars(on: boolean): void;
     toggleKnockedFX(on: boolean): void;
     shakeCamera(): void;

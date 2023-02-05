@@ -15,7 +15,12 @@ interface ReplicatedStorage extends Instance {
 			};
 		};
         Weapons: Folder & {
-            SomeWeapon: Folder;
+            ["Diamond Sword"]: Model & {
+                Mesh: UnionOperation;
+                Handle: Part & {
+                    Mesh: Weld;
+                };
+            };
         };
         Effects: Folder & {
             Flame: Folder & {

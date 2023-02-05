@@ -41,3 +41,15 @@ export class WeaponCaseReward extends CaseReward {
         super(CaseRewardKind.Weapon, name, image, rarity);
     }
 }
+
+interface WeaponAnimations {
+    Attack: number[];
+    Idle?: number;
+}
+
+export interface WeaponData {
+    Damage: [number, number];
+    Range: number;
+    Cooldown: number;
+    Animations: WeaponAnimations;
+}

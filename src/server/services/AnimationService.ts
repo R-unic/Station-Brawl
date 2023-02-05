@@ -18,10 +18,11 @@ export class AnimationService implements OnInit {
                 const tracks = new Map<string, AnimationTrack>();
                 const intializeAnimation = (name: string) => animations.set(name, this._createAnimation(name, character));
 
+                intializeAnimation("idle");
                 intializeAnimation("attack");
                 intializeAnimation("finisher");
                 intializeAnimation("beingFinished");
-                intializeAnimation("emote")
+                intializeAnimation("emote");
 
                 this.playerAnimations.set(player, animations);
                 this.playerTracks.set(player, tracks);

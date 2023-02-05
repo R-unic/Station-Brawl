@@ -4,6 +4,8 @@ import DataStore2 from "@rbxts/datastore2";
 
 import { Events, Functions } from "server/network";
 import InventoryInfo from "shared/dataInterfaces/InventoryInfo";
+import { WeaponItemInfo } from "shared/dataInterfaces/WeaponItemInfo";
+import { Rarity } from "shared/dataInterfaces/Rarity";
 
 @Service({})
 export class DataService implements OnInit {
@@ -19,6 +21,7 @@ export class DataService implements OnInit {
             inventory.cases ??= [];
             inventory.effects ??= [];
             inventory.weapons ??= [];
+            // inventory.weapons.push(new WeaponItemInfo("Diamond Sword", "rbxassetid://3516782316", Rarity.UltraRare));
             this.set<InventoryInfo>(player, "inventory", inventory);
         });
     }

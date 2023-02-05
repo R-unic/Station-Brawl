@@ -98,11 +98,10 @@ class InventoryScreen extends Roact.Component<{}, State> {
                     Icon={weapon.image}
                     OnlyOneEquippable={true}
                     OnEquip={on => {
-                        // weapons equipping code
-                        // if (on)
-                        //     Events.addEffectParticles.fire(getCharacter(), weapon.name);
-                        // else
-                        //     Events.removeEffectParticles.fire(getCharacter(), weapon.name);
+                        if (on)
+                            Events.equipWeapon.fire(weapon.name);
+                        else
+                            Events.unequipWeapon.fire(weapon.name);
                     }}
                 />
             );
