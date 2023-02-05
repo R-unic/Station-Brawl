@@ -17,18 +17,14 @@
     "@typescript-eslint/eslint-plugin": "^4.28.4",
     "@typescript-eslint/parser": "^4.28.4",
     "eslint": "^7.31.0",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^3.4.0",
     "eslint-plugin-roblox-ts": "^0.0.30",
-    "prettier": "^2.3.2",
-    "rbxts-transformer-flamework": "^1.0.0-beta.14",
-    "roblox-ts": "^2.0.2",
-    "typescript": "^4.8.3"
+    "roblox-ts": "^2.1.0-dev-de8ccae",
+    "typescript": "^4.9.4"
   },
   "dependencies": {
-    "@flamework/components": "^1.0.0-beta.9",
-    "@flamework/core": "^1.0.0-beta.6",
-    "@flamework/networking": "^1.0.0-beta.8",
+    "@flamework/components": "^1.0.0-beta.12",
+    "@flamework/core": "^1.0.0-beta.8",
+    "@flamework/networking": "^1.0.0-beta.9",
     "@rbxts/camera-shaker": "^1.0.7",
     "@rbxts/datastore2": "^1.4.0-ts.0",
     "@rbxts/janitor": "^1.14.1-ts.1",
@@ -37,6 +33,8 @@
     "@rbxts/roact": "^1.4.4-ts.0",
     "@rbxts/rodux": "^3.0.0-ts.3",
     "@rbxts/strict-map": "^1.0.2",
-    "rbxts-transform-debug": "^2.0.3"
+    "@rbxts/t": "^3.1.0",
+    "rbxts-transform-debug": "^2.0.3",
+    "rbxts-transformer-flamework": "^1.0.0-beta.15"
   }
 }

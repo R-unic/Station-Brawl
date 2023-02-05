@@ -1,5 +1,4 @@
 import { HttpService as HTTP, RunService as Runtime } from "@rbxts/services";
-import { $print, $warn } from "rbxts-transform-debug";
 import { HttpException } from "./Exceptions";
 
 export default class Logger {
@@ -41,10 +40,10 @@ export default class Logger {
 
   public static $debug(message: unknown): void {
     if (!Runtime.IsStudio()) return;
-    $print(message);
+    print(message);
   }
 
   public static $warn(message: string): void {
-    $warn(message);
+    warn(message);
   }
 }
