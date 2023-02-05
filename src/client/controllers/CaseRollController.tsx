@@ -1,15 +1,19 @@
 import { Controller } from "@flamework/core";
-import { Workspace as World } from "@rbxts/services";
+import { ReplicatedStorage as Replicated, Workspace as World } from "@rbxts/services";
 import { StrictMap } from "@rbxts/strict-map";
 import { Janitor } from "@rbxts/janitor";
 import Roact, { mount, unmount } from "@rbxts/roact";
 
-import { Events } from "client/network";
+import { randomElement } from "shared/utility/ArrayUtil";
+import { RarityColors } from "shared/dataInterfaces/Rarity";
+import { CaseItemInfo } from "shared/dataInterfaces/CaseItemInfo";
+import { EffectItemInfo } from "shared/dataInterfaces/EffectItemInfo";
+import InventoryInfo from "shared/dataInterfaces/InventoryInfo";
+import { CaseReward, CaseRewardKind } from "shared/Interfaces";
+
+import { Events, Functions } from "client/network";
 import { WINDOW_REFS } from "client/roact/Refs";
 import { getUI } from "client/utility";
-import { randomElement } from "shared/utility/ArrayUtil";
-import { CaseItemInfo } from "shared/dataInterfaces/CaseItemInfo";
-import { CaseReward, CaseRewardKind } from "shared/Interfaces";
 import { LootPoolController } from "./LootPoolController";
 import CaseRewardModal from "client/roact/components/CaseRewardModal";
 import ItemCard from "client/roact/components/cards/ItemCard";
@@ -29,7 +33,7 @@ export class CaseRollController {
         this.janitor.Cleanup();
     }
 
-    public open(_case: CaseItemInfo): void {
+    public async open(_case: CaseItemInfo): Promise<void> {
         Events.toggleCinematicBars.predict(true);
         const defaultEnabled = new StrictMap<string, boolean>();
         for (const [key, ref] of WINDOW_REFS.entries()) {
@@ -47,6 +51,7 @@ export class CaseRollController {
         // do something with the rarity for epic colors
 
         const reward = this._getReward(_case);
+        const rarityColor = RarityColors[reward.rarity];
         const modal = (
             <CaseRewardModal>
                 <ItemCard
@@ -57,6 +62,8 @@ export class CaseRollController {
                     AnchorPoint={new Vector2(.5, .5)}
                     Position={UDim2.fromScale(.5, .425)}
                     Size={UDim2.fromScale(.125, .3)}
+                    PrimaryGradientColor={Color3.fromRGB(204, 204, 204).Lerp(rarityColor, .5)}
+                    SecondaryGradientColor={Color3.fromRGB(150, 150, 150).Lerp(rarityColor, .5)}
                     ButtonColor={Color3.fromRGB(48, 54, 64)}
                     ButtonTextColor={Color3.fromRGB(168, 179, 191)}
                     OnButtonClicked={() => {}}
@@ -65,7 +72,15 @@ export class CaseRollController {
         );
 
         const modalHandle = mount(modal, getUI());
-        this.janitor.Add(() => {
+        this.janitor.Add(async () => {
+            const inventory = (await Functions.getData.invoke("inventory")) as InventoryInfo;
+            switch(reward.kind) {
+                case CaseRewardKind.Effect:
+                    inventory.effects.push(new EffectItemInfo(reward.name as Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>, reward.image, reward.rarity));
+                    break;
+            }
+            Events.setData.fire("inventory", inventory);
+
             Events.toggleCinematicBars.predict(false);
             camera.CameraType = CameraType.Custom;
             camera.FieldOfView = 70;

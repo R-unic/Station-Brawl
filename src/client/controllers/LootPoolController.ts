@@ -2,7 +2,7 @@ import { Controller } from "@flamework/core";
 import { CaseItemInfo } from "shared/dataInterfaces/CaseItemInfo";
 import { Rarity } from "shared/dataInterfaces/Rarity";
 import { MissingLootPoolException } from "shared/Exceptions";
-import { CaseReward, CaseRewardKind } from "shared/Interfaces";
+import { CaseReward, CaseRewardKind, EffectCaseReward } from "shared/Interfaces";
 
 @Controller({})
 export class LootPoolController {
@@ -10,7 +10,8 @@ export class LootPoolController {
         switch(_case.name) {
             case "Basic":
                 return [
-                    new CaseReward(CaseRewardKind.Effect, "Fire", "rbxassetid://0", Rarity.Uncommon)
+                    new EffectCaseReward("Flame", "rbxassetid://33238901", Rarity.Common),
+                    new EffectCaseReward("Electricity", "rbxassetid://247707592", Rarity.Average)
                 ];
             default:
                 throw new MissingLootPoolException(_case);
