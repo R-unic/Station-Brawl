@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import { commaFormat } from "shared/utility/NumberUtil";
+import { formatNum } from "@rbxts/number-manipulator";
 import { tween } from "client/utility";
 import DropShadow from "./DropShadow"
 import DataConnectedText from "./DataConnectedText";
@@ -53,7 +53,7 @@ export default function MoneyLabel(props: Props) {
                     Key="Amount"
                     DataKey="money"
                     InitialText="$10,000"
-                    DataMapper={a => "$" + commaFormat(a as number)}
+                    DataMapper={a => "$" + formatNum(a as number)}
 
                     LabelProperties={{
                         AnchorPoint: new Vector2(1, 0),
