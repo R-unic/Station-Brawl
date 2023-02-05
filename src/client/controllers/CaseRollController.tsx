@@ -8,11 +8,10 @@ import { randomElement } from "shared/utility/ArrayUtil";
 import { CaseReward, CaseRewardKind } from "shared/Interfaces";
 import { DuplicateRewards, Rarity, RarityColors } from "shared/dataInterfaces/Rarity";
 import { CaseItemInfo } from "shared/dataInterfaces/CaseItemInfo";
-import { EffectItemInfo } from "shared/dataInterfaces/EffectItemInfo";
 import InventoryInfo from "shared/dataInterfaces/InventoryInfo";
 
 import { Events, Functions } from "client/network";
-import { WINDOW_REFS } from "client/roact/Refs";
+import { WindowRefs } from "client/roact/Refs";
 import { getUI } from "client/utility";
 import { LootPoolController } from "./LootPoolController";
 import CaseRewardModal from "client/roact/components/CaseRewardModal";
@@ -36,7 +35,7 @@ export class CaseRollController {
     public async open(_case: CaseItemInfo): Promise<void> {
         Events.toggleCinematicBars.predict(true);
         const defaultEnabled = new StrictMap<string, boolean>();
-        for (const [key, ref] of WINDOW_REFS.entries()) {
+        for (const [key, ref] of WindowRefs.entries()) {
             const screen = ref.getValue()!;
             defaultEnabled.set(key, screen.Enabled);
             screen.Enabled = false;
@@ -59,7 +58,7 @@ export class CaseRollController {
 
             unmount(modalHandle);
             for (const [key, enabled] of defaultEnabled.entries()) {
-                const ref = WINDOW_REFS.mustGet(key);
+                const ref = WindowRefs.mustGet(key);
                 const screen = ref.getValue()!;
                 screen.Enabled = enabled;
             }

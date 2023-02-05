@@ -8,7 +8,7 @@ export interface InventoryPages {
     Cases: Element[];
 }
 
-export enum CaseRewardKind {
+export const enum CaseRewardKind {
     Effect,
     Weapon
 }

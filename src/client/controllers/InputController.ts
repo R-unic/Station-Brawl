@@ -2,7 +2,7 @@ import { Controller, OnInit } from "@flamework/core";
 import { ContextActionService as Action } from "@rbxts/services";
 
 import { Events } from "client/network";
-import { WINDOW_REFS } from "client/roact/Refs";
+import { WindowRefs } from "client/roact/Refs";
 import { CombatController } from "./CombatController";
 import { EmoteController } from "./EmoteController";
 
@@ -30,7 +30,7 @@ export class InputController implements OnInit {
                 break;
             case "OpenInventory":
                 if (io.UserInputState !== UserInputState.Begin) break;
-                const inventoryRef = WINDOW_REFS.mustGet("inventory");
+                const inventoryRef = WindowRefs.mustGet("inventory");
                 const inventory = inventoryRef.getValue()!;
                 inventory.Enabled = !inventory.Enabled
         }

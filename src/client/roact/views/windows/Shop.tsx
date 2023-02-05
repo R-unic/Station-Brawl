@@ -1,10 +1,10 @@
 import Roact, { createRef } from "@rbxts/roact";
-import { WINDOW_REFS } from "client/roact/Refs";
+import { WindowRefs } from "client/roact/Refs";
 import MoneyProductCard from "client/roact/components/MoneyProductCard";
 import ListWindow from "client/roact/components/ListWindow";
 
 const ref = createRef<ScreenGui>();
-WINDOW_REFS.set("shop", ref);
+WindowRefs.set("shop", ref);
 
 export const ShopUI = (
     <screengui Ref={ref} Key="Shop" Enabled={false}>

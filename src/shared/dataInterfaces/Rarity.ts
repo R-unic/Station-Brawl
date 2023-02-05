@@ -1,4 +1,4 @@
-export enum Rarity {
+export const enum Rarity {
     Common,
     Average,
     Rare,

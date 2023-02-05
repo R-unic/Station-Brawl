@@ -1,19 +1,26 @@
 import { OnInit, Service } from "@flamework/core";
+import { Players } from "@rbxts/services";
 import DataStore2 from "@rbxts/datastore2";
 
 import { Events, Functions } from "server/network";
-import { CaseItemInfo } from "shared/dataInterfaces/CaseItemInfo";
-import { Rarity } from "shared/dataInterfaces/Rarity";
 import InventoryInfo from "shared/dataInterfaces/InventoryInfo";
-
-DataStore2.Combine("DATA", "money", "inventory");
 
 @Service({})
 export class DataService implements OnInit {
     public onInit(): void {
+        DataStore2.Combine("DATA", "money", "inventory");
         Events.initializeData.connect(player => this._setup(player));
         Events.setData.connect((player, key, value) => this.set(player, key, value));
         Functions.getData.setCallback((player, key) => this.get(player, key)!);
+
+        Players.PlayerAdded.Connect(player => {
+            const inventory = this.get<InventoryInfo>(player, "inventory");
+            if (!inventory) return;
+            inventory.cases ??= [];
+            inventory.effects ??= [];
+            inventory.weapons ??= [];
+            this.set<InventoryInfo>(player, "inventory", inventory);
+        });
     }
 
     public get<T = unknown>(player: Player, key: string): T | undefined {
@@ -27,16 +34,13 @@ export class DataService implements OnInit {
     }
 
     private _setup(player: Player): void {
+        this._initialize(player, "lastDailyClaim", undefined);
         this._initialize(player, "money", 100);
         this._initialize<InventoryInfo>(player, "inventory", {
             cases: [],
             effects: [],
             weapons: []
         });
-
-        const inv = this.get<InventoryInfo>(player, "inventory")!;
-        inv.cases.push(new CaseItemInfo("Basic", "rbxassetid://2026820322", Rarity.Common));
-        this.set<InventoryInfo>(player, "inventory", inv);
     }
 
     private _initialize<T = unknown>(player: Player, key: string, defaultValue?: T): void {

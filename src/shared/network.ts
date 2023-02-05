@@ -5,6 +5,8 @@ import { Rarity } from "./dataInterfaces/Rarity";
 interface ServerEvents {
     initializeData(): void;
     setData(key: string, value: unknown): void;
+    setLastDailyClaimTime(): void;
+    addCaseToInventory(name: string, image: string, rarity: Rarity): void;
     addEffectToInventory(name: Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>, image: string, rarity: Rarity): void;
     addWeaponToInventory(name: Exclude<keyof typeof Replicated.Assets.Weapons, keyof Folder>, image: string, rarity: Rarity): void;
 
@@ -28,6 +30,7 @@ interface ClientEvents {
 
 interface ServerFunctions {
     getData(key: string): unknown;
+    showDailyReward(): boolean;
 }
 
 interface ClientFunctions {}

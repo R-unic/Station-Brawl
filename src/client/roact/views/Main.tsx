@@ -1,6 +1,6 @@
 import Roact from "@rbxts/roact";
+import { WindowRefs } from "../Refs";
 import MoneyLabel from "../components/MoneyLabel";
-import { WINDOW_REFS } from "../Refs";
 
 export const MainUI = (
     <screengui Key="Main" ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}>
@@ -17,7 +17,7 @@ export const MainUI = (
                 Size: new UDim2(0.1, 0, 0, 35)
             }}
             OnPromptAddMoney={() => {
-                const shopRef = WINDOW_REFS.mustGet("shop");
+                const shopRef = WindowRefs.mustGet("shop");
                 const shop = shopRef.getValue()!;
                 shop.Enabled = !shop.Enabled;
             }}

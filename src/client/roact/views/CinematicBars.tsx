@@ -55,4 +55,4 @@ class CinematicBars extends Roact.Component<Props> {
     }
 }
 
-export = <CinematicBars />
+export default <CinematicBars />;

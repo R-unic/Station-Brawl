@@ -1,7 +1,7 @@
 import Roact, { Element, Tree, createRef, mount, unmount } from "@rbxts/roact";
 import { Events } from "client/network";
 import { getCharacter } from "client/utility";
-import { WINDOW_REFS } from "client/roact/Refs";
+import { WindowRefs } from "client/roact/Refs";
 import ListWindow from "client/roact/components/ListWindow";
 import WindowTabs from "client/roact/components/WindowTabs";
 import CaseCard from "client/roact/components/cards/CaseCard";
@@ -27,7 +27,7 @@ class InventoryScreen extends Roact.Component<{}, State> {
 
     public constructor(props: {}) {
         super(props);
-        WINDOW_REFS.set("inventory", this.ref);
+        WindowRefs.set("inventory", this.ref);
     }
 
     public setPage(page: keyof InventoryInfo): void {
@@ -57,8 +57,6 @@ class InventoryScreen extends Roact.Component<{}, State> {
     }
 
     private _refresh(inventory: InventoryInfo) {
-        const screen = this.ref.getValue()!;
-
         for (const handle of this.itemHandles)
             unmount(handle);
 
@@ -110,6 +108,7 @@ class InventoryScreen extends Roact.Component<{}, State> {
             );
 
         task.spawn(() => {
+            const screen = this.ref.getValue()!;
             const list = screen.WaitForChild("Inventory").FindFirstChildOfClass("ScrollingFrame");
             if (!list) return;
             for (const element of this.items)
