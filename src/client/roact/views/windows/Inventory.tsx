@@ -1,10 +1,12 @@
-import Roact, { Element, Ref, Tree, createRef, mount, unmount } from "@rbxts/roact";
+import Roact, { Element, Tree, createRef, mount, unmount } from "@rbxts/roact";
+import { ReplicatedStorage as Replicated } from "@rbxts/services";
 import { Events } from "client/network";
 import { WINDOW_REFS } from "client/roact/Refs";
 import ListWindow from "client/roact/components/ListWindow";
 import WindowTabs from "client/roact/components/WindowTabs";
 import CaseCard from "client/roact/components/cards/CaseCard";
 import InventoryItemCard from "client/roact/components/cards/InventoryItemCard";
+import { getCharacter } from "client/utility";
 import InventoryInfo from "shared/dataInterfaces/InventoryInfo";
 
 interface State {
@@ -30,18 +32,20 @@ class InventoryScreen extends Roact.Component<{}, State> {
     }
 
     public setPage(page: keyof InventoryInfo): void {
-        const screen = this.ref.getValue();
-        if (!screen) return;
+        task.spawn(() => {
+            const screen = this.ref.getValue();
+            if (!screen) return;
 
-        const list = screen.WaitForChild("Inventory").FindFirstChildOfClass("ScrollingFrame");
-        if (!list) return;
+            const list = screen.WaitForChild("Inventory").FindFirstChildOfClass("ScrollingFrame");
+            if (!list) return;
 
-        const pageMembers = list.GetChildren().filter((i): i is GuiObject => i.GetAttribute("Page") === page && i.IsA("GuiObject"));
-        const nonPageMembers = list.GetChildren().filter((i): i is GuiObject => i.GetAttribute("Page") !== page && i.IsA("GuiObject"));
-        for (const member of pageMembers)
-            member.Visible = true;
-        for (const member of nonPageMembers)
-            member.Visible = false;
+            const pageMembers = list.GetChildren().filter((i): i is GuiObject => i.GetAttribute("Page") === page && i.IsA("GuiObject"));
+            const nonPageMembers = list.GetChildren().filter((i): i is GuiObject => i.GetAttribute("Page") !== page && i.IsA("GuiObject"));
+            for (const member of pageMembers)
+                member.Visible = true;
+            for (const member of nonPageMembers)
+                member.Visible = false;
+        });
     }
 
     protected didMount(): void {
@@ -62,18 +66,40 @@ class InventoryScreen extends Roact.Component<{}, State> {
 
         for (const _case of inventory.cases) {
             const itemName = _case.name + " Case";
-            this.items.push(<CaseCard CaseInfo={_case} CardName={"cases_" + itemName} ItemName={itemName} Icon={_case.image} />);
+            this.items.push(
+                <CaseCard
+                    CaseInfo={_case}
+                    CardName={"cases_" + itemName}
+                    ItemName={itemName}
+                    Icon={_case.image}
+                />
+            );
         }
         for (const effect of inventory.effects)
-            this.items.push(<InventoryItemCard CardName={"effects_" + effect.name} ItemName={effect.name} Icon={effect.image} />);
+            this.items.push(
+                <InventoryItemCard
+                    Rarity={effect.rarity}
+                    CardName={"effects_" + effect.name}
+                    ItemName={effect.name}
+                    Icon={effect.image}
+                    OnEquip={on => {
+                        if (on)
+                            Events.addEffectParticles.fire(getCharacter(), effect.name);
+                        else
+                            Events.removeEffectParticles.fire(getCharacter(), effect.name);
+                    }}
+                />
+            );
 
-        const list = screen.WaitForChild("Inventory").FindFirstChildOfClass("ScrollingFrame");
-        if (!list) return;
-        for (const element of this.items)
-            this.itemHandles.push(mount(element, list));
+        task.spawn(() => {
+            const list = screen.WaitForChild("Inventory").FindFirstChildOfClass("ScrollingFrame");
+            if (!list) return;
+            for (const element of this.items)
+                this.itemHandles.push(mount(element, list));
 
-        for (const card of list.GetChildren().filter((i): i is GuiObject => i.IsA("GuiObject")))
-            card.SetAttribute("Page", card.Name.split("_")[0]);
+            for (const card of list.GetChildren().filter((i): i is GuiObject => i.IsA("GuiObject")))
+                card.SetAttribute("Page", card.Name.split("_")[0]);
+        });
     }
 
     public render(): Roact.Element {

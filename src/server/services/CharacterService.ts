@@ -1,5 +1,5 @@
 import { Service, OnInit } from "@flamework/core";
-import { Players } from "@rbxts/services";
+import { Players, ReplicatedStorage as Replicated } from "@rbxts/services";
 import { Janitor } from "@rbxts/janitor";
 import { Events } from "server/network";
 import { randomElement } from "shared/utility/ArrayUtil";
@@ -15,6 +15,8 @@ export class CharacterService implements OnInit {
     public onInit(): void {
         Events.anchor.connect((_, character, on, anchorPart) => anchor(character, on, anchorPart));
         Events.damage.connect((player, humanoid, dmg) => this._damage(player, humanoid, dmg));
+        Events.addEffectParticles.connect((player, character, effectName) => this._addEffectParticles(character, effectName));
+        Events.removeEffectParticles.connect((player, character, effectName) => this._removeEffectParticles(character, effectName));
         Players.PlayerAdded.Connect(player => {
             const characterLifeJanitor = new Janitor;
             player.CharacterAdded.Connect(character => {
@@ -26,6 +28,20 @@ export class CharacterService implements OnInit {
             })
             player.LoadCharacter();
         });
+    }
+
+    private _addEffectParticles(character: Model, effectName: Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>): void {
+        const effectParticles = Replicated.Assets.Effects[effectName].GetChildren<ParticleEmitter>();
+        for (const particle of effectParticles) {
+            particle.SetAttribute("EffectName", effectName);
+            particle.Parent = character.PrimaryPart;
+        }
+    }
+
+    private _removeEffectParticles(character: Model, effectName: Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>): void {
+        for (const particle of character.PrimaryPart!.GetChildren<ParticleEmitter>())
+            if (particle.GetAttribute("EffectName") === effectName)
+                particle.Destroy();
     }
 
     private _damage(player: Player, victimHumanoid: Humanoid, dmg: number): void {

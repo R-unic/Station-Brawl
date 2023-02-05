@@ -1,4 +1,5 @@
 import { Networking } from "@flamework/networking";
+import { ReplicatedStorage as Replicated } from "@rbxts/services";
 
 interface ServerEvents {
     initializeData(): void;
@@ -10,6 +11,8 @@ interface ServerEvents {
     damage(humanoid: Humanoid, amount: number): void;
     anchor(character: Model, on?: boolean, anchorPart?: string): void;
     createBlood(position: Vector3, duration: number): void;
+    addEffectParticles(character: Model, effectName: Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>): void;
+    removeEffectParticles(character: Model, effectName: Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>): void;
 }
 
 interface ClientEvents {

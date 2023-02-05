@@ -1,4 +1,5 @@
-import Roact, { Ref } from "@rbxts/roact";
+import Roact from "@rbxts/roact";
+import { Rarity, RarityColors } from "shared/dataInterfaces/Rarity";
 import ItemCard from "./ItemCard";
 
 interface Props {
@@ -6,6 +7,8 @@ interface Props {
     Icon: string;
     InfoText?: string;
     CardName?: string;
+    Rarity: Rarity;
+    OnEquip: (on: boolean) => void;
 }
 
 interface State {
@@ -17,7 +20,9 @@ class InventoryItemCard extends Roact.Component<Props, State> {
     private readonly unequippedColor = Color3.fromRGB(143, 194, 212);
 
     private _equip(equipped?: boolean): void {
-        this.setState({ Equipped: equipped ?? !this.state.Equipped });
+        const on = equipped ?? !this.state.Equipped;
+        this.setState({ Equipped: on });
+        this.props.OnEquip(on);
     }
 
     protected didMount(): void {
@@ -25,6 +30,9 @@ class InventoryItemCard extends Roact.Component<Props, State> {
     }
 
     public render(): Roact.Element {
+        const rarityColor = RarityColors[this.props.Rarity];
+        const primaryColor = Color3.fromRGB(204, 204, 204).Lerp(rarityColor, .5);
+        const secondaryColor = Color3.fromRGB(150, 150, 150).Lerp(rarityColor, .5);
         return (
             <ItemCard
                 CardName={this.props.CardName}
@@ -34,6 +42,8 @@ class InventoryItemCard extends Roact.Component<Props, State> {
                 ButtonText={this.state.Equipped ? "Unequip" : "Equip"}
                 ButtonTextColor={this.state.Equipped ? this.equippedColor : this.unequippedColor}
                 ButtonColor={this.state.Equipped ? this.equippedColor : this.unequippedColor}
+                PrimaryGradientColor={primaryColor}
+                SecondaryGradientColor={secondaryColor}
                 OnButtonClicked={() => this._equip()}
             />
         )
