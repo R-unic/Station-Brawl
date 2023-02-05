@@ -1,5 +1,5 @@
-import Roact, { Ref } from "@rbxts/roact";
-import { tween } from "client/utility";
+import Roact, { PropsWithChildren, Ref } from "@rbxts/roact";
+import { getChildren, tween } from "client/utility";
 import DropShadow from "../DropShadow";
 
 interface Props {
@@ -21,7 +21,7 @@ interface Props {
 const { Font, SizeConstraint, ScaleType, ApplyStrokeMode, EasingStyle } = Enum;
 
 // card button animations
-export default function ItemCard(props: Props) {
+export default function ItemCard(props: PropsWithChildren<Props>) {
     const hoverInfo = new TweenInfo(.3, EasingStyle.Quad);
     function hover(btn: TextButton): void {
         tween(btn.WaitForChild<ImageLabel>("Glow"), hoverInfo, {
@@ -60,6 +60,7 @@ export default function ItemCard(props: Props) {
                 MouseButton1Click: b => props.OnButtonClicked(b)
             }}
         >
+            {...getChildren(props)}
             <uicorner />
             <uistroke ApplyStrokeMode={ApplyStrokeMode.Border} Color={Color3.fromRGB(141, 142, 142)} Thickness={2}>
                 <uigradient

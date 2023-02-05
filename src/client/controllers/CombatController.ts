@@ -66,7 +66,7 @@ export class CombatController implements OnInit {
     }
 
     private _toggleKnockedFX(on: boolean): void {
-        const info = new TweenInfo(3, Enum.EasingStyle.Elastic);
+        const info = new TweenInfo(4.5, Enum.EasingStyle.Elastic);
         tween(Lighting.KnockedCC, info, { Saturation: on ? -1 - Lighting.ColorCorrection.Saturation : 0 });
         tween(Lighting.KnockedBlur, info, { Size: on ? 16 : 0 });
     }

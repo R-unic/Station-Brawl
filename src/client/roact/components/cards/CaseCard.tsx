@@ -34,10 +34,13 @@ export default function CaseCard(props: Props) {
             OnButtonClicked={async card => {
                 card.Destroy();
                 const caseRoller = Dependency<CaseRollController>();
-                caseRoller.open(props.CaseInfo);
+                await caseRoller.open(props.CaseInfo);
 
                 const inventory = (await Functions.getData.invoke("inventory")) as InventoryInfo;
-                const cases = inventory.cases.filter(_case => _case.name !== props.ItemName.split(" Case")[0]);
+                const toRemove = inventory.cases.filter(_case => _case.name === props.ItemName.split(" Case")[0])[0];
+                const cases = inventory.cases;
+                cases.remove(cases.indexOf(toRemove));
+
                 const newInventory: InventoryInfo = {
                     cases: cases,
                     effects: inventory.effects

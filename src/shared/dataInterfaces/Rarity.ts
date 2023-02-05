@@ -17,3 +17,13 @@ export const RarityColors = {
     [Rarity.Mythic]: Color3.fromRGB(255, 84, 71),
     [Rarity.Heirloom]: Color3.fromRGB(252, 217, 84)
 };
+
+export const DuplicateRewards = {
+    [Rarity.Common]: 100,
+    [Rarity.Average]: 125,
+    [Rarity.Rare]: 175,
+    [Rarity.UltraRare]: 250,
+    [Rarity.Epic]: 650,
+    [Rarity.Mythic]: 1200,
+    [Rarity.Heirloom]: 2500
+};

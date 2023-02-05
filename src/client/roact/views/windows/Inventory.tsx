@@ -1,16 +1,15 @@
 import Roact, { Element, Tree, createRef, mount, unmount } from "@rbxts/roact";
-import { ReplicatedStorage as Replicated } from "@rbxts/services";
 import { Events } from "client/network";
+import { getCharacter } from "client/utility";
 import { WINDOW_REFS } from "client/roact/Refs";
 import ListWindow from "client/roact/components/ListWindow";
 import WindowTabs from "client/roact/components/WindowTabs";
 import CaseCard from "client/roact/components/cards/CaseCard";
 import InventoryItemCard from "client/roact/components/cards/InventoryItemCard";
-import { getCharacter } from "client/utility";
 import InventoryInfo from "shared/dataInterfaces/InventoryInfo";
 
 interface State {
-    CurrentPage: string;
+    CurrentPage: keyof InventoryInfo;
 }
 
 interface TabProps {
@@ -32,6 +31,7 @@ class InventoryScreen extends Roact.Component<{}, State> {
     }
 
     public setPage(page: keyof InventoryInfo): void {
+        this.setState({ CurrentPage: page });
         task.spawn(() => {
             const screen = this.ref.getValue();
             if (!screen) return;
@@ -51,8 +51,9 @@ class InventoryScreen extends Roact.Component<{}, State> {
     protected didMount(): void {
         Events.dataUpdate.connect<[key: string, value: InventoryInfo]>((key, inventory) => {
             if (key !== "inventory") return;
-            this._refresh(inventory)
+            this._refresh(inventory);
         });
+        this.setPage("effects");
     }
 
     private _refresh(inventory: InventoryInfo) {
@@ -99,6 +100,8 @@ class InventoryScreen extends Roact.Component<{}, State> {
 
             for (const card of list.GetChildren().filter((i): i is GuiObject => i.IsA("GuiObject")))
                 card.SetAttribute("Page", card.Name.split("_")[0]);
+
+            this.setPage(this.state.CurrentPage);
         });
     }
 
