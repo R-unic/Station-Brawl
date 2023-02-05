@@ -91,6 +91,23 @@ class InventoryScreen extends Roact.Component<{}, State> {
                     }}
                 />
             );
+        for (const weapon of inventory.weapons)
+            this.items.push(
+                <InventoryItemCard
+                    Rarity={weapon.rarity}
+                    CardName={"weapons_" + weapon.name}
+                    ItemName={weapon.name}
+                    Icon={weapon.image}
+                    OnlyOneEquippable={true}
+                    OnEquip={on => {
+                        // weapons equipping code
+                        // if (on)
+                        //     Events.addEffectParticles.fire(getCharacter(), weapon.name);
+                        // else
+                        //     Events.removeEffectParticles.fire(getCharacter(), weapon.name);
+                    }}
+                />
+            );
 
         task.spawn(() => {
             const list = screen.WaitForChild("Inventory").FindFirstChildOfClass("ScrollingFrame");
@@ -111,6 +128,7 @@ class InventoryScreen extends Roact.Component<{}, State> {
                 <ListWindow Title="Inventory" ListSize={new UDim2(1.015, 0, 0.77, 0)}>
                     <WindowTabs>
                         <InventoryTab TabName="Effects" Screen={this} />
+                        <InventoryTab TabName="Weapons" Screen={this} />
                         <InventoryTab TabName="Cases" Screen={this} />
                     </WindowTabs>
                 </ListWindow>

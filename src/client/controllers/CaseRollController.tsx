@@ -143,6 +143,8 @@ export class CaseRollController {
         switch(kind) {
             case CaseRewardKind.Effect:
                 return "Effect";
+            case CaseRewardKind.Weapon:
+                return "Weapon";
         }
     }
 

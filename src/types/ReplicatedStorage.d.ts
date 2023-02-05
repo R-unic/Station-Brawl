@@ -14,6 +14,9 @@ interface ReplicatedStorage extends Instance {
 				};
 			};
 		};
+        Weapons: Folder & {
+            SomeWeapon: Folder;
+        };
         Effects: Folder & {
             Flame: Folder & {
                 AuraTOP: ParticleEmitter;

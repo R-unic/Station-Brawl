@@ -4,6 +4,7 @@ import { Events } from "server/network";
 import { DataService } from "./DataService";
 import { Rarity } from "shared/dataInterfaces/Rarity";
 import { EffectItemInfo } from "shared/dataInterfaces/EffectItemInfo";
+import { WeaponItemInfo } from "shared/dataInterfaces/WeaponItemInfo";
 import InventoryInfo from "shared/dataInterfaces/InventoryInfo";
 
 @Service({})
@@ -13,7 +14,8 @@ export class InventoryService implements OnInit {
     ) {}
 
     public onInit(): void {
-        Events.addEffectToInventory.connect((player, name, image, rarity) => this._addEffect(player, name, image, rarity))
+        Events.addEffectToInventory.connect((player, name, image, rarity) => this._addEffect(player, name, image, rarity));
+        Events.addWeaponToInventory.connect((player, name, image, rarity) => this._addWeapon(player, name, image, rarity));
     }
 
     private _addEffect(player: Player, name: Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>, image: string, rarity: Rarity) {
@@ -22,7 +24,19 @@ export class InventoryService implements OnInit {
         effects.push(new EffectItemInfo(name, image, rarity));
         this.data.set<InventoryInfo>(player, "inventory", {
             cases: inventory.cases,
-            effects: effects
+            effects: effects,
+            weapons: inventory.weapons
+        });
+    }
+
+    private _addWeapon(player: Player, name: Exclude<keyof typeof Replicated.Assets.Weapons, keyof Folder>, image: string, rarity: Rarity) {
+        const inventory = this.data.get<InventoryInfo>(player, "inventory")!;
+        const weapons = inventory.weapons;
+        weapons.push(new WeaponItemInfo(name, image, rarity));
+        this.data.set<InventoryInfo>(player, "inventory", {
+            cases: inventory.cases,
+            effects: inventory.effects,
+            weapons: weapons
         });
     }
 }

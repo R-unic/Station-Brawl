@@ -43,7 +43,8 @@ export default function CaseCard(props: Props) {
 
                 const newInventory: InventoryInfo = {
                     cases: cases,
-                    effects: inventory.effects
+                    effects: inventory.effects,
+                    weapons: inventory.weapons
                 };
                 Events.setData("inventory", newInventory);
             }}

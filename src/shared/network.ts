@@ -6,6 +6,7 @@ interface ServerEvents {
     initializeData(): void;
     setData(key: string, value: unknown): void;
     addEffectToInventory(name: Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>, image: string, rarity: Rarity): void;
+    addWeaponToInventory(name: Exclude<keyof typeof Replicated.Assets.Weapons, keyof Folder>, image: string, rarity: Rarity): void;
 
     playAnim(name: string, id: number, character?: Model, dontCancel?: boolean): void;
     stopAnim(name: string): void;

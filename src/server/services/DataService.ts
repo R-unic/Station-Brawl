@@ -30,11 +30,12 @@ export class DataService implements OnInit {
         this._initialize(player, "money", 100);
         this._initialize<InventoryInfo>(player, "inventory", {
             cases: [],
-            effects: []
+            effects: [],
+            weapons: []
         });
 
         const inv = this.get<InventoryInfo>(player, "inventory")!;
-        inv.cases.push(new CaseItemInfo("Basic", "rbxassetid://2026820322", Rarity.Common), new CaseItemInfo("Basic", "rbxassetid://2026820322", Rarity.Common), new CaseItemInfo("Basic", "rbxassetid://2026820322", Rarity.Common), new CaseItemInfo("Basic", "rbxassetid://2026820322", Rarity.Common));
+        inv.cases.push(new CaseItemInfo("Basic", "rbxassetid://2026820322", Rarity.Common));
         this.set<InventoryInfo>(player, "inventory", inv);
     }
 

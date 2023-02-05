@@ -4,11 +4,13 @@ import { ReplicatedStorage as Replicated } from "@rbxts/services";
 
 export interface InventoryPages {
     Effects: Element[];
+    Weapons: Element[];
     Cases: Element[];
 }
 
 export enum CaseRewardKind {
-    Effect
+    Effect,
+    Weapon
 }
 
 export class CaseReward {
@@ -27,5 +29,15 @@ export class EffectCaseReward extends CaseReward {
         public readonly rarity: Rarity
     ) {
         super(CaseRewardKind.Effect, name, image, rarity);
+    }
+}
+
+export class WeaponCaseReward extends CaseReward {
+    public constructor(
+        public readonly name: Exclude<keyof typeof Replicated.Assets.Weapons, keyof Folder>,
+        public readonly image: string,
+        public readonly rarity: Rarity
+    ) {
+        super(CaseRewardKind.Weapon, name, image, rarity);
     }
 }

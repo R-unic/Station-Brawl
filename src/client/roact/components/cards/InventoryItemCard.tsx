@@ -7,6 +7,7 @@ interface Props {
     Icon: string;
     InfoText?: string;
     CardName?: string;
+    OnlyOneEquippable?: boolean;
     Rarity: Rarity;
     OnEquip: (on: boolean) => void;
 }
@@ -15,18 +16,24 @@ interface State {
     Equipped: boolean;
 }
 
+const inventoryCards: InventoryItemCard[] = [];
 class InventoryItemCard extends Roact.Component<Props, State> {
     private readonly equippedColor = Color3.fromRGB(212, 171, 143);
     private readonly unequippedColor = Color3.fromRGB(143, 194, 212);
 
-    private _equip(equipped?: boolean): void {
+    public equip(equipped?: boolean): void {
         const on = equipped ?? !this.state.Equipped;
         this.setState({ Equipped: on });
         this.props.OnEquip(on);
+        if (this.props.OnlyOneEquippable ?? false)
+            for (const inventoryCard of inventoryCards)
+                if (inventoryCard !== this)
+                    inventoryCard.equip(!equipped);
     }
 
     protected didMount(): void {
-        this._equip(false);
+        inventoryCards.push(this);
+        this.equip(false);
     }
 
     public render(): Roact.Element {
@@ -44,7 +51,7 @@ class InventoryItemCard extends Roact.Component<Props, State> {
                 ButtonColor={this.state.Equipped ? this.equippedColor : this.unequippedColor}
                 PrimaryGradientColor={primaryColor}
                 SecondaryGradientColor={secondaryColor}
-                OnButtonClicked={() => this._equip()}
+                OnButtonClicked={() => this.equip()}
             />
         )
     }
