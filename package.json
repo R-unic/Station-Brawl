@@ -34,6 +34,7 @@
     "@rbxts/rodux": "^3.0.0-ts.3",
     "@rbxts/strict-map": "^1.0.2",
     "@rbxts/t": "^3.1.0",
+    "@rbxts/timer": "^0.0.7",
     "rbxts-transform-debug": "^2.0.3",
     "rbxts-transformer-flamework": "^1.0.0-beta.15"
   }
