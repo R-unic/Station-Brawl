@@ -4,13 +4,11 @@ import DataStore2 from "@rbxts/datastore2";
 
 import { Events, Functions } from "server/network";
 import InventoryInfo from "shared/dataInterfaces/InventoryInfo";
-import { WeaponItemInfo } from "shared/dataInterfaces/WeaponItemInfo";
-import { Rarity } from "shared/dataInterfaces/Rarity";
 
 @Service({})
 export class DataService implements OnInit {
   public onInit(): void {
-    DataStore2.Combine("DATA", "money", "inventory");
+    DataStore2.Combine("DATA", "money", "inventory", "lastDailyClaim");
     Events.initializeData.connect(player => this._setup(player));
     Events.setData.connect((player, key, value) => this.set(player, key, value));
     Functions.getData.setCallback((player, key) => this.get(player, key)!);

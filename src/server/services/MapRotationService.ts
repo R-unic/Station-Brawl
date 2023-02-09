@@ -19,6 +19,7 @@ export class MapRotationService {
     const weeksInMonth = daysInMonth / 7;
     const week = math.ceil(day / 7);
     const weekRounded = math.ceil(week / weeksInMonth);
+    print(week / weeksInMonth, weekRounded);
     this.maps = rotations[weekRounded - 1];
   }
 

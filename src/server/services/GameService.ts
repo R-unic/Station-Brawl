@@ -1,6 +1,6 @@
 import { Service, OnInit } from "@flamework/core";
 import { Janitor } from "@rbxts/janitor";
-import { Players, Stats } from "@rbxts/services";
+import { Players } from "@rbxts/services";
 import { Timer } from "@rbxts/timer";
 
 enum RoundState {
@@ -34,10 +34,10 @@ export class GameService implements OnInit {
 
     const intermissionJanitor = new Janitor;
     const timer = new Timer(this.INTERMISSION_LENGTH);
-    intermissionJanitor.Add(timer.secondReached.Connect(() => this._updateTimer(timer.getTimeLeft())));
+    intermissionJanitor.Add(timer.secondReached.Connect(() => this._updateTimer(timer.getTimeLeft())), "Disconnect");
     intermissionJanitor.Add(timer, "destroy");
     intermissionJanitor.Add(() => this._startRound());
-    intermissionJanitor.Add(timer.completed.Connect(() => intermissionJanitor.Destroy()));
+    intermissionJanitor.Add(timer.completed.Connect(() => intermissionJanitor.Destroy()), "Disconnect");
 
     // TODO: prompt map vote and collect results
   }
@@ -48,10 +48,10 @@ export class GameService implements OnInit {
 
     const roundJanitor = new Janitor;
     const timer = new Timer(this.ROUND_LENGTH);
-    roundJanitor.Add(timer.secondReached.Connect(() => this._updateTimer(timer.getTimeLeft())));
+    roundJanitor.Add(timer.secondReached.Connect(() => this._updateTimer(timer.getTimeLeft())), "Disconnect");
     roundJanitor.Add(timer, "destroy");
     roundJanitor.Add(() => this._endRound());
-    roundJanitor.Add(timer.completed.Connect(() => roundJanitor.Destroy()));
+    roundJanitor.Add(timer.completed.Connect(() => roundJanitor.Destroy()), "Disconnect");
 
     // TODO: process map results and move map into scene
   }
