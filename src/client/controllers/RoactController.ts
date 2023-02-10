@@ -10,6 +10,7 @@ import MainUI from "client/roact/views/Main";
 import ButtonsUI from "client/roact/views/Buttons";
 import CinematicBarsUI from "client/roact/views/CinematicBars";
 import DailyRewardUI from "client/roact/views/DailyReward";
+import CodesUI from "client/roact/views/Codes";
 
 @Controller({ loadOrder: 0 })
 export class RoactController implements OnInit {
@@ -31,6 +32,7 @@ export class RoactController implements OnInit {
     this._mountWindow(InventoryUI);
     mount(MainUI, PlayerUI);
     mount(ButtonsUI, PlayerUI);
+    mount(CodesUI, PlayerUI);
     mount(CinematicBarsUI, PlayerUI);
 
     Events.initializeData.fire();
