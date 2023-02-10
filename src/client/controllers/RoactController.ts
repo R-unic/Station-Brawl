@@ -4,9 +4,10 @@ import { Events, Functions } from "client/network";
 import { getUI } from "client/utility";
 
 import { WindowRefs } from "client/roact/Refs";
-import { MainUI } from "client/roact/views/Main";
 import { ShopUI } from "client/roact/views/windows/Shop";
 import { InventoryUI } from "client/roact/views/windows/Inventory";
+import MainUI from "client/roact/views/Main";
+import ButtonsUI from "client/roact/views/Buttons";
 import CinematicBarsUI from "client/roact/views/CinematicBars";
 import DailyRewardUI from "client/roact/views/DailyReward";
 
@@ -29,6 +30,7 @@ export class RoactController implements OnInit {
     this._mountWindow(ShopUI);
     this._mountWindow(InventoryUI);
     mount(MainUI, PlayerUI);
+    mount(ButtonsUI, PlayerUI);
     mount(CinematicBarsUI, PlayerUI);
 
     Events.initializeData.fire();

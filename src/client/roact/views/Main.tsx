@@ -2,7 +2,7 @@ import Roact from "@rbxts/roact";
 import { WindowRefs } from "../Refs";
 import MoneyLabel from "../components/MoneyLabel";
 
-export const MainUI = (
+const MainUI = (
   <screengui Key="Main" ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}>
     <uipadding
       PaddingBottom={new UDim(0, 5)}
@@ -24,3 +24,5 @@ export const MainUI = (
     />
   </screengui>
 );
+
+export default MainUI;
