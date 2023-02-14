@@ -27,7 +27,7 @@ const CodesUI = (
       AnchorPoint={new Vector2(0.5, 0.5)}
       BackgroundColor3={Color3.fromRGB(255, 255, 255)}
       Position={new UDim2(0.5, 0, 0.5, 0)}
-      Size={new UDim2(0.3, 0, 0.2, 0)}
+      Size={new UDim2(0.2, 0, 0.3, 0)}
     >
       <CloseButton
         ParentScreen={() => ref.getValue()!}

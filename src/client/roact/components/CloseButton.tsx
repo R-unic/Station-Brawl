@@ -36,7 +36,7 @@ export default function CloseButton(props: Props) {
       Event={{
         MouseEnter: hover,
         MouseLeave: unhover,
-        MouseButton1Click: b => (typeOf(b) === "function" ? props.ParentScreen(b) : props.ParentScreen as unknown as ScreenGui).Enabled = false
+        MouseButton1Click: b => (typeOf(props.ParentScreen) === "function" ? props.ParentScreen(b) : props.ParentScreen as unknown as ScreenGui).Enabled = false
       }}
     >
       <uigradient
