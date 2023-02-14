@@ -1,22 +1,16 @@
-import Roact, { Children, Element, PropsWithChildren, Ref } from "@rbxts/roact";
-import { getChildren, tween } from "client/utility";
+import Roact, { PropsWithChildren, Ref } from "@rbxts/roact";
+import { getChildren } from "client/utility";
+import CloseButton from "./CloseButton";
 
 interface Props {
   Title: string;
+  Screen: Ref<ScreenGui>;
 }
 
-const { Font, TextXAlignment, EasingStyle } = Enum;
+const { Font, TextXAlignment } = Enum;
 
 // window icon to left of title
 export default function Window(props: PropsWithChildren<Props>) {
-  const closeHoverInfo = new TweenInfo(.3, EasingStyle.Quad);
-  const defaultCloseColor = Color3.fromRGB(255, 100, 100);
-  function hoverClose(btn: TextButton): void {
-    tween(btn, closeHoverInfo, { TextColor3: Color3.fromRGB(255, 150, 150) });
-  }
-  function unhoverClose(btn: TextButton): void {
-    tween(btn, closeHoverInfo, { TextColor3: defaultCloseColor });
-  }
 
   return (
     <frame
@@ -27,33 +21,8 @@ export default function Window(props: PropsWithChildren<Props>) {
       Size={new UDim2(0.5, 0, 0.65, 0)}
     >
       {...getChildren(props)}
+      <CloseButton ParentScreen={() => props.Screen.getValue()!} />
       <uicorner CornerRadius={new UDim(0, 12)} />
-      <textbutton
-        Key="Close"
-        AnchorPoint={new Vector2(1, 0)}
-        BackgroundTransparency={1}
-        Font={Font.FredokaOne}
-        Position={new UDim2(1, 0, 0, 0)}
-        Size={new UDim2(0.09, 0, 0.09, 0)}
-        Text="X"
-        TextColor3={defaultCloseColor}
-        TextScaled={true}
-        TextWrapped={true}
-        TextSize={40}
-        Event={{
-          MouseEnter: hoverClose,
-          MouseLeave: unhoverClose,
-          MouseButton1Click: b => (b.Parent!.Parent! as ScreenGui).Enabled = false
-        }}
-      >
-        <uigradient
-          Color={new ColorSequence([new ColorSequenceKeypoint(0, Color3.fromRGB(129, 129, 129)), new ColorSequenceKeypoint(1, Color3.fromRGB(255, 255, 255))])}
-          Offset={new Vector2(0, 0.1)}
-          Rotation={-70}
-        />
-        <uiaspectratioconstraint />
-        <uistroke Color={Color3.fromRGB(85, 42, 38)} Thickness={1.6} />
-      </textbutton>
       <textlabel
         Key="Title"
         BackgroundTransparency={1}

@@ -1,5 +1,6 @@
 import Roact from "@rbxts/roact";
 import { WindowRefs } from "../Refs";
+import { tween } from "client/utility";
 
 interface Props {
   ButtonName: string;
@@ -7,16 +8,29 @@ interface Props {
   OnClick: () => void;
 }
 
+const { SortOrder, VerticalAlignment, EasingStyle } = Enum;
+
 function SideButton(props: Props) {
+  const defaultSize = new UDim2(0.075, 0, 0.075, 0);
+  const hoverInfo = new TweenInfo(.3, EasingStyle.Quad);
+  function hover(btn: ImageButton): void {
+    tween(btn, hoverInfo, { Size: new UDim2(0.085, 0, 0.085, 0) });
+  }
+  function unhover(btn: ImageButton): void {
+    tween(btn, hoverInfo, { Size: defaultSize });
+  }
   return (
     <imagebutton
       Key={props.ButtonName}
       BackgroundColor3={Color3.fromRGB(255, 255, 255)}
       BackgroundTransparency={0.1}
-      Size={new UDim2(0.075, 0, 0.075, 0)}
+      AutoButtonColor={false}
+      Size={defaultSize}
       Event={{
-        MouseEnter: () => { },
-        MouseLeave: () => { },
+        MouseEnter: hover,
+        MouseLeave: unhover,
+        MouseButton1Down: unhover,
+        MouseButton1Up: hover,
         MouseButton1Click: () => props.OnClick(),
       }}
     >
@@ -24,7 +38,11 @@ function SideButton(props: Props) {
       <uiaspectratioconstraint />
       <uistroke Color={Color3.fromRGB(189, 189, 189)} Thickness={2}>
         <uigradient
-          Color={new ColorSequence([new ColorSequenceKeypoint(0, Color3.fromRGB(119, 207, 97)), new ColorSequenceKeypoint(0.5, Color3.fromRGB(164, 255, 167)), new ColorSequenceKeypoint(1, Color3.fromRGB(119, 207, 97))])}
+          Color={new ColorSequence([
+            new ColorSequenceKeypoint(0, Color3.fromRGB(119, 207, 97)),
+            new ColorSequenceKeypoint(0.5, Color3.fromRGB(164, 255, 167)),
+            new ColorSequenceKeypoint(1, Color3.fromRGB(119, 207, 97))
+          ])}
           Rotation={-80}
         />
       </uistroke>
@@ -34,7 +52,7 @@ function SideButton(props: Props) {
         AnchorPoint={new Vector2(0.5, 0.5)}
         BackgroundTransparency={1}
         Image={props.Icon}
-        ImageColor3={Color3.fromRGB(69, 85, 76)}
+        ImageColor3={Color3.fromRGB(97, 115, 105)}
         Position={new UDim2(0.5, 0, 0.5, 0)}
         Selectable={true}
         Size={new UDim2(0.7, 0, 0.7, 0)}
@@ -64,8 +82,8 @@ const ButtonsUI = (
     }} />
     <uilistlayout
       Padding={new UDim(0.01, 0)}
-      SortOrder={Enum.SortOrder.LayoutOrder}
-      VerticalAlignment={Enum.VerticalAlignment.Center}
+      SortOrder={SortOrder.LayoutOrder}
+      VerticalAlignment={VerticalAlignment.Center}
     />
   </screengui>
 );

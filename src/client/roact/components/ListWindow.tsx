@@ -7,20 +7,21 @@ const { HorizontalAlignment, SortOrder, EasingStyle } = Enum;
 type ChildrenLister = ((ref: Ref<ScrollingFrame>) => Element);
 interface Props {
   Title: string;
+  Screen: Ref<ScreenGui>;
   ListSize?: UDim2;
-  ListChildren?: Element[] | ChildrenLister;
+  ListChildren?: Element | ChildrenLister;
 }
 
 export default class ListWindow extends Roact.Component<PropsWithChildren<Props>> {
   private readonly listRef = createRef<ScrollingFrame>();
 
   public render(): Roact.Element {
-    const nullableChildren = typeOf(this.props.ListChildren) === "function" ? [(this.props.ListChildren as ChildrenLister)(this.listRef)] : this.props.ListChildren as Element[] | undefined;
-    const children = this.props.ListChildren ? nullableChildren as Element[] : [];
+    const nullableChildren = typeOf(this.props.ListChildren) === "function" ? (this.props.ListChildren as ChildrenLister)(this.listRef) : this.props.ListChildren as Element | undefined;
+    const children = this.props.ListChildren ? [nullableChildren as Element] : [];
     const scrollerHoverInfo = new TweenInfo(.3, EasingStyle.Quad);
     const height = 0.88;
     return (
-      <Window Title={this.props.Title}>
+      <Window Title={this.props.Title} Screen={this.props.Screen}>
         {...getChildren(this.props)}
         <scrollingframe
           Ref={this.listRef}

@@ -123,7 +123,7 @@ class InventoryScreen extends Roact.Component<{}, State> {
   public render(): Roact.Element {
     return (
       <screengui Ref={this.ref} Key="Inventory" Enabled={false}>
-        <ListWindow Title="Inventory" ListSize={new UDim2(1.015, 0, 0.77, 0)}>
+        <ListWindow Title="Inventory" ListSize={new UDim2(1.015, 0, 0.77, 0)} Screen={this.ref}>
           <WindowTabs>
             <InventoryTab TabName="Effects" Screen={this} />
             <InventoryTab TabName="Weapons" Screen={this} />

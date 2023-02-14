@@ -1,19 +1,23 @@
+import { Dependency } from "@flamework/core";
 import Roact, { createRef } from "@rbxts/roact"
-import { WindowRefs } from "../Refs";
+import { CodeController } from "client/controllers/CodeController";
 import { tween } from "client/utility";
+import { WindowRefs } from "../Refs";
+import CloseButton from "../components/CloseButton";
 
-const { Font, ZIndexBehavior, ApplyStrokeMode, EasingStyle } = Enum;
+const { Font, ZIndexBehavior, ApplyStrokeMode, TextTruncate, TextXAlignment, EasingStyle } = Enum;
 
 const ref = createRef<ScreenGui>();
+const inputRef = createRef<TextBox>();
 WindowRefs.set("codes", ref);
 
-const closeHoverInfo = new TweenInfo(.3, EasingStyle.Quad);
-const defaultCloseColor = Color3.fromRGB(255, 100, 100);
-function hoverClose(btn: TextButton): void {
-  tween(btn, closeHoverInfo, { TextColor3: Color3.fromRGB(255, 150, 150) });
+const defaultInputColor = Color3.fromRGB(245, 245, 250);
+const hoverInputInfo = new TweenInfo(.3, EasingStyle.Quad);
+function hoverInput(box: TextBox): void {
+  tween(box, hoverInputInfo, { BackgroundColor3: Color3.fromRGB(255, 255, 255) });
 }
-function unhoverClose(btn: TextButton): void {
-  tween(btn, closeHoverInfo, { TextColor3: defaultCloseColor });
+function unhoverInput(box: TextBox): void {
+  tween(box, hoverInputInfo, { BackgroundColor3: defaultInputColor });
 }
 
 const CodesUI = (
@@ -23,34 +27,41 @@ const CodesUI = (
       AnchorPoint={new Vector2(0.5, 0.5)}
       BackgroundColor3={Color3.fromRGB(255, 255, 255)}
       Position={new UDim2(0.5, 0, 0.5, 0)}
-      Size={new UDim2(0.4, 0, 0.4, 0)}
+      Size={new UDim2(0.3, 0, 0.2, 0)}
     >
-      <textbutton
-        Key="Close"
-        AnchorPoint={new Vector2(1, 0)}
-        BackgroundTransparency={1}
-        Font={Font.FredokaOne}
-        Position={new UDim2(1, 0, 0, 0)}
-        Size={new UDim2(0.09, 0, 0.09, 0)}
-        Text="X"
-        TextColor3={defaultCloseColor}
-        TextScaled={true}
-        TextWrapped={true}
-        TextSize={40}
-        Event={{
-          MouseEnter: hoverClose,
-          MouseLeave: unhoverClose,
-          MouseButton1Click: b => (b.Parent!.Parent! as ScreenGui).Enabled = false
-        }}
-      ></textbutton>
+      <CloseButton
+        ParentScreen={() => ref.getValue()!}
+        Position={new UDim2(1.05, 0, -0.025, 0)}
+        Size={new UDim2(0.125, 0, 0.125, 0)}
+      />
       <textbox
+        Ref={inputRef}
         Key="Input"
-        PlaceholderText="Type code here..."
-        Size={UDim2.fromScale(.35, .35)}
         AnchorPoint={new Vector2(0.5, 0.5)}
-        Position={UDim2.fromScale(.5, .5)}
+        BackgroundColor3={defaultInputColor}
+        CursorPosition={-1}
+        ClearTextOnFocus={false}
+        Font={Font.Gotham}
+        PlaceholderColor3={Color3.fromRGB(203, 203, 203)}
+        PlaceholderText="Type code here..."
+        Position={new UDim2(0.5, 0, 0.5, 0)}
+        Size={new UDim2(0.65, 0, 0.2, 0)}
+        Text={""}
+        TextColor3={Color3.fromRGB(232, 232, 232)}
+        TextSize={24}
+        TextTruncate={TextTruncate.AtEnd}
+        TextXAlignment={TextXAlignment.Left}
+        Event={{
+          MouseEnter: hoverInput,
+          MouseLeave: unhoverInput,
+          Focused: hoverInput,
+          FocusLost: unhoverInput
+        }}
       >
         <uicorner />
+        <uipadding PaddingLeft={new UDim(0.075, 0)} />
+        <uistroke Color={Color3.fromRGB(122, 122, 122)} Thickness={1.5} />
+        <uistroke ApplyStrokeMode={ApplyStrokeMode.Border} Color={Color3.fromRGB(100, 113, 120)} Thickness={1.6} />
       </textbox>
       <uicorner CornerRadius={new UDim(0, 14)} />
       <uistroke Color={Color3.fromRGB(158, 158, 158)} Thickness={3}>
@@ -66,7 +77,7 @@ const CodesUI = (
         BackgroundColor3={Color3.fromRGB(255, 255, 255)}
         Font={Font.Unknown}
         Position={new UDim2(0.5, 0, 1, 0)}
-        Size={new UDim2(0.4, 0, 0.1, 0)}
+        Size={new UDim2(0.325, 0, 0.125, 0)}
         Text={""}
         TextColor3={Color3.fromRGB(0, 0, 0)}
         TextScaled={true}
@@ -74,7 +85,10 @@ const CodesUI = (
         TextWrapped={true}
         Event={{
           MouseButton1Click: () => {
-
+            const inputBox = inputRef.getValue()!;
+            const code = inputBox.Text;
+            const codes = Dependency<CodeController>();
+            codes.check(code);
           }
         }}
       >
@@ -123,7 +137,7 @@ const CodesUI = (
         BackgroundTransparency={1}
         Font={Font.GothamBlack}
         Position={new UDim2(0.5, 0, 0, 0)}
-        Size={new UDim2(1, 0, 0.15, 0)}
+        Size={new UDim2(.8, 0, 0.125, 0)}
         Text="Daily Reward"
         TextColor3={Color3.fromRGB(252, 252, 252)}
         TextScaled={true}
@@ -143,7 +157,7 @@ const CodesUI = (
         Rotation={45}
       />
     </frame>
-  </screengui>
+  </screengui >
 );
 
 export default CodesUI;

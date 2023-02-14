@@ -8,7 +8,7 @@ WindowRefs.set("shop", ref);
 
 export const ShopUI = (
   <screengui Ref={ref} Key="Shop" Enabled={false}>
-    <ListWindow Title="Purchase Money" ListChildren={(ref) => (
+    <ListWindow Title="Purchase Money" Screen={ref} ListChildren={
       <>
         <MoneyProductCard ItemName="$300" Icon="rbxassetid://46022281" ID={1369201265} />
         <MoneyProductCard ItemName="$650" Icon="rbxassetid://46022281" ID={1369202529} />
@@ -17,6 +17,6 @@ export const ShopUI = (
         <MoneyProductCard ItemName="$4500" Icon="rbxassetid://46022281" ID={1369203791} />
         <MoneyProductCard ItemName="$9350" Icon="rbxassetid://46022281" ID={1369203792} />
       </>
-    )} />
+    } />
   </screengui>
 );
