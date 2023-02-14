@@ -3,6 +3,7 @@ import { tween } from "client/utility";
 
 interface Props {
   ParentScreen: (btn: TextButton) => ScreenGui | ScreenGui;
+  OnClose?: () => void;
   AnchorPoint?: Vector2;
   Size?: UDim2;
   Position?: UDim2;
@@ -36,7 +37,10 @@ export default function CloseButton(props: Props) {
       Event={{
         MouseEnter: hover,
         MouseLeave: unhover,
-        MouseButton1Click: b => (typeOf(props.ParentScreen) === "function" ? props.ParentScreen(b) : props.ParentScreen as unknown as ScreenGui).Enabled = false
+        MouseButton1Click: b => {
+          (typeOf(props.ParentScreen) === "function" ? props.ParentScreen(b) : props.ParentScreen as unknown as ScreenGui).Enabled = false;
+          (props.OnClose ?? function () { })();
+        }
       }}
     >
       <uigradient

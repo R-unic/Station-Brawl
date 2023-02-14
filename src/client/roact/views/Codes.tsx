@@ -5,16 +5,17 @@ import { tween } from "client/utility";
 import { WindowRefs } from "../Refs";
 import CloseButton from "../components/CloseButton";
 
-const { Font, ZIndexBehavior, ApplyStrokeMode, TextTruncate, TextXAlignment, EasingStyle } = Enum;
+const { Font, ZIndexBehavior, ApplyStrokeMode, TextTruncate, TextXAlignment, EasingStyle, EasingDirection } = Enum;
 
 const ref = createRef<ScreenGui>();
 const inputRef = createRef<TextBox>();
 WindowRefs.set("codes", ref);
 
-const defaultInputColor = Color3.fromRGB(245, 245, 250);
+let claimDb = false;
+const defaultInputColor = Color3.fromRGB(255, 255, 255);
 const hoverInputInfo = new TweenInfo(.3, EasingStyle.Quad);
 function hoverInput(box: TextBox): void {
-  tween(box, hoverInputInfo, { BackgroundColor3: Color3.fromRGB(255, 255, 255) });
+  tween(box, hoverInputInfo, { BackgroundColor3: Color3.fromRGB(232, 232, 242) });
 }
 function unhoverInput(box: TextBox): void {
   tween(box, hoverInputInfo, { BackgroundColor3: defaultInputColor });
@@ -33,6 +34,7 @@ const CodesUI = (
         ParentScreen={() => ref.getValue()!}
         Position={new UDim2(1.05, 0, -0.025, 0)}
         Size={new UDim2(0.125, 0, 0.125, 0)}
+        OnClose={() => inputRef.getValue()!.Text = ""}
       />
       <textbox
         Ref={inputRef}
@@ -85,10 +87,20 @@ const CodesUI = (
         TextWrapped={true}
         Event={{
           MouseButton1Click: () => {
+            if (claimDb) return;
+            claimDb = true;
+
             const inputBox = inputRef.getValue()!;
             const code = inputBox.Text;
             const codes = Dependency<CodeController>();
-            codes.check(code);
+            const valid = codes.check(code);
+
+            inputBox.Text = "";
+            if (!valid)
+              tween(inputBox, new TweenInfo(.3, EasingStyle.Quint, EasingDirection.Out, 0, true), { BackgroundColor3: Color3.fromRGB(232, 143, 143) })
+                .Completed.Once(() => claimDb = false);
+            else
+              claimDb = false;
           }
         }}
       >
@@ -138,7 +150,7 @@ const CodesUI = (
         Font={Font.GothamBlack}
         Position={new UDim2(0.5, 0, 0, 0)}
         Size={new UDim2(.8, 0, 0.125, 0)}
-        Text="Daily Reward"
+        Text="Codes"
         TextColor3={Color3.fromRGB(252, 252, 252)}
         TextScaled={true}
         TextSize={14}

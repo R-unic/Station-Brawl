@@ -10,14 +10,23 @@ interface Props {
 
 const { SortOrder, VerticalAlignment, EasingStyle } = Enum;
 
+interface SideButtonType extends ImageButton {
+  Icon: ImageLabel;
+};
+
 function SideButton(props: Props) {
   const defaultSize = new UDim2(0.075, 0, 0.075, 0);
+  const defaultIconColor = Color3.fromRGB(97, 115, 105);
   const hoverInfo = new TweenInfo(.3, EasingStyle.Quad);
-  function hover(btn: ImageButton): void {
+  function hover(base: ImageButton): void {
+    const btn = base as SideButtonType;
     tween(btn, hoverInfo, { Size: new UDim2(0.085, 0, 0.085, 0) });
+    tween(btn.Icon, hoverInfo, { ImageColor3: Color3.fromRGB(107, 133, 125) });
   }
-  function unhover(btn: ImageButton): void {
+  function unhover(base: ImageButton): void {
+    const btn = base as SideButtonType;
     tween(btn, hoverInfo, { Size: defaultSize });
+    tween(btn.Icon, hoverInfo, { ImageColor3: defaultIconColor });
   }
   return (
     <imagebutton
@@ -52,7 +61,7 @@ function SideButton(props: Props) {
         AnchorPoint={new Vector2(0.5, 0.5)}
         BackgroundTransparency={1}
         Image={props.Icon}
-        ImageColor3={Color3.fromRGB(97, 115, 105)}
+        ImageColor3={defaultIconColor}
         Position={new UDim2(0.5, 0, 0.5, 0)}
         Selectable={true}
         Size={new UDim2(0.7, 0, 0.7, 0)}
