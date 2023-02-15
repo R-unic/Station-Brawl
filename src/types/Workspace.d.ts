@@ -1,5 +1,8 @@
 interface Workspace {
-    CaseRollScene: WorldModel & {
-        CaseCamera: Part;
-    }
+  CaseRollScene: WorldModel & {
+    CaseCamera: Part;
+  };
+  Lobby: Folder & {
+    Spawns: Folder;
+  }
 }

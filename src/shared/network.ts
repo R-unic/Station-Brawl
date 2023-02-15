@@ -1,5 +1,5 @@
 import { Networking } from "@flamework/networking";
-import { ReplicatedStorage as Replicated } from "@rbxts/services";
+import { ReplicatedStorage as Replicated, ServerStorage } from "@rbxts/services";
 import { Rarity } from "./dataInterfaces/Rarity";
 import { WeaponData } from "./Interfaces";
 
@@ -22,6 +22,9 @@ interface ServerEvents {
   unequipWeapon(name: Exclude<keyof typeof Replicated.Assets.Weapons, keyof Folder>): void;
   addEffectParticles(character: Model, effectName: Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>): void;
   removeEffectParticles(character: Model, effectName: Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>): void;
+
+  voteForMap(mapName: Exclude<keyof ServerStorage["Maps"], keyof Folder>): void;
+  mapVotingComplete(): void;
 }
 
 interface ClientEvents {
@@ -32,6 +35,8 @@ interface ClientEvents {
   toggleKnockedFX(on: boolean): void;
   shakeCamera(): void;
   finishedEmote(): void;
+
+  promptMapVote(): void;
 }
 
 interface ServerFunctions {
