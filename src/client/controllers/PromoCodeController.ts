@@ -8,7 +8,7 @@ import { WeaponItemInfo } from "shared/dataInterfaces/WeaponItemInfo";
 type CodeReward = EffectItemInfo | CaseItemInfo | WeaponItemInfo | number;
 type CodeRewardType = "Effect" | "Case" | "Weapon" | "Money";
 
-class Redeemable {
+class PromoCode {
   public constructor(
     public readonly code: string,
     public readonly rewards: [CodeReward, CodeRewardType][],
@@ -16,12 +16,12 @@ class Redeemable {
   ) { }
 }
 
-const VALID_CODES: Redeemable[] = [
-  new Redeemable("epic_sb", [[1000, "Money"]])
+const VALID_CODES: PromoCode[] = [
+  new PromoCode("epic_brawlers", [[1000, "Money"]])
 ];
 
 @Controller({})
-export class CodeController {
+export class PromoCodeController {
   public async claim(code: string): Promise<void> {
     const valid = await this._isValid(code);
     if (!valid) return;
@@ -63,7 +63,7 @@ export class CodeController {
     return true;
   }
 
-  private _getRedeemable(code: string): Redeemable | undefined {
+  private _getRedeemable(code: string): PromoCode | undefined {
     return VALID_CODES.find(v => v.code.lower().gsub(" ", "")[0] === code.lower().gsub(" ", "")[0]);
   }
 }

@@ -1,6 +1,6 @@
 import { Dependency } from "@flamework/core";
 import Roact, { createRef } from "@rbxts/roact"
-import { CodeController } from "client/controllers/CodeController";
+import { PromoCodeController } from "client/controllers/PromoCodeController";
 import { tween } from "client/utility";
 import { WindowRefs } from "../Refs";
 import CloseButton from "../components/CloseButton";
@@ -92,8 +92,8 @@ const CodesUI = (
 
             const inputBox = inputRef.getValue()!;
             const code = inputBox.Text;
-            const codes = Dependency<CodeController>();
-            codes.check(code).then(valid => {
+            const promoCodes = Dependency<PromoCodeController>();
+            promoCodes.check(code).then(valid => {
               inputBox.Text = "";
               if (!valid)
                 tween(inputBox, new TweenInfo(.3, EasingStyle.Quint, EasingDirection.Out, 0, true), { BackgroundColor3: Color3.fromRGB(232, 143, 143) })
