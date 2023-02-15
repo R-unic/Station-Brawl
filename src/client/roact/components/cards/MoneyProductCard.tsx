@@ -1,7 +1,7 @@
 import Roact from "@rbxts/roact"
 import { MarketplaceService as Market } from "@rbxts/services";
 import { getPlayer } from "client/utility";
-import ItemCard from "./cards/ItemCard";
+import ItemCard from "./ItemCard";
 
 interface Props {
   ItemName: string;

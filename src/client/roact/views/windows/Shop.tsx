@@ -1,7 +1,7 @@
 import Roact, { createRef } from "@rbxts/roact";
 import { WindowRefs } from "client/roact/Refs";
-import MoneyProductCard from "client/roact/components/MoneyProductCard";
-import ListWindow from "client/roact/components/ListWindow";
+import ListWindow from "client/roact/components/windows/ListWindow";
+import MoneyProductCard from "client/roact/components/cards/MoneyProductCard";
 
 const ref = createRef<ScreenGui>();
 WindowRefs.set("shop", ref);

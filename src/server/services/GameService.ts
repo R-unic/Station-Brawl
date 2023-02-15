@@ -3,6 +3,7 @@ import { Janitor } from "@rbxts/janitor";
 import { Players, ServerStorage, Workspace as World } from "@rbxts/services";
 import { Timer } from "@rbxts/timer";
 import { MapVotingService } from "./MapVotingService";
+import { Events } from "server/network";
 
 enum RoundState {
   Intermission,
@@ -82,6 +83,10 @@ export class GameService implements OnInit {
 
   private _updateTimer(remaining: number): void {
     const title = this.roundState === RoundState.InGame ? "In Game" : "Intermission";
+    const mins = math.floor(remaining / 60);
+    const secs = remaining % 60;
+    const remainingString = "%2d:%02d".format(mins, secs);
+    Events.updateTimer.broadcast(title, remainingString);
   }
 
   private _getRandomSpawn(spawns: Folder): SpawnLocation {

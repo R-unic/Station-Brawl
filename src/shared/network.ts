@@ -37,6 +37,7 @@ interface ClientEvents {
   finishedEmote(): void;
 
   promptMapVote(): void;
+  updateTimer(roundState: string, remainingTime: string): void;
 }
 
 interface ServerFunctions {

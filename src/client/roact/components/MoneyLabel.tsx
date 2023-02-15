@@ -54,7 +54,6 @@ export default function MoneyLabel(props: Props) {
           DataKey="money"
           InitialText="$10,000"
           DataMapper={a => "$" + formatNum(a as number)}
-
           LabelProperties={{
             AnchorPoint: new Vector2(1, 0),
             BackgroundTransparency: 1,

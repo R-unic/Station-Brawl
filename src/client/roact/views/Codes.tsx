@@ -3,7 +3,7 @@ import Roact, { createRef } from "@rbxts/roact"
 import { PromoCodeController } from "client/controllers/PromoCodeController";
 import { tween } from "client/utility";
 import { WindowRefs } from "../Refs";
-import CloseButton from "../components/CloseButton";
+import CloseButton from "../components/windows/CloseButton";
 
 const { Font, ZIndexBehavior, ApplyStrokeMode, TextTruncate, TextXAlignment, EasingStyle, EasingDirection } = Enum;
 
