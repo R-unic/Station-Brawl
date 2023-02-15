@@ -17,7 +17,7 @@ class Redeemable {
 }
 
 const VALID_CODES: Redeemable[] = [
-  new Redeemable("balls", [[1000, "Money"]], DateTime.fromLocalTime(2023, 2, 14, 12, 12))
+  new Redeemable("epic_sb", [[1000, "Money"]])
 ];
 
 @Controller({})
@@ -26,7 +26,6 @@ export class CodeController {
     const valid = await this._isValid(code);
     if (!valid) return;
 
-    //check if already claimed, store claimed in datastore if not
     const redeemable = this._getRedeemable(code)!;
     const claimedCodes = <string[]>(await Functions.getData.invoke("claimedCodes"));
     Events.setData.fire("claimedCodes", [...claimedCodes, code]);
@@ -43,28 +42,28 @@ export class CodeController {
           Events.addCaseToInventory.fire(reward.name, reward.image, reward.rarity);
         case "Money":
           const money = <number>(await Functions.getData.invoke("money"));
-          Events.setData.fire("money", money);
+          Events.setData.fire("money", money + <number>reward);
       }
   }
 
   public async check(code: string): Promise<boolean> {
     const valid = await this._isValid(code);
     if (valid)
-      this.claim(code);
+      await this.claim(code);
 
     return valid;
   }
 
   private async _isValid(code: string): Promise<boolean> {
     const redeemable = this._getRedeemable(code);
-    const claimedCodes = <string[]>(await Functions.getData.invoke("claimedCodes"));
     if (!redeemable) return false;
+    const claimedCodes = <string[]>(await Functions.getData.invoke("claimedCodes"));
     if (claimedCodes.includes(code)) return false;
     if (redeemable.expiration) return redeemable.expiration.UnixTimestamp > DateTime.now().UnixTimestamp;
     return true;
   }
 
   private _getRedeemable(code: string): Redeemable | undefined {
-    return VALID_CODES.find(v => v.code === code.lower());
+    return VALID_CODES.find(v => v.code.lower().gsub(" ", "")[0] === code.lower().gsub(" ", "")[0]);
   }
 }

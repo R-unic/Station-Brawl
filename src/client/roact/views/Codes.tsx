@@ -86,21 +86,21 @@ const CodesUI = (
         TextSize={14}
         TextWrapped={true}
         Event={{
-          MouseButton1Click: () => {
+          MouseButton1Click: async () => {
             if (claimDb) return;
             claimDb = true;
 
             const inputBox = inputRef.getValue()!;
             const code = inputBox.Text;
             const codes = Dependency<CodeController>();
-            const valid = codes.check(code);
-
-            inputBox.Text = "";
-            if (!valid)
-              tween(inputBox, new TweenInfo(.3, EasingStyle.Quint, EasingDirection.Out, 0, true), { BackgroundColor3: Color3.fromRGB(232, 143, 143) })
-                .Completed.Once(() => claimDb = false);
-            else
-              claimDb = false;
+            codes.check(code).then(valid => {
+              inputBox.Text = "";
+              if (!valid)
+                tween(inputBox, new TweenInfo(.3, EasingStyle.Quint, EasingDirection.Out, 0, true), { BackgroundColor3: Color3.fromRGB(232, 143, 143) })
+                  .Completed.Once(() => claimDb = false);
+              else
+                claimDb = false;
+            });
           }
         }}
       >
