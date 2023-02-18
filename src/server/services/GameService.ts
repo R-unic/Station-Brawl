@@ -31,10 +31,11 @@ export class GameService implements OnInit {
           this._removePlayer(character);
       })
     });
-
-    for (const map of ServerStorage.WaitForChild("Maps").GetChildren<Folder>())
-      map.SetAttribute("DescendantCount", map.GetDescendants().size());
-    this._endRound();
+    task.delay(10, () => {
+      for (const map of ServerStorage.WaitForChild("Maps").GetChildren<Folder>())
+        map.SetAttribute("DescendantCount", map.GetDescendants().size());
+      this._endRound();
+    });
   }
 
   private _endRound(): any {

@@ -1,5 +1,5 @@
 import { Networking } from "@flamework/networking";
-import { ReplicatedStorage as Replicated, ServerStorage } from "@rbxts/services";
+import { ReplicatedStorage as Replicated } from "@rbxts/services";
 import { Rarity } from "./dataInterfaces/Rarity";
 import { WeaponData } from "./Interfaces";
 
@@ -43,6 +43,7 @@ interface ClientEvents {
 interface ServerFunctions {
   getData(key: string): unknown;
   showDailyReward(): boolean;
+  getRandomMap(): Exclude<keyof ServerStorage["Maps"], keyof Folder>;
 }
 
 interface ClientFunctions { }

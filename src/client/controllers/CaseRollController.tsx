@@ -14,7 +14,7 @@ import { Events, Functions } from "client/network";
 import { WindowRefs } from "client/roact/Refs";
 import { getUI } from "client/utility";
 import { LootPoolController } from "./LootPoolController";
-import CaseRewardModal from "client/roact/components/CaseRewardModal";
+import CaseRewardModal from "client/roact/components/modals/CaseRewardModal";
 import ItemCard from "client/roact/components/cards/ItemCard";
 
 const { CameraType, Font } = Enum;

@@ -7,17 +7,17 @@ import { Events } from "server/network";
 
 @Service({})
 export class VfxService implements OnInit {
-  private readonly bloodCache = new PartCacheModule(<Part>Replicated.Assets.VFX.WaitForChild("Blood"), 16);
+  private readonly impactCache = new PartCacheModule(<Part>Replicated.Assets.VFX.WaitForChild("Impact"), 16);
 
   public onInit(): void {
-    this.bloodCache.SetCacheParent(World.WaitForChild("Ignore"));
-    Events.createBlood.connect((player, position, duration) => this.createBlood(position, duration));
+    this.impactCache.SetCacheParent(World.WaitForChild("Ignore"));
+    Events.createBlood.connect((player, position, duration) => this.createImpact(position, duration));
   }
 
-  public createBlood(position: Vector3, duration: number): void {
-    const part = this.bloodCache.GetPart();
+  public createImpact(position: Vector3, duration: number): void {
+    const part = this.impactCache.GetPart();
     part.Position = position;
-    this._createParticles(part, duration, this.bloodCache);
+    this._createParticles(part, duration, this.impactCache);
   }
 
   private _createParticles(part: Part, duration: number, cache: PartCache): void {

@@ -1,10 +1,38 @@
-import Roact from "@rbxts/roact";
+import Roact, { Element, createRef, mount } from "@rbxts/roact";
+import { Events, Functions } from "client/network";
 import { WindowRefs } from "../Refs";
+import MapVotingModal from "../components/modals/MapVotingModal";
 import MoneyLabel from "../components/MoneyLabel";
 import RoundTimer from "../components/RoundTimer";
+import MapChoice from "../components/MapChoice";
+import { StrictMap } from "@rbxts/strict-map";
+import { ServerStorage } from "@rbxts/services";
+
+const ref = createRef<ScreenGui>();
+const mapIcons = new StrictMap<Exclude<keyof typeof ServerStorage["Maps"], keyof Folder>, string>([
+  ["Gas Station", "rbxassetid://11115843157"]
+]);
+
+Events.promptMapVote.connect(async () => {
+  const choices: Element[] = [];
+  for (let i = 0; i < 3; i++) {
+    const randomMap = (await Functions.getRandomMap.invoke())
+    choices.push(
+      <MapChoice
+        MapName={randomMap}
+        Icon={mapIcons.mustGet(randomMap)}
+      />
+    );
+  }
+  mount((
+    <MapVotingModal>
+      {...choices}
+    </MapVotingModal>
+  ), ref.getValue()!);
+})
 
 const MainUI = (
-  <screengui Key="Main" ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}>
+  <screengui Ref={ref} Key="Main" ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}>
     <uipadding
       PaddingBottom={new UDim(0, 5)}
       PaddingLeft={new UDim(0, 10)}

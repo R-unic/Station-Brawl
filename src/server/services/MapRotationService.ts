@@ -1,4 +1,5 @@
-import { Service } from "@flamework/core";
+import { Service, OnInit } from "@flamework/core";
+import { Functions } from "server/network";
 
 type MapName = Exclude<keyof ServerStorage["Maps"], keyof Folder>;
 const rotations: MapName[][] = [
@@ -11,13 +12,17 @@ const rotations: MapName[][] = [
 
 
 @Service({})
-export class MapRotationService {
+export class MapRotationService implements OnInit {
   public readonly pool: MapName[]
   public constructor() {
     const date = DateTime.now();
     const { Day: day } = date.ToUniversalTime();
     const week = math.ceil(day / 7);
     this.pool = rotations[week - 1];
+  }
+
+  public onInit(): void {
+    Functions.getRandomMap.setCallback(() => this.getRandom());
   }
 
   public getRandom(): MapName {
