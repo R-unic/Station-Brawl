@@ -17,7 +17,7 @@ export class CharacterService implements OnInit {
 
   public constructor(
     private readonly soundPlayer: SoundPlayerService,
-    private readonly game: GameService
+    private readonly _game: GameService
   ) { }
 
   public onInit(): void {
@@ -66,7 +66,7 @@ export class CharacterService implements OnInit {
   }
 
   private _knockout(killer: Player | undefined, victimHumanoid: Humanoid) {
-    if (this.game.roundState !== RoundState.InGame) return;
+    if (this._game.roundState !== RoundState.InGame) return;
 
     const promptJanitor = new Janitor;
     const victimCharacter = <Model>victimHumanoid.Parent;
