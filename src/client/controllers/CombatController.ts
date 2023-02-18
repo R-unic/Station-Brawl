@@ -3,9 +3,10 @@ import { Lighting, Workspace as World } from "@rbxts/services";
 import CameraShaker from "@rbxts/camera-shaker";
 
 import { Events, Functions } from "client/network";
-import { getCharacter, getPlayer, tween } from "client/utility";
+import { getCharacter, getPlayer } from "client/utility";
 import { EmoteController } from "./EmoteController";
 import { RoundState, WeaponData } from "shared/Interfaces";
+import tween from "shared/utility/tween";
 
 const fists: WeaponData = {
   Damage: [15, 25],
@@ -68,9 +69,9 @@ export class CombatController implements OnInit {
 
       const dmg = math.ceil(math.random(dmg0, dmg1));
       Events.damage.fire(humanoid, dmg);
-      Events.createBlood.fire(result.Position, .5);
+      Events.createImpactVFX.fire(result.Position, .5);
+      Events.createDamageCounter.fire(enemy, dmg, 2.5);
     });
-
     task.delay(this.weaponState.Cooldown, () => this.debounce.attack = false);
   }
 
@@ -91,7 +92,7 @@ export class CombatController implements OnInit {
     tween(Lighting.KnockedBlur, info, { Size: on ? 16 : 0 });
   }
 
-  private _rayMarch(): RaycastResult | undefined {
+  private _rayMarch(): Nullable<RaycastResult> {
     const character = getCharacter();
     const root = character.PrimaryPart!;
     const params = new RaycastParams();

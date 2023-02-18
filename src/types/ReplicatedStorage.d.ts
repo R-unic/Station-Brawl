@@ -7,6 +7,13 @@ interface ReplicatedStorage extends Instance {
   Assets: Folder & {
     VFX: Folder & {
       Impact: Part;
+      DamageCounter: Part & {
+        Billboard: BillboardGui & {
+          DamageLabel: TextLabel & {
+            UIStroke: UIStroke;
+          };
+        };
+      };
     };
     Weapons: Folder & {
       ["Diamond Sword"]: Model & {

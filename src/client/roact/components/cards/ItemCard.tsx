@@ -1,6 +1,7 @@
 import Roact, { PropsWithChildren, Ref } from "@rbxts/roact";
-import { getChildren, tween } from "client/utility";
+import { getChildren } from "client/utility";
 import DropShadow from "../DropShadow";
+import tween from "shared/utility/tween";
 
 interface Props {
   CardName?: string;

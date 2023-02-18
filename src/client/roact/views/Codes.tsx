@@ -1,9 +1,9 @@
 import { Dependency } from "@flamework/core";
 import Roact, { createRef } from "@rbxts/roact"
 import { PromoCodeController } from "client/controllers/PromoCodeController";
-import { tween } from "client/utility";
 import { WindowRefs } from "../Refs";
 import CloseButton from "../components/windows/CloseButton";
+import tween from "shared/utility/tween";
 
 const { Font, ZIndexBehavior, ApplyStrokeMode, TextTruncate, TextXAlignment, EasingStyle, EasingDirection } = Enum;
 

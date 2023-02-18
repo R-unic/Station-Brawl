@@ -1,6 +1,6 @@
 import Roact from "@rbxts/roact";
 import { WindowRefs } from "../Refs";
-import { tween } from "client/utility";
+import tween from "shared/utility/tween";
 
 interface Props {
   ButtonName: string;

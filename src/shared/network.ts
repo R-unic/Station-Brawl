@@ -16,7 +16,9 @@ interface ServerEvents {
   playSoundInCharacter(name: string, volume?: number): void;
   damage(humanoid: Humanoid, amount: number): void;
   anchor(character: Model, on?: boolean, anchorPart?: string): void;
-  createBlood(position: Vector3, duration: number): void;
+
+  createImpactVFX(position: Vector3, duration: number): void;
+  createDamageCounter(character: Model, damage: number, duration: number): void;
 
   equipWeapon(name: Exclude<keyof typeof Replicated.Assets.Weapons, keyof Folder>): void;
   unequipWeapon(name: Exclude<keyof typeof Replicated.Assets.Weapons, keyof Folder>): void;

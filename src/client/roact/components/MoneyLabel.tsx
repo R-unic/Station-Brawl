@@ -1,6 +1,6 @@
 import Roact from "@rbxts/roact";
 import { formatNum } from "@rbxts/number-manipulator";
-import { tween } from "client/utility";
+import tween from "shared/utility/tween";
 import DropShadow from "./DropShadow"
 import DataConnectedText from "./DataConnectedText";
 

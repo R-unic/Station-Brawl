@@ -1,5 +1,5 @@
 import Roact from "@rbxts/roact";
-import { tween } from "client/utility";
+import tween from "shared/utility/tween";
 
 interface Props {
   ParentScreen: (btn: TextButton) => ScreenGui | ScreenGui;

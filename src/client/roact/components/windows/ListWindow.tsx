@@ -1,6 +1,7 @@
 import Roact, { Element, PropsWithChildren, Ref, createRef } from "@rbxts/roact";
-import { getChildren, tween } from "client/utility";
+import { getChildren } from "client/utility";
 import Window from "./Window";
+import tween from "shared/utility/tween";
 
 const { HorizontalAlignment, SortOrder, EasingStyle } = Enum;
 

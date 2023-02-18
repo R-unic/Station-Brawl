@@ -1,7 +1,7 @@
 import Roact, { createRef } from "@rbxts/roact";
 import { StarterGui } from "@rbxts/services";
 import { Events } from "client/network";
-import { tween } from "client/utility";
+import tween from "shared/utility/tween";
 
 interface Props {
   InitiallyToggled?: boolean;
