@@ -72,7 +72,7 @@ function LeaderboardEntry(props: EntryProps) {
   );
 }
 
-export default class LeaderboardScreen extends Roact.Component<{}, {}> {
+class LeaderboardScreen extends Roact.Component<{}, {}> {
   private readonly listRef = createRef<ScrollingFrame>();
   private readonly entryHandles: Tree[] = [];
 
@@ -167,3 +167,5 @@ export default class LeaderboardScreen extends Roact.Component<{}, {}> {
     );
   }
 }
+
+export default <LeaderboardScreen />;
