@@ -3,7 +3,9 @@ import { Players, ReplicatedStorage as Replicated } from "@rbxts/services";
 import { Janitor } from "@rbxts/janitor";
 import { Events } from "server/network";
 import { randomElement } from "shared/utility/ArrayUtil";
+import { RoundState } from "shared/Interfaces";
 import { SoundPlayerService } from "./SoundPlayerService";
+import { GameService } from "./GameService";
 import ragdoll from "server/utility/ragdoll";
 import anchor from "server/utility/anchor";
 
@@ -14,7 +16,8 @@ export class CharacterService implements OnInit {
   };
 
   public constructor(
-    private readonly soundPlayer: SoundPlayerService
+    private readonly soundPlayer: SoundPlayerService,
+    private readonly game: GameService
   ) { }
 
   public onInit(): void {
@@ -63,6 +66,8 @@ export class CharacterService implements OnInit {
   }
 
   private _knockout(killer: Player | undefined, victimHumanoid: Humanoid) {
+    if (this.game.roundState !== RoundState.InGame) return;
+
     const promptJanitor = new Janitor;
     const victimCharacter = <Model>victimHumanoid.Parent;
     const victim = Players.GetPlayerFromCharacter(victimCharacter);

@@ -14,7 +14,7 @@ export class GameService implements OnInit {
   private readonly ROUND_LENGTH = testing ? 20 : 120;
   private readonly lobbySpawns = World.Lobby.Spawns;
 
-  private roundState: RoundState = RoundState.Intermission;
+  public roundState: RoundState = RoundState.Intermission;
 
   public constructor(
     private readonly mapVoting: MapVotingService
