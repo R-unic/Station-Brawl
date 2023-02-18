@@ -13,7 +13,7 @@ interface ServerEvents {
 
   playAnim(name: string, id: number, character?: Model, dontCancel?: boolean): void;
   stopAnim(name: string): void;
-  playSoundInCharacter(name: string): void;
+  playSoundInCharacter(name: string, volume?: number): void;
   damage(humanoid: Humanoid, amount: number): void;
   anchor(character: Model, on?: boolean, anchorPart?: string): void;
   createBlood(position: Vector3, duration: number): void;

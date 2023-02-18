@@ -2,7 +2,7 @@ import { Service, OnInit } from "@flamework/core";
 import { Janitor } from "@rbxts/janitor";
 import { Players, RunService as Runtime, ServerStorage, Workspace as World } from "@rbxts/services";
 import { Timer } from "@rbxts/timer";
-import { Events } from "server/network";
+import { Events, Functions } from "server/network";
 import { RoundState } from "shared/Interfaces";
 import { MapVotingService } from "./MapVotingService";
 
@@ -21,6 +21,7 @@ export class GameService implements OnInit {
   ) { }
 
   public onInit(): void {
+    Functions.getRoundState.setCallback(() => this.roundState);
     Players.PlayerAdded.Connect(player => {
       player.CharacterAdded.Once(character => {
         if (this.roundState === RoundState.InGame)

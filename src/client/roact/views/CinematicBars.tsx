@@ -32,7 +32,7 @@ class CinematicBars extends Roact.Component<Props> {
 
   public render(): Roact.Element {
     return (
-      <screengui Key="CinematicBars" ScreenInsets={ScreenInsets.DeviceSafeInsets} DisplayOrder={5}>
+      <screengui Key="CinematicBars" ScreenInsets={ScreenInsets.DeviceSafeInsets} DisplayOrder={5} ResetOnSpawn={false}>
         <frame
           Key="B"
           Ref={this.bottomRef}

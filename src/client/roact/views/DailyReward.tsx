@@ -20,7 +20,7 @@ const ref = createRef<ScreenGui>();
 
 let db = false;
 const DailyRewardUI = (
-  <screengui Ref={ref} Key="DailyReward" DisplayOrder={2} ZIndexBehavior={ZIndexBehavior.Sibling}>
+  <screengui Ref={ref} Key="DailyReward" DisplayOrder={2} ZIndexBehavior={ZIndexBehavior.Sibling} ResetOnSpawn={false}>
     <frame
       Key="Modal"
       AnchorPoint={new Vector2(0.5, 0.5)}

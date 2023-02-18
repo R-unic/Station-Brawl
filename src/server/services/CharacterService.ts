@@ -3,6 +3,7 @@ import { Players, ReplicatedStorage as Replicated } from "@rbxts/services";
 import { Janitor } from "@rbxts/janitor";
 import { Events } from "server/network";
 import { randomElement } from "shared/utility/ArrayUtil";
+import { SoundPlayerService } from "./SoundPlayerService";
 import ragdoll from "server/utility/ragdoll";
 import anchor from "server/utility/anchor";
 
@@ -11,6 +12,10 @@ export class CharacterService implements OnInit {
   private readonly animations = {
     "finishers": [[12296520631, 12296522679]] // killer, victim
   };
+
+  public constructor(
+    private readonly soundPlayer: SoundPlayerService
+  ) { }
 
   public onInit(): void {
     Events.anchor.connect((_, character, on, anchorPart) => anchor(character, on, anchorPart));
@@ -22,7 +27,7 @@ export class CharacterService implements OnInit {
       player.CharacterAdded.Connect(character => {
         const humanoid = character.WaitForChild<Humanoid>("Humanoid");
         characterLifeJanitor.Add(humanoid.Died.Connect(() => {
-          this._knock(undefined, humanoid);
+          this._knockout(undefined, humanoid);
           characterLifeJanitor.Cleanup();
         }));
       })
@@ -54,10 +59,10 @@ export class CharacterService implements OnInit {
       Events.shakeCamera.fire(victim);
 
     if (victimHumanoid.Health > 0) return;
-    this._knock(player, victimHumanoid);
+    this._knockout(player, victimHumanoid);
   }
 
-  private _knock(killer: Player | undefined, victimHumanoid: Humanoid) {
+  private _knockout(killer: Player | undefined, victimHumanoid: Humanoid) {
     const promptJanitor = new Janitor;
     const victimCharacter = <Model>victimHumanoid.Parent;
     const victim = Players.GetPlayerFromCharacter(victimCharacter);
@@ -65,6 +70,7 @@ export class CharacterService implements OnInit {
     ragdoll(victimCharacter);
 
     if (victim) {
+      this.soundPlayer.playInCharacter(victim, "knockout", 1.5);
       Events.toggleKnockedFX.fire(victim, true);
 
       const finishPrompt = new Instance("ProximityPrompt");

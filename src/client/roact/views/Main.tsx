@@ -37,7 +37,7 @@ Events.promptMapVote.connect(async () => {
 });
 
 const MainUI = (
-  <screengui Ref={ref} Key="Main" ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}>
+  <screengui Ref={ref} Key="Main" ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets} ResetOnSpawn={false}>
     <uipadding
       PaddingBottom={new UDim(0, 5)}
       PaddingLeft={new UDim(0, 10)}

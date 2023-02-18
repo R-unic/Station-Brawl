@@ -28,6 +28,7 @@ function SideButton(props: Props) {
     tween(btn, hoverInfo, { Size: defaultSize });
     tween(btn.Icon, hoverInfo, { ImageColor3: defaultIconColor });
   }
+
   return (
     <imagebutton
       Key={props.ButtonName}
@@ -75,7 +76,7 @@ function SideButton(props: Props) {
 }
 
 const ButtonsUI = (
-  <screengui Key="Buttons">
+  <screengui Key="Buttons" ResetOnSpawn={false}>
     <uipadding PaddingLeft={new UDim(0.01, 0)} />
     <SideButton ButtonName="Inventory" Icon="rbxassetid://10723424963" OnClick={() => {
       const inventoryRef = WindowRefs.mustGet("inventory");
