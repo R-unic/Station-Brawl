@@ -1,6 +1,6 @@
 import { Service, OnInit } from "@flamework/core";
 import { Timer } from "@rbxts/timer";
-import { Events } from "server/network";
+import { Events, Functions } from "server/network";
 import { MapRotationService } from "./MapRotationService";
 
 type MapName = Exclude<keyof ServerStorage["Maps"], keyof Folder>;
@@ -15,6 +15,7 @@ export class MapVotingService implements OnInit {
 
   public onInit(): void {
     Events.voteForMap.connect((player, mapName) => this.playerVotes.set(player, mapName));
+    Functions.getMapVotes.setCallback((player, mapName) => this._getMapVotes().get(mapName));
   }
 
   public async determineMap(votingTime: number): Promise<MapName> {
@@ -23,12 +24,7 @@ export class MapVotingService implements OnInit {
     timer.start();
     timer.completed.Wait();
 
-    const mapVotes = new Map<MapName, number>();
-    for (const [_, mapName] of this.playerVotes) {
-      const currentVotes = mapVotes.get(mapName) ?? 0;
-      mapVotes.set(mapName, currentVotes + 1);
-    }
-
+    const mapVotes = this._getMapVotes();
     const voteCounts: number[] = [];
     for (const [_, votes] of mapVotes)
       voteCounts.push(votes);
@@ -40,5 +36,14 @@ export class MapVotingService implements OnInit {
         chosenMap = mapName;
 
     return chosenMap;
+  }
+
+  private _getMapVotes(): Map<MapName, number> {
+    const mapVotes = new Map<MapName, number>();
+    for (const [_, mapName] of this.playerVotes) {
+      const currentVotes = mapVotes.get(mapName) ?? 0;
+      mapVotes.set(mapName, currentVotes + 1);
+    }
+    return mapVotes;
   }
 }

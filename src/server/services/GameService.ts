@@ -31,7 +31,7 @@ export class GameService implements OnInit {
           this._removePlayer(character);
       })
     });
-    task.delay(10, () => {
+    task.delay(20, () => {
       for (const map of ServerStorage.WaitForChild("Maps").GetChildren<Folder>())
         map.SetAttribute("DescendantCount", map.GetDescendants().size());
       this._endRound();

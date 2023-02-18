@@ -1,5 +1,6 @@
 import Roact from "@rbxts/roact"
-import { Events } from "client/network";
+import { Events, Functions } from "client/network";
+import VotesContainer from "./VotesContainer";
 
 interface Props {
   MapName: Exclude<keyof ServerStorage["Maps"], keyof Folder>;
@@ -8,7 +9,6 @@ interface Props {
 
 const { ScaleType, Font, TextYAlignment, ApplyStrokeMode } = Enum;
 
-// TODO: add vote count label
 export default function MapChoice(props: Props) {
   return (
     <imagebutton
@@ -19,9 +19,14 @@ export default function MapChoice(props: Props) {
       Size={new UDim2(0.3, 0, 0.85, 0)}
       ZIndex={2}
       Event={{
-        MouseButton1Click: () => Events.voteForMap.fire(props.MapName)
+        MouseButton1Click: () => {
+          Events.voteForMap.fire(props.MapName);
+          Functions.getMapVotes.invoke(props.MapName)
+            .then(votes => Events.updateMapChoiceVotes.predict(props.MapName, votes ?? 0));
+        }
       }}
     >
+      <VotesContainer MapName={props.MapName} />
       <textlabel
         Key="Title"
         AnchorPoint={new Vector2(0.5, 1)}
@@ -72,3 +77,4 @@ export default function MapChoice(props: Props) {
     </imagebutton>
   );
 }
+

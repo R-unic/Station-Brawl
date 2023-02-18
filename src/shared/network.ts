@@ -37,13 +37,16 @@ interface ClientEvents {
   finishedEmote(): void;
 
   promptMapVote(): void;
+  removeMapVotePrompt(): void;
   updateTimer(roundState: string, remainingTime: string): void;
+  updateMapChoiceVotes(mapName: Exclude<keyof ServerStorage["Maps"], keyof Folder>, votes: number): void;
 }
 
 interface ServerFunctions {
   getData(key: string): unknown;
   showDailyReward(): boolean;
   getRandomMap(): Exclude<keyof ServerStorage["Maps"], keyof Folder>;
+  getMapVotes(mapName: Exclude<keyof ServerStorage["Maps"], keyof Folder>): Nullable<number>;
 }
 
 interface ClientFunctions { }
