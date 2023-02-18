@@ -2,6 +2,11 @@ import { Element } from "@rbxts/roact";
 import { Rarity } from "./dataInterfaces/Rarity";
 import { ReplicatedStorage as Replicated } from "@rbxts/services";
 
+export const enum RoundState {
+  Intermission,
+  InGame
+}
+
 export interface InventoryPages {
   Effects: Element[];
   Weapons: Element[];

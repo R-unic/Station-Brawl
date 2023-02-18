@@ -1,19 +1,17 @@
 import { Service, OnInit } from "@flamework/core";
 import { Janitor } from "@rbxts/janitor";
-import { Players, ServerStorage, Workspace as World } from "@rbxts/services";
+import { Players, RunService as Runtime, ServerStorage, Workspace as World } from "@rbxts/services";
 import { Timer } from "@rbxts/timer";
-import { MapVotingService } from "./MapVotingService";
 import { Events } from "server/network";
+import { RoundState } from "shared/Interfaces";
+import { MapVotingService } from "./MapVotingService";
 
-enum RoundState {
-  Intermission,
-  InGame
-}
+const testing = Runtime.IsStudio();
 
 @Service({})
 export class GameService implements OnInit {
-  private readonly INTERMISSION_LENGTH = 15;
-  private readonly ROUND_LENGTH = 25;
+  private readonly INTERMISSION_LENGTH = testing ? 15 : 30;
+  private readonly ROUND_LENGTH = testing ? 20 : 120;
   private readonly lobbySpawns = World.Lobby.Spawns;
 
   private roundState: RoundState = RoundState.Intermission;

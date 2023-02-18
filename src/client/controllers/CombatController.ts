@@ -2,10 +2,10 @@ import { Controller, OnInit } from "@flamework/core";
 import { Lighting, Workspace as World } from "@rbxts/services";
 import CameraShaker from "@rbxts/camera-shaker";
 
-import { Events } from "client/network";
+import { Events, Functions } from "client/network";
 import { getCharacter, getPlayer, tween } from "client/utility";
 import { EmoteController } from "./EmoteController";
-import { WeaponData } from "shared/Interfaces";
+import { RoundState, WeaponData } from "shared/Interfaces";
 
 const fists: WeaponData = {
   Damage: [15, 25],
@@ -39,7 +39,8 @@ export class CombatController implements OnInit {
     Events.unloadWeapon.connect(() => this._unloadWeapon());
   }
 
-  public attack(): void {
+  public async attack(): Promise<void> {
+    if (await Functions.getRoundState.invoke() !== RoundState.InGame) return;
     if (this.emote.emoting) return;
     if (this.debounce.attack) return;
     this.debounce.attack = true;

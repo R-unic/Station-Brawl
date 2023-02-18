@@ -1,7 +1,7 @@
 import { Networking } from "@flamework/networking";
 import { ReplicatedStorage as Replicated } from "@rbxts/services";
 import { Rarity } from "./dataInterfaces/Rarity";
-import { WeaponData } from "./Interfaces";
+import { RoundState, WeaponData } from "./Interfaces";
 
 interface ServerEvents {
   initializeData(): void;
@@ -47,6 +47,7 @@ interface ServerFunctions {
   showDailyReward(): boolean;
   getRandomMap(): Exclude<keyof ServerStorage["Maps"], keyof Folder>;
   getMapVotes(mapName: Exclude<keyof ServerStorage["Maps"], keyof Folder>): Nullable<number>;
+  getRoundState(): RoundState;
 }
 
 interface ClientFunctions { }
