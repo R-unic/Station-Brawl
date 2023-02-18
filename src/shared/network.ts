@@ -50,6 +50,7 @@ interface ServerFunctions {
   getRandomMap(): Exclude<keyof ServerStorage["Maps"], keyof Folder>;
   getMapVotes(mapName: Exclude<keyof ServerStorage["Maps"], keyof Folder>): Nullable<number>;
   getRoundState(): RoundState;
+  getDataTable(): unknown;
 }
 
 interface ClientFunctions { }

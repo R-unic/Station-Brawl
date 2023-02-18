@@ -1,5 +1,5 @@
 import { OnInit, Service } from "@flamework/core";
-import { Players } from "@rbxts/services";
+import { DataStoreService, Players } from "@rbxts/services";
 import DataStore2 from "@rbxts/datastore2";
 
 import { Events, Functions } from "server/network";
