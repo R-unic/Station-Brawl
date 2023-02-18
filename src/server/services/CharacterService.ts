@@ -6,6 +6,7 @@ import { randomElement } from "shared/utility/ArrayUtil";
 import { RoundState } from "shared/Interfaces";
 import { SoundPlayerService } from "./SoundPlayerService";
 import { GameService } from "./GameService";
+import { DataService } from "./DataService";
 import ragdoll from "server/utility/ragdoll";
 import anchor from "server/utility/anchor";
 
@@ -17,7 +18,8 @@ export class CharacterService implements OnInit {
 
   public constructor(
     private readonly soundPlayer: SoundPlayerService,
-    private readonly _game: GameService
+    private readonly _game: GameService,
+    private readonly data: DataService
   ) { }
 
   public onInit(): void {
@@ -65,7 +67,7 @@ export class CharacterService implements OnInit {
     this._knockout(player, victimHumanoid);
   }
 
-  private _knockout(killer: Player | undefined, victimHumanoid: Humanoid) {
+  private _knockout(killer: Nullable<Player>, victimHumanoid: Humanoid) {
     if (this._game.roundState !== RoundState.InGame) return;
 
     const promptJanitor = new Janitor;
@@ -90,6 +92,7 @@ export class CharacterService implements OnInit {
         if (player === victim) return;
         if (player !== killer) return;
         this._doFinisher(killer, victim);
+        this.data.increment(killer, "careerKills");
       }));
     }
 
@@ -102,6 +105,8 @@ export class CharacterService implements OnInit {
       else {
         Events.toggleKnockedFX.fire(victim, false);
         victim?.LoadCharacter();
+        if (killer)
+          this.data.increment(killer, "careerKills");
       }
     });
   }

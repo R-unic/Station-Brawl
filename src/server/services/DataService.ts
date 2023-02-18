@@ -8,12 +8,20 @@ import InventoryInfo from "shared/dataInterfaces/InventoryInfo";
 @Service({})
 export class DataService implements OnInit {
   public onInit(): void {
-    DataStore2.Combine("DATA", "money", "inventory", "lastDailyClaim", "claimedCodes");
+    DataStore2.Combine("DATA", "money", "inventory", "lastDailyClaim", "claimedCodes", "careerKills", "playtime");
     Events.initializeData.connect(player => this._setup(player));
     Events.setData.connect((player, key, value) => this.set(player, key, value));
     Functions.getData.setCallback((player, key) => this.get(player, key)!);
 
     Players.PlayerAdded.Connect(player => {
+      task.spawn(() => {
+        while (player) {
+          const increment = 20;
+          task.wait(increment);
+          this.increment(player, "playtime", increment);
+        }
+      });
+
       const inventory = this.get<InventoryInfo>(player, "inventory");
       if (!inventory) return;
       inventory.cases ??= [];
@@ -24,7 +32,12 @@ export class DataService implements OnInit {
     });
   }
 
-  public get<T = unknown>(player: Player, key: string): T | undefined {
+  public increment(player: Player, key: string, amount = 1): void {
+    const value = this.get<number>(player, key) ?? 0;
+    this.set(player, key, value + amount);
+  }
+
+  public get<T = unknown>(player: Player, key: string): Nullable<T> {
     const store = this._getStore<T>(player, key);
     return store.Get();
   }
@@ -37,6 +50,8 @@ export class DataService implements OnInit {
   private _setup(player: Player): void {
     this._initialize(player, "claimedCodes", []);
     this._initialize(player, "lastDailyClaim", undefined);
+    this._initialize(player, "careerKills", 0);
+    this._initialize(player, "playtime", 0);
     this._initialize(player, "money", 100);
     this._initialize<InventoryInfo>(player, "inventory", {
       cases: [],
