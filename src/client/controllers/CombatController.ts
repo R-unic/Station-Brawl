@@ -19,6 +19,7 @@ const fists: WeaponData = {
 
 @Controller({})
 export class CombatController implements OnInit {
+  private consecutiveAttacks = 0;
   private weaponState: WeaponData = fists;
   private readonly debounce = {
     attack: false
@@ -45,6 +46,7 @@ export class CombatController implements OnInit {
     if (this.emote.emoting) return;
     if (this.debounce.attack) return;
     this.debounce.attack = true;
+    this.consecutiveAttacks += 1;
 
     task.spawn(() => {
       const player = getPlayer();
@@ -53,7 +55,7 @@ export class CombatController implements OnInit {
       if (player.GetAttribute("BeingFinished") === true) return;
 
       const attackAnimations = this.weaponState.Animations.Attack;
-      const attackId = attackAnimations[(new Random).NextInteger(0, attackAnimations.size())];
+      const attackId = this.consecutiveAttacks < 1 ? attackAnimations[0] : attackAnimations[(new Random).NextInteger(0, attackAnimations.size())];
       Events.playAnim.fire("attack", attackId, undefined, false);
       const result = this._rayMarch();
       if (!result) return;
@@ -72,7 +74,10 @@ export class CombatController implements OnInit {
       Events.createImpactVFX.fire(result.Position, .5);
       Events.createDamageCounter.fire(enemy, dmg, 2.5);
     });
-    task.delay(this.weaponState.Cooldown, () => this.debounce.attack = false);
+    task.delay(this.weaponState.Cooldown, () => {
+      this.debounce.attack = false;
+      this.consecutiveAttacks -= 1;
+    });
   }
 
   private _unloadWeapon(): void {
