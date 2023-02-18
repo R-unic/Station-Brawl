@@ -49,5 +49,5 @@ export default function CaseCard(props: Props) {
         Events.setData("inventory", newInventory);
       }}
     />
-  )
+  );
 }

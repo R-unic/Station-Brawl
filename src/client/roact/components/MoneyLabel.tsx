@@ -1,8 +1,9 @@
 import Roact from "@rbxts/roact";
 import { formatNum } from "@rbxts/number-manipulator";
-import tween from "shared/utility/tween";
+
 import DropShadow from "./DropShadow"
 import DataConnectedText from "./DataConnectedText";
+import tween from "shared/utility/tween";
 
 interface Props {
   FrameProperties: Partial<WritableInstanceProperties<Frame>>;
@@ -11,7 +12,6 @@ interface Props {
 
 const { Font, EasingStyle, TextXAlignment } = Enum;
 
-// color animations for add currency button
 export default function MoneyLabel(props: Props) {
   const defaultAddColor = Color3.fromRGB(63, 202, 140);
   const hoverAddInfo = new TweenInfo(.35, EasingStyle.Quad);
@@ -42,11 +42,19 @@ export default function MoneyLabel(props: Props) {
       >
         <uicorner CornerRadius={new UDim(0, 12)} />
         <uigradient
-          Transparency={new NumberSequence([new NumberSequenceKeypoint(0, 0, 0), new NumberSequenceKeypoint(0.69, 0.3, 0), new NumberSequenceKeypoint(1, 1, 0)])}
+          Transparency={new NumberSequence([
+            new NumberSequenceKeypoint(0, 0, 0),
+            new NumberSequenceKeypoint(0.69, 0.3, 0),
+            new NumberSequenceKeypoint(1, 1, 0)
+          ])}
         />
         <uistroke Color={Color3.fromRGB(75, 75, 75)} Thickness={1.4}>
           <uigradient
-            Transparency={new NumberSequence([new NumberSequenceKeypoint(0, 0, 0), new NumberSequenceKeypoint(0.69, 0.3, 0), new NumberSequenceKeypoint(1, 1, 0)])}
+            Transparency={new NumberSequence([
+              new NumberSequenceKeypoint(0, 0, 0),
+              new NumberSequenceKeypoint(0.69, 0.3, 0),
+              new NumberSequenceKeypoint(1, 1, 0)
+            ])}
           />
         </uistroke>
         <DataConnectedText
@@ -69,9 +77,16 @@ export default function MoneyLabel(props: Props) {
         >
           <uistroke Color={Color3.fromRGB(123, 171, 86)} Thickness={1.4}>
             <uigradient
-              Color={new ColorSequence([new ColorSequenceKeypoint(0, Color3.fromRGB(255, 255, 255)), new ColorSequenceKeypoint(1, Color3.fromRGB(147, 147, 147))])}
+              Color={new ColorSequence([
+                new ColorSequenceKeypoint(0, Color3.fromRGB(255, 255, 255)),
+                new ColorSequenceKeypoint(1, Color3.fromRGB(147, 147, 147))
+              ])}
               Rotation={90}
-              Transparency={new NumberSequence([new NumberSequenceKeypoint(0, 0, 0), new NumberSequenceKeypoint(0.69, 0.3, 0), new NumberSequenceKeypoint(1, 1, 0)])}
+              Transparency={new NumberSequence([
+                new NumberSequenceKeypoint(0, 0, 0),
+                new NumberSequenceKeypoint(0.69, 0.3, 0),
+                new NumberSequenceKeypoint(1, 1, 0)
+              ])}
             />
           </uistroke>
         </DataConnectedText>
@@ -102,7 +117,13 @@ export default function MoneyLabel(props: Props) {
         <uicorner CornerRadius={new UDim(0, 12)} />
         <uiaspectratioconstraint />
         <uigradient
-          Color={new ColorSequence([new ColorSequenceKeypoint(0, Color3.fromRGB(184, 230, 201)), new ColorSequenceKeypoint(0.2, Color3.fromRGB(255, 255, 255)), new ColorSequenceKeypoint(0.5, Color3.fromRGB(255, 255, 255)), new ColorSequenceKeypoint(0.7000000000000001, Color3.fromRGB(255, 255, 255)), new ColorSequenceKeypoint(1, Color3.fromRGB(184, 230, 201))])}
+          Color={new ColorSequence([
+            new ColorSequenceKeypoint(0, Color3.fromRGB(184, 230, 201)),
+            new ColorSequenceKeypoint(0.2, Color3.fromRGB(255, 255, 255)),
+            new ColorSequenceKeypoint(0.5, Color3.fromRGB(255, 255, 255)),
+            new ColorSequenceKeypoint(0.7, Color3.fromRGB(255, 255, 255)),
+            new ColorSequenceKeypoint(1, Color3.fromRGB(184, 230, 201))
+          ])}
           Rotation={90}
         />
         <uistroke Color={Color3.fromRGB(75, 75, 75)} Thickness={1.4} />

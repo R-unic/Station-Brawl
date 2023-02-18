@@ -65,7 +65,11 @@ export default function ItemCard(props: PropsWithChildren<Props>) {
       <uicorner />
       <uistroke ApplyStrokeMode={ApplyStrokeMode.Border} Color={Color3.fromRGB(141, 142, 142)} Thickness={2}>
         <uigradient
-          Color={new ColorSequence([new ColorSequenceKeypoint(0, Color3.fromRGB(176, 175, 211)), new ColorSequenceKeypoint(0.5, Color3.fromRGB(226, 226, 226)), new ColorSequenceKeypoint(1, Color3.fromRGB(176, 175, 211))])}
+          Color={new ColorSequence([
+            new ColorSequenceKeypoint(0, Color3.fromRGB(176, 175, 211)),
+            new ColorSequenceKeypoint(0.5, Color3.fromRGB(226, 226, 226)),
+            new ColorSequenceKeypoint(1, Color3.fromRGB(176, 175, 211))
+          ])}
           Rotation={45}
         />
       </uistroke>
@@ -128,14 +132,21 @@ export default function ItemCard(props: PropsWithChildren<Props>) {
           Thickness={2}
         >
           <uigradient
-            Color={new ColorSequence([new ColorSequenceKeypoint(0, Color3.fromRGB(176, 175, 211)), new ColorSequenceKeypoint(0.5, Color3.fromRGB(226, 226, 226)), new ColorSequenceKeypoint(1, Color3.fromRGB(176, 175, 211))])}
+            Color={new ColorSequence([
+              new ColorSequenceKeypoint(0, Color3.fromRGB(176, 175, 211)),
+              new ColorSequenceKeypoint(0.5, Color3.fromRGB(226, 226, 226)),
+              new ColorSequenceKeypoint(1, Color3.fromRGB(176, 175, 211))
+            ])}
             Rotation={45}
           />
         </uistroke>
         <uistroke Color={Color3.fromRGB(65, 81, 93)} Thickness={1.6} />
       </textbutton>
       <uigradient
-        Color={new ColorSequence([new ColorSequenceKeypoint(0, props.PrimaryGradientColor ?? Color3.fromRGB(29, 30, 44)), new ColorSequenceKeypoint(1, props.SecondaryGradientColor ?? Color3.fromRGB(64, 63, 76))])}
+        Color={new ColorSequence([
+          new ColorSequenceKeypoint(0, props.PrimaryGradientColor ?? Color3.fromRGB(29, 30, 44)),
+          new ColorSequenceKeypoint(1, props.SecondaryGradientColor ?? Color3.fromRGB(64, 63, 76))
+        ])}
         Rotation={45}
       />
       <imagelabel

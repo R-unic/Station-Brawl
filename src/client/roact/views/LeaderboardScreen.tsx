@@ -1,5 +1,10 @@
+import { Players } from "@rbxts/services";
 import { NumAbbr, formatNum } from "@rbxts/number-manipulator";
-import Roact, { Tree, createRef, unmount } from "@rbxts/roact";
+import { StrictMap } from "@rbxts/strict-map";
+import { Janitor } from "@rbxts/janitor";
+
+import Roact, { Element, Tree, createRef, mount, unmount } from "@rbxts/roact";
+import { Events, Functions } from "client/network";
 
 interface EntryProps {
   Username: string;
@@ -19,7 +24,7 @@ function LeaderboardEntry(props: EntryProps) {
     >
       <uicorner />
       <textlabel
-        Key="Name"
+        Key="Username"
         BackgroundTransparency={1}
         Font={Enum.Font.GothamBold}
         Size={new UDim2(0.5, 0, 1, 0)}
@@ -72,19 +77,50 @@ function LeaderboardEntry(props: EntryProps) {
   );
 }
 
-class LeaderboardScreen extends Roact.Component<{}, {}> {
+interface LeaderboardState {
+  SortMode: "Playtime" | "Kills"
+}
+
+class LeaderboardScreen extends Roact.Component<{}, LeaderboardState> {
   private readonly listRef = createRef<ScrollingFrame>();
   private readonly entryHandles: Tree[] = [];
+  private readonly janitor = new Janitor;
+
+  protected willUnmount(): void {
+    this.janitor.Destroy();
+  }
 
   protected didMount(): void {
+    this.setState({ SortMode: "Kills" });
+    this.janitor.Add(Events.dataUpdate.connect((key, value) => {
+      if (key !== "careerKills" && key !== "playtime") return;
+      this._refresh();
+    }));
     this._refresh();
   }
 
-  private _refresh(): void {
+  private async _refresh(): Promise<void> {
     for (const handle of this.entryHandles)
       unmount(handle);
 
     const list = this.listRef.getValue()!;
+
+    type EntryData = [Element, number, number];
+    const entries = new StrictMap<Player, EntryData>();
+    for (const player of Players.GetPlayers()) {
+      const kills = (await Functions.getData.invoke("careerKills")) as number;
+      const playtime = (await Functions.getData.invoke("playtime")) as number;
+      const entry = <LeaderboardEntry Username={player.Name} Kills={kills} Playtime={playtime} />;
+      entries.set(player, [entry, kills, playtime]);
+    }
+
+    entries.values().sort((a, b) => {
+      const idx = this.state.SortMode === "Kills" ? 1 : 2;
+      return b[idx] > a[idx];
+    }).forEach(([entry]) => {
+      const handle = mount(entry, list);
+      this.entryHandles.push(handle);
+    });
   }
 
   public render() {
@@ -111,7 +147,7 @@ class LeaderboardScreen extends Roact.Component<{}, {}> {
           <uistroke Thickness={3} Transparency={0.4} />
           <uipadding PaddingLeft={new UDim(0, 25)} />
         </textlabel>
-        <textlabel
+        <textbutton
           Key="PlaytimeTitle"
           AnchorPoint={new Vector2(1, 0)}
           BackgroundTransparency={1}
@@ -123,11 +159,14 @@ class LeaderboardScreen extends Roact.Component<{}, {}> {
           TextScaled={true}
           TextSize={14}
           TextWrapped={true}
+          Event={{
+            MouseButton1Click: () => this.setState({ SortMode: "Playtime" }),
+          }}
         >
           <uistroke Thickness={3} Transparency={0.4} />
           <uipadding PaddingRight={new UDim(0, 25)} />
-        </textlabel>
-        <textlabel
+        </textbutton>
+        <textbutton
           Key="KillsTitle"
           AnchorPoint={new Vector2(1, 0)}
           BackgroundTransparency={1}
@@ -139,10 +178,13 @@ class LeaderboardScreen extends Roact.Component<{}, {}> {
           TextScaled={true}
           TextSize={14}
           TextWrapped={true}
+          Event={{
+            MouseButton1Click: () => this.setState({ SortMode: "Kills" }),
+          }}
         >
           <uistroke Thickness={3} Transparency={0.4} />
           <uipadding PaddingRight={new UDim(0, 25)} />
-        </textlabel>
+        </textbutton>
         <scrollingframe
           Ref={this.listRef}
           Key="List"

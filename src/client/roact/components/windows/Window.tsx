@@ -11,7 +11,6 @@ const { Font, TextXAlignment } = Enum;
 
 // window icon to left of title
 export default function Window(props: PropsWithChildren<Props>) {
-
   return (
     <frame
       Key={props.Title}
@@ -37,7 +36,10 @@ export default function Window(props: PropsWithChildren<Props>) {
         TextXAlignment={TextXAlignment.Left}
       >
         <uigradient
-          Color={new ColorSequence([new ColorSequenceKeypoint(0, Color3.fromRGB(213, 255, 231)), new ColorSequenceKeypoint(1, Color3.fromRGB(193, 255, 243))])}
+          Color={new ColorSequence([
+            new ColorSequenceKeypoint(0, Color3.fromRGB(213, 255, 231)),
+            new ColorSequenceKeypoint(1, Color3.fromRGB(193, 255, 243))
+          ])}
           Rotation={110}
         />
         <uistroke Color={Color3.fromRGB(97, 123, 154)} Thickness={1.6} />
@@ -49,7 +51,10 @@ export default function Window(props: PropsWithChildren<Props>) {
         PaddingTop={new UDim(0.015, 0)}
       />
       <uigradient
-        Color={new ColorSequence([new ColorSequenceKeypoint(0, Color3.fromRGB(66, 70, 81)), new ColorSequenceKeypoint(1, Color3.fromRGB(42, 45, 52))])}
+        Color={new ColorSequence([
+          new ColorSequenceKeypoint(0, Color3.fromRGB(66, 70, 81)),
+          new ColorSequenceKeypoint(1, Color3.fromRGB(42, 45, 52))
+        ])}
         Rotation={45}
       />
       <uistroke Color={Color3.fromRGB(212, 212, 212)} Thickness={2} Transparency={0.6} />
@@ -63,7 +68,11 @@ export default function Window(props: PropsWithChildren<Props>) {
         Size={new UDim2(1.03, 0, 0, 3)}
       >
         <uigradient
-          Transparency={new NumberSequence([new NumberSequenceKeypoint(0, 1, 0), new NumberSequenceKeypoint(0.5, 0, 0), new NumberSequenceKeypoint(1, 1, 0)])}
+          Transparency={new NumberSequence([
+            new NumberSequenceKeypoint(0, 1, 0),
+            new NumberSequenceKeypoint(0.5, 0, 0),
+            new NumberSequenceKeypoint(1, 1, 0)
+          ])}
         />
       </frame>
     </frame>

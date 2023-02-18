@@ -1,7 +1,8 @@
-import Roact, { PropsWithChildren, Ref, createRef } from "@rbxts/roact";
+import { Janitor } from "@rbxts/janitor";
+import Roact, { PropsWithChildren, Ref } from "@rbxts/roact";
 import { getChildren } from "client/utility";
 
-interface StatefulTextProps {
+export interface StatefulTextProps {
   InitialText?: string;
   LabelProperties: Partial<WritableInstanceProperties<TextLabel>>;
   Ref?: Ref<TextLabel>;
@@ -12,6 +13,8 @@ interface State {
 }
 
 export class StatefulText<P = {}> extends Roact.Component<PropsWithChildren<StatefulTextProps & P>, State> {
+  protected readonly janitor = new Janitor;
+
   public update(text: string): void {
     this.setState({ LinkedText: text });
   }

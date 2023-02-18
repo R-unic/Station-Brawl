@@ -1,3 +1,5 @@
+import { Janitor } from "@rbxts/janitor";
+
 import Roact from "@rbxts/roact";
 import { Events } from "client/network";
 
@@ -10,11 +12,17 @@ interface Props {
 }
 
 export default class VotesContainer extends Roact.Component<Props, State> {
+  private janitor = new Janitor;
+
+  protected willUnmount(): void {
+    this.janitor.Destroy();
+  }
+
   protected didMount(): void {
-    Events.updateMapChoiceVotes.connect((mapName, votes) => {
+    this.janitor.Add(Events.updateMapChoiceVotes.connect((mapName, votes) => {
       if (mapName !== this.props.MapName) return;
       this.setState({ VoteCount: votes });
-    });
+    }));
     this.setState({ VoteCount: 0 });
   }
 

@@ -1,4 +1,5 @@
 import Roact, { Element, Tree, createRef, mount, unmount } from "@rbxts/roact";
+import { Janitor } from "@rbxts/janitor";
 import { Events } from "client/network";
 import { getCharacter } from "client/utility";
 import { WindowRefs } from "client/roact/Refs";
@@ -24,6 +25,7 @@ class InventoryScreen extends Roact.Component<{}, State> {
   private readonly ref = createRef<ScreenGui>();
   private readonly items: Element[] = [];
   private readonly itemHandles: Tree[] = [];
+  private readonly janitor = new Janitor;
 
   public constructor(props: {}) {
     super(props);
@@ -48,11 +50,15 @@ class InventoryScreen extends Roact.Component<{}, State> {
     });
   }
 
+  protected willUnmount(): void {
+    this.janitor.Destroy();
+  }
+
   protected didMount(): void {
-    Events.dataUpdate.connect<[key: string, value: InventoryInfo]>((key, inventory) => {
+    this.janitor.Add(Events.dataUpdate.connect<[key: string, value: InventoryInfo]>((key, inventory) => {
       if (key !== "inventory") return;
       this._refresh(inventory);
-    });
+    }));
     this.setPage("effects");
   }
 

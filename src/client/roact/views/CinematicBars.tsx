@@ -1,5 +1,7 @@
-import Roact, { createRef } from "@rbxts/roact";
 import { StarterGui } from "@rbxts/services";
+import { Janitor } from "@rbxts/janitor";
+
+import Roact, { createRef } from "@rbxts/roact";
 import { Events } from "client/network";
 import tween from "shared/utility/tween";
 
@@ -12,10 +14,15 @@ const { CoreGuiType, ScreenInsets, EasingStyle } = Enum;
 class CinematicBars extends Roact.Component<Props> {
   private readonly bottomRef = createRef<Frame>();
   private readonly topRef = createRef<Frame>();
+  private readonly janitor = new Janitor;
+
+  protected willUnmount(): void {
+    this.janitor.Destroy();
+  }
 
   protected didMount(): void {
     this._toggle(this.props.InitiallyToggled ?? false);
-    Events.toggleCinematicBars.connect(on => this._toggle(on));
+    this.janitor.Add(Events.toggleCinematicBars.connect(on => this._toggle(on)));
     StarterGui.SetCoreGuiEnabled(CoreGuiType.Backpack, false);
   }
 

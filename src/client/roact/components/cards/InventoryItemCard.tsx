@@ -53,7 +53,7 @@ class InventoryItemCard extends Roact.Component<Props, State> {
         SecondaryGradientColor={secondaryColor}
         OnButtonClicked={() => this.equip()}
       />
-    )
+    );
   }
 }
 
