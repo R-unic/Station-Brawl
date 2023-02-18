@@ -8,6 +8,7 @@ interface Props {
 
 const { ScaleType, Font, TextYAlignment, ApplyStrokeMode } = Enum;
 
+// TODO: add vote count label
 export default function MapChoice(props: Props) {
   return (
     <imagebutton
