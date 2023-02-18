@@ -132,4 +132,7 @@ function ragdoll(character)
 	ragdollJoint(character.LowerTorso, character.LeftUpperLeg, "LeftHip", "BallSocket");
 	ragdollJoint(character.LowerTorso, character.RightUpperLeg, "RightHip", "BallSocket");
 end;
-return ragdoll;
+
+return {
+  default = ragdoll
+}

@@ -64,7 +64,7 @@ const MainUI = (
     <MoneyLabel
       FrameProperties={{
         AnchorPoint: new Vector2(1, 0),
-        Position: new UDim2(.96, 0, 0, 0),
+        Position: new UDim2(1, -155, 0, 0),
         Size: new UDim2(0.1, 0, 0, 35)
       }}
       OnPromptAddMoney={() => {

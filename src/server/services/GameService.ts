@@ -79,7 +79,7 @@ export class GameService implements OnInit {
   }
 
   private _getCurrentMap(): Folder & { Spawns: Folder; } | undefined {
-    return World.GetChildren().find(c => c.GetAttribute("CurrentMap")) as Folder & { Spawns: Folder; } | undefined;
+    return World.GetChildren().find(c => c.GetAttribute("CurrentMap")) as Nullable<Folder & { Spawns: Folder; }>;
   }
 
   private _updateTimer(remaining: number): void {
@@ -106,9 +106,8 @@ export class GameService implements OnInit {
   }
 
   private _removePlayer(character: Model) {
-    const torso = character.WaitForChild<Part>("UpperTorso");
     const spawn = this._getRandomSpawn(this.lobbySpawns);
-    torso.CFrame = new CFrame(spawn.Position, torso.CFrame.LookVector).add(new Vector3(0, 7, 0));
+    this._movePlayer(character, spawn.Position);
   }
 
   private _addPlayers(): void {
@@ -117,9 +116,14 @@ export class GameService implements OnInit {
   }
 
   private _addPlayer(character: Model): void {
-    const torso = character.WaitForChild<Part>("UpperTorso");
     const map = this._getCurrentMap()!;
     const spawn = this._getRandomSpawn(map.Spawns);
-    torso.CFrame = new CFrame(spawn.Position, torso.CFrame.LookVector).add(new Vector3(0, 7, 0));
+    this._movePlayer(character, spawn.Position);
+  }
+
+  private _movePlayer(character: Model, position: Vector3): void {
+    const torso = character.WaitForChild<Part>("UpperTorso", 4);
+    if (!torso) return;
+    torso.CFrame = new CFrame(position, torso.CFrame.LookVector).add(new Vector3(0, 7, 0));
   }
 }

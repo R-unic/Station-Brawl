@@ -27,17 +27,21 @@ export class CharacterService implements OnInit {
     Events.damage.connect((player, humanoid, dmg) => this._damage(player, humanoid, dmg));
     Events.addEffectParticles.connect((player, character, effectName) => this._addEffectParticles(character, effectName));
     Events.removeEffectParticles.connect((player, character, effectName) => this._removeEffectParticles(character, effectName));
-    Players.PlayerAdded.Connect(player => {
-      const characterLifeJanitor = new Janitor;
-      player.CharacterAdded.Connect(character => {
-        const humanoid = character.WaitForChild<Humanoid>("Humanoid");
-        characterLifeJanitor.Add(humanoid.Died.Connect(() => {
-          this._knockout(undefined, humanoid);
-          characterLifeJanitor.Cleanup();
-        }));
-      })
-      player.LoadCharacter();
-    });
+    Players.PlayerAdded.Connect(player => this._respawn(player));
+  }
+
+  private _respawn(player: Player): void {
+    player.LoadCharacter();
+    this._addCharacterLife(player.Character!);
+  }
+
+  private _addCharacterLife(character: Model): void {
+    const characterLifeJanitor = new Janitor;
+    const humanoid = character.WaitForChild<Humanoid>("Humanoid");
+    characterLifeJanitor.Add(humanoid.Died.Connect(() => {
+      this._knockout(undefined, humanoid);
+      characterLifeJanitor.Destroy();
+    }));
   }
 
   private _addEffectParticles(character: Model, effectName: Exclude<keyof typeof Replicated.Assets.Effects, keyof Folder>): void {
@@ -68,14 +72,22 @@ export class CharacterService implements OnInit {
   }
 
   private _knockout(killer: Nullable<Player>, victimHumanoid: Humanoid) {
-    if (this._game.roundState !== RoundState.InGame) return;
-
     const promptJanitor = new Janitor;
     const victimCharacter = <Model>victimHumanoid.Parent;
+    print(victimCharacter);
     const victim = Players.GetPlayerFromCharacter(victimCharacter);
-    if (!victimCharacter || !victimCharacter.PrimaryPart) return;
-    ragdoll(victimCharacter);
+    if (this._game.roundState !== RoundState.InGame || !killer)
+      if (victim)
+        return this._respawn(victim);
+      else
+        return;
+    if (!victimCharacter || !victimCharacter.PrimaryPart)
+      if (victim)
+        return this._respawn(victim);
+      else
+        return;
 
+    ragdoll(victimCharacter);
     if (victim) {
       this.soundPlayer.playInCharacter(victim, "knockout", 1.5);
       Events.toggleKnockedFX.fire(victim, true);
@@ -96,7 +108,7 @@ export class CharacterService implements OnInit {
       }));
     }
 
-    task.delay(7, () => {
+    task.delay(6, () => {
       if (victim?.GetAttribute("BeingFinished")) return;
       promptJanitor.Cleanup();
 
@@ -104,7 +116,7 @@ export class CharacterService implements OnInit {
         victimCharacter.Destroy();
       else {
         Events.toggleKnockedFX.fire(victim, false);
-        victim?.LoadCharacter();
+        this._respawn(victim);
         if (killer)
           this.data.increment(killer, "careerKills");
       }
@@ -113,7 +125,7 @@ export class CharacterService implements OnInit {
 
   private _doFinisher(killer: Player, victim: Player): void {
     victim.SetAttribute("BeingFinished", true);
-    victim.LoadCharacter();
+    this._respawn(victim)
     const victimCharacter = victim.Character!;
 
     const victimTorso = victimCharacter.WaitForChild<Part>("UpperTorso");
