@@ -67,6 +67,7 @@ export class GameService implements OnInit {
     this.roundState = RoundState.InGame;
     this._toggleSpawns(this.lobbySpawns, false);
     this._addPlayers();
+    this.mapVoting.removePrompt();
 
     const roundJanitor = new Janitor;
     const timer = new Timer(this.ROUND_LENGTH);

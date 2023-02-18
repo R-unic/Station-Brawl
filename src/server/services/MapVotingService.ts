@@ -18,6 +18,10 @@ export class MapVotingService implements OnInit {
     Functions.getMapVotes.setCallback((player, mapName) => this._getMapVotes().get(mapName));
   }
 
+  public removePrompt(): void {
+    Events.removeMapVotePrompt.broadcast();
+  }
+
   public async determineMap(votingTime: number): Promise<MapName> {
     Events.promptMapVote.broadcast();
     const timer = new Timer(votingTime);

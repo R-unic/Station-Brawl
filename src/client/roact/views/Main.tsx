@@ -1,4 +1,4 @@
-import Roact, { Element, createRef, mount } from "@rbxts/roact";
+import Roact, { Element, Tree, createRef, mount, unmount } from "@rbxts/roact";
 import { Events, Functions } from "client/network";
 import { WindowRefs } from "../Refs";
 import MapVotingModal from "../components/modals/MapVotingModal";
@@ -13,6 +13,11 @@ const mapIcons = new StrictMap<Exclude<keyof typeof ServerStorage["Maps"], keyof
   ["Gas Station", "rbxassetid://11115843157"]
 ]);
 
+let votingModalHandle: Nullable<Tree>;
+Events.removeMapVotePrompt.connect(() => {
+  if (!votingModalHandle) return;
+  unmount(votingModalHandle);
+});
 Events.promptMapVote.connect(async () => {
   const choices: Element[] = [];
   for (let i = 0; i < 3; i++) {
@@ -24,12 +29,12 @@ Events.promptMapVote.connect(async () => {
       />
     );
   }
-  mount((
+  votingModalHandle = mount((
     <MapVotingModal>
       {...choices}
     </MapVotingModal>
   ), ref.getValue()!);
-})
+});
 
 const MainUI = (
   <screengui Ref={ref} Key="Main" ScreenInsets={Enum.ScreenInsets.DeviceSafeInsets}>
